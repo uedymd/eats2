@@ -4991,6 +4991,8 @@ __webpack_require__(/*! ./rakuten */ "./resources/js/rakuten.js");
 
 __webpack_require__(/*! ./rate_set */ "./resources/js/rate_set.js");
 
+__webpack_require__(/*! ./common */ "./resources/js/common.js");
+
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__.default;
 alpinejs__WEBPACK_IMPORTED_MODULE_0__.default.start();
@@ -5025,6 +5027,26 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/common.js":
+/*!********************************!*\
+  !*** ./resources/js/common.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+$(function () {
+  var deleter = $('a[href*="/destroy"]');
+  deleter.on('click', function () {
+    if (!confirm('削除しますか？')) {
+      return false;
+    } else {
+      location.href = $(this).attr('href');
+    }
+  });
+});
 
 /***/ }),
 

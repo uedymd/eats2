@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            ブランドセット設定
+            価格レート設定
         </h2>
     </x-slot>
 
@@ -10,24 +10,63 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-                    <form method="POST" action="{{ route('setting.brandset.update',['id'=>$brand_set->id]) }}">
+                    <form method="POST" action="{{ route('setting.rateset.update',['id'=>$rate_set->id]) }}">
                         @csrf
 
                         <div class="mt-4">
                             <div>
                                 <x-label for="name" :value="__('設定名')" />
-                                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name',isset($brand_set->name) ? $brand_set->name : '')" required autofocus />
+
+                                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name',$rate_set->name)" required autofocus />
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <div>
-                                <x-label for="set" :value="__('ブランド')" />
-
-                                {{Form::textarea('set', $brand_set->set, ['class' => 'form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', 'id' => 'set', 'placeholder' => 'ブランドを一行づつ入力してください。', 'rows' => '3'])}}
+                        <div class="mt-4 flex">
+                            <div class="w-3/12">
+                                最小値（円以上）
+                            </div>
+                            <div class="w-3/12 ml-5">
+                                最大値（円未満）
+                            </div>
+                            <div class="w-3/12 ml-5">
+                                レート（円上乗せ）
                             </div>
                         </div>
+
+                        @php
+                            $settings = unserialize($rate_set->set);
+                            $count = 0;
+                            @endphp
+                            @foreach($settings as $setting)
+                                <div class="mt-4 flex input_set">
+                                    <div class="w-3/12">
+                                        {{Form::number('price_min[]', $setting['min'], ['placeholder' => '円以上','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline require'])}}
+                                    </div>
+                                    <div class="w-3/12 ml-5">
+                                        {{Form::number('price_max[]', $setting['max'], ['placeholder' => '円未満','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline require'])}}
+                                    </div>
+                                    <div class="w-3/12 ml-5">
+                                        {{Form::number('price_rate[]', $setting['rate'], ['placeholder' => '円上乗せ','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline require'])}}
+                                    </div>
+                                    <div class="w-3/12 ml-5">
+                                        <span class="rate_add inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800 ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                        </span>
+                                        @if ($count>0)
+                                        <span class="rate_remove inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800 ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                            </svg>
+                                        </span>
+                                        @endif
+                                    </div>
+                                    @php
+                                        $count++;
+                                    @endphp
+                                </div>
+                            @endforeach
 
 
 
@@ -38,6 +77,30 @@
                             </x-button>
                         </div>
                     </form>
+
+                    <div class="rate_set_model hidden mt-4 input_set">
+                        <div class="w-3/12">
+                            {{Form::number('price_min[]', null, ['placeholder' => '円以上','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'])}}
+                        </div>
+                        <div class="w-3/12 ml-5">
+                            {{Form::number('price_max[]', null, ['placeholder' => '円未満','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'])}}
+                        </div>
+                        <div class="w-3/12 ml-5">
+                            {{Form::number('price_rate[]', null, ['placeholder' => '円上乗せ','class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'])}}
+                        </div>
+                        <div class="w-3/12 ml-5">
+                            <span class="rate_add inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                            </span>
+                            <span class="rate_remove inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

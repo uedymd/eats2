@@ -78,9 +78,10 @@ class RateSetController extends Controller
      * @param  \App\Models\RateSet  $rateSet
      * @return \Illuminate\Http\Response
      */
-    public function edit(RateSet $rateSet)
+    public function edit(Request $request, RateSet $rateSet)
     {
-        //
+        $rate_set = RateSet::find($request->id);
+        return view('rateset/edit', compact('rate_set'));
     }
 
     /**
@@ -92,7 +93,27 @@ class RateSetController extends Controller
      */
     public function update(Request $request, RateSet $rateSet)
     {
-        //
+        $price_mins = $request->input('price_min');
+        $price_maxs = $request->input('price_max');
+        $price_rates = $request->input('price_rate');
+        $setting = [];
+
+        $i = 0;
+
+        while ((!empty($price_mins[$i]) || !empty($price_maxs[$i]) && !empty($price_rates[$i]))) {
+            $setting[] = [
+                'min'   => $price_mins[$i],
+                'max'   => $price_maxs[$i],
+                'rate'   => $price_rates[$i],
+            ];
+            $i++;
+        }
+
+        $rate_set = RateSet::find($request->id);
+        $rate_set->name = $request->input('name');
+        $rate_set->set = serialize($setting);
+        $rate_set->update();
+        return redirect('setting/rateset')->with('success', '保存完了');
     }
 
     /**
@@ -101,8 +122,13 @@ class RateSetController extends Controller
      * @param  \App\Models\RateSet  $rateSet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RateSet $rateSet)
+    public function destroy(Request $request, RateSet $rateSet)
     {
-        //
+        $rate_set = RateSet::find($request->id);
+
+        if ($rate_set->count() > 0) {
+            $rate_set->delete();
+        }
+        return redirect('setting/rateset');
     }
 }
