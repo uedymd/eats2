@@ -1,0 +1,51 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            楽天設定
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+                    <form method="POST" action="{{ route('setting.update',['site'=>$site]) }}">
+                        @csrf
+
+                        <?php
+                        if (!isset($settings[0])) {
+                            $ng_title = "";
+                            $ng_content = "";
+                        } else {
+                            $ng_title = $settings[0]->ng_title;
+                            $ng_content = $settings[0]->ng_content;
+                        }
+                        ?>
+
+                        <div class="mt-4">
+                            <div class="flex">
+                                <div class="flex-grow ml-5">
+                                    {{Form::label('ng_title', 'タイトル除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
+                                    {{Form::textarea('ng_title', $ng_title, ['class' => 'form-control w-10/12', 'id' => 'ng_title', 'rows' => '10'])}}
+                                </div>
+                                <div class="flex-grow ml-5">
+                                    {{Form::label('ng_content', 'コンテンツ除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
+                                    {{Form::textarea('ng_content', $ng_content, ['class' => 'form-control w-10/12', 'id' => 'ng_content', 'rows' => '10'])}}
+                                </div>
+                            </div>
+
+
+                            <div class="flex items-center justify-end mt-4">
+                                <x-button class="ml-4">
+                                    {{ __('更新') }}
+                                </x-button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</x-app-layout>
