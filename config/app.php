@@ -235,5 +235,6 @@ return [
 
     'ebay_token' => env('EBAY_API_TOKEN'),
     'ebay_client_id' => env('EBAY_API_CLIENT_ID'),
+    'rakuten_app_id' => env('RAKUTEN_APP_ID'),
 
 ];

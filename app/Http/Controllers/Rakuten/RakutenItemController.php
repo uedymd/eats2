@@ -13,7 +13,6 @@ class RakutenItemController extends Controller
 {
 
     private $rakutenSearchApi = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706';
-    private $rakutenAppID = '1000118304340903899';
 
     /**
      * Store a newly created resource in storage.
@@ -43,7 +42,7 @@ class RakutenItemController extends Controller
 
             $rakuten = json_decode($rakutens);
 
-            $request = "applicationId={$this->rakutenAppID}";
+            $request = "applicationId={config('app.rakuten_app_id')}";
 
             if (!empty($rakuten->keyword)) {
                 $request .= "&keyword=" . urlencode($rakuten->keyword);
