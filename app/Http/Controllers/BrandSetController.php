@@ -14,7 +14,8 @@ class BrandSetController extends Controller
      */
     public function index()
     {
-        //
+        $brand_sets = BrandSet::all();
+        return view('brandset/index', compact('brand_sets'));
     }
 
     /**
@@ -24,7 +25,7 @@ class BrandSetController extends Controller
      */
     public function create()
     {
-        //
+        return view('brandset/create');
     }
 
     /**
@@ -35,7 +36,20 @@ class BrandSetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $brand_set = new BrandSet();
+        $validated = $request->validate([
+            'name' => 'required',
+            'set' => 'required',
+        ], [
+            'name.required' => '設定名は必須です',
+            'set.required' => 'ブランドは必須です',
+        ]);
+        $brand_set->insert([
+            'name'   => $request->input('name'),
+            'set'   => $request->input('set'),
+        ]);
+
+        return redirect('setting/brandset')->with('success', '保存完了');
     }
 
     /**

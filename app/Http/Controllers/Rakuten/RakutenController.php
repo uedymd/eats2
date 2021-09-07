@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
+use App\Models\BrandSet;
 use Illuminate\Support\Facades\App;
 
 class RakutenController extends Controller
@@ -23,7 +24,6 @@ class RakutenController extends Controller
      */
     public function index()
     {
-        dd(config('app.ebay_client_id'));
         $rakutens = Rakuten::all();
         $items = [];
         foreach ($rakutens as $rakuten) {
@@ -42,7 +42,15 @@ class RakutenController extends Controller
      */
     public function create()
     {
-        return view('rakuten/create');
+
+        $brand_sets = BrandSet::select('id', 'name')->get();
+        $slector = [];
+
+        foreach ($brand_sets as $brand_set) {
+            $slector[$brand_set->id] = $brand_set->name;
+        }
+
+        return view('rakuten/create', compact('slector'));
     }
 
     /**

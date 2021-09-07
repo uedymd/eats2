@@ -22,11 +22,20 @@
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <div>
+                        <div class="mt-4 flex">
+                            <div class="flex-shrink-0 w-8/12">
                                 <x-label for="keyword" :value="__('検索キーワード')" />
 
                                 <x-input id="keyword" class="block mt-1 w-full" type="text" name="keyword" :value="old('keyword')" required autofocus />
+                            </div>
+                            <div class="flex-shrink-0 w-4/12 ml-5">
+                                <x-label for="keyword" :value="__('対象ブランド')" />
+                                {{ Form::select(
+                                    'brand_Set', 
+                                    $slector,
+                                    null,
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500']
+                                ) }}
                             </div>
                         </div>
 
@@ -56,6 +65,7 @@
                                 <x-input id="ng_url" class="block mt-1 w-10/12" type="text" name="ng_url" :value="old('ng_url')" autofocus />
                             </div>
                         </div>
+
 
 
                         <div class="mt-4 flex">

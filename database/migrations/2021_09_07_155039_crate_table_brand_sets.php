@@ -15,6 +15,7 @@ class CrateTableBrandSets extends Migration
     {
         Schema::create('brand_sets', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
             $table->longText('set');
         });
     }

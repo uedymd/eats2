@@ -13,8 +13,6 @@ class EbayItemController extends Controller
 
     private $url = 'https://api.ebay.com/ws/api.dll';
     // private $url = 'https://api.sandbox.ebay.com/ws/api.dll';
-    private $clientID = config('app.ebay_client_id');
-
 
 
     /**

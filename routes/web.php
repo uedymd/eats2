@@ -5,6 +5,7 @@ use App\Http\Controllers\Rakuten\RakutenController;
 use App\Http\Controllers\Rakuten\RakutenItemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EbayItemController;
+use App\Http\Controllers\BrandSetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,9 @@ Route::redirect('/dashboard', '/rakuten')->middleware(['auth'])->name('dashboard
 Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     Route::get('edit/{site}', [SettingController::class, 'edit'])->name('setting.edit');
     Route::post('update/{site}', [SettingController::class, 'update'])->name('setting.update');
+    Route::get('brandset', [BrandSetController::class, 'index'])->name('setting.brandset.index');
+    Route::get('brandset/create', [BrandSetController::class, 'create'])->name('setting.brandset.create');
+    Route::post('brandset/store', [BrandSetController::class, 'store'])->name('setting.brandset.store');
 });
 
 Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
