@@ -37,6 +37,9 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
         Route::get('/', [RateSetController::class, 'index'])->name('setting.rateset.index');
         Route::get('/create', [RateSetController::class, 'create'])->name('setting.rateset.create');
         Route::post('/store', [RateSetController::class, 'store'])->name('setting.rateset.store');
+        Route::get('/edit/{id}', [RateSetController::class, 'edit'])->name('setting.rateset.edit');
+        Route::post('/update/{id}', [RateSetController::class, 'update'])->name('setting.rateset.update');
+        Route::get('/destroy/{id}', [RateSetController::class, 'destroy'])->name('setting.rateset.destroy');
     });
 });
 

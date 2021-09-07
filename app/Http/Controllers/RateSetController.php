@@ -14,7 +14,8 @@ class RateSetController extends Controller
      */
     public function index()
     {
-        //
+        $rate_sets = RateSet::all();
+        return view('rateset/index', compact('rate_sets'));
     }
 
     /**
@@ -24,7 +25,7 @@ class RateSetController extends Controller
      */
     public function create()
     {
-        //
+        return view('rateset/create');
     }
 
     /**
@@ -35,7 +36,29 @@ class RateSetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $price_mins = $request->input('price_min');
+        $price_maxs = $request->input('price_max');
+        $price_rates = $request->input('price_rate');
+        $setting = [];
+
+        $i = 0;
+
+        while ((!empty($price_mins[$i]) || !empty($price_maxs[$i]) && !empty($price_rates[$i]))) {
+            $setting[] = [
+                'min'   => $price_mins[$i],
+                'max'   => $price_maxs[$i],
+                'rate'   => $price_rates[$i],
+            ];
+            $i++;
+        }
+
+        $rate_set = new RateSet();
+        $rate_set->name = $request->input('name');
+        $rate_set->set = serialize($setting);
+        $rate_set->save();
+
+        return redirect('setting/rateset');
     }
 
     /**

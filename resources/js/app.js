@@ -1,5 +1,6 @@
 require('./bootstrap');
 require('./rakuten');
+require('./rate_set');
 
 import Alpine from 'alpinejs';
 

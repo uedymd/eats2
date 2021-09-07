@@ -21,6 +21,11 @@
                         ブランド設定
                     </x-jet-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('setting.rateset.index') }}" :active="request()->routeIs('setting.rateset.index')">
+                        金額レート設定
+                    </x-jet-nav-link>
+                </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">

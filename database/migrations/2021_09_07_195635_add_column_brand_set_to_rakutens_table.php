@@ -14,8 +14,8 @@ class AddColumnBrandSetToRakutensTable extends Migration
     public function up()
     {
         Schema::table('rakutens', function (Blueprint $table) {
-            $table->char('brand_set_id', 255)->after('ng_keyword');
-            $table->char('rate_set_id', 255)->after('brand_set_id');
+            $table->char('brand_set_id', 255)->after('ng_keyword')->nullable();
+            $table->char('rate_set_id', 255)->after('brand_set_id')->nullable();
         });
     }
 

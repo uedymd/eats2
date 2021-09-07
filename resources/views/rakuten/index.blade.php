@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex justify-between">
-                        <a href="{{ route('rakuten.create'); }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800">
+                        <a href="{{ route('rakuten.create'); }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800">
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                 <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path>
                             </svg>
@@ -24,8 +24,6 @@
                                 <th class="border px-4 py-2">タイトル</th>
                                 <th class="border px-4 py-2">キーワード</th>
                                 <th class="border px-4 py-2">ジャンル</th>
-                                <th class="border px-4 py-2">除外キーワード</th>
-                                <th class="border px-4 py-2">除外URL</th>
                                 <th class="border px-4 py-2">最小価格</th>
                                 <th class="border px-4 py-2">最大価格</th>
                                 <th class="border px-4 py-2">レート</th>
@@ -39,14 +37,22 @@
                             <tr>
                                 <td class="border px-4 py-2"><a href="{{ route('rakuten.items',['id'=>$rakuten->id]) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$rakuten->id}}<a></td>
                                 <td class="border px-4 py-2">{{$rakuten->title}}<br>（{{$items[$rakuten->id]}}件）</td>
-                                <td class="border px-4 py-2">{{$rakuten->keyword}}</td>
+                                <td class="border px-4 py-2">
+                                    {{$rakuten->keyword}}
+                                    @if(!empty($rakuten->ng_keyword))
+                                    <br><br>
+                                    <hr><br>除外キーワード：<br>{{$rakuten->ng_keyword}}
+                                    @endif
+                                    @if(!empty($rakuten->ng_url))
+                                    <br><br>
+                                    <hr><br>除外URL：<br>{{$rakuten->ng_url}}
+                                    @endif
+                                </td>
                                 <td class="border px-4 py-2">
                                     @if($rakuten->genre || $rakuten->genre_id)
                                     {{$rakuten->genre}}（{{$rakuten->genre_id}}）
                                     @endif
                                 </td>
-                                <td class="border px-4 py-2">{{$rakuten->ng_keyword}}</td>
-                                <td class="border px-4 py-2">{{$rakuten->ng_url}}</td>
                                 <td class="border px-4 py-2 text-right">
                                     @if($rakuten->price_min)
                                     {{number_format($rakuten->price_min)}}円
@@ -72,7 +78,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <a href="{{ route('rakuten.create'); }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">
+                    <a href="{{ route('rakuten.create'); }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-white transition-colors duration-150 bg-gray-700 rounded-lg focus:shadow-outline hover:bg-gray-800 mt-5">
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                             <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path>
                         </svg>

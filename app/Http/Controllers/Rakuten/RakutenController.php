@@ -67,6 +67,8 @@ class RakutenController extends Controller
         $rakuten->genre = $request->input('genre');
         $rakuten->genre_id = $request->input('genre_id');
         $rakuten->ng_keyword = $request->input('ng_keyword');
+        $rakuten->brand_set = $request->input('brand_set');
+        $rakuten->rate_set = $request->input('rate_set');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->price_min = $request->input('price_min');
@@ -123,6 +125,8 @@ class RakutenController extends Controller
         $rakuten->genre = $request->input('genre');
         $rakuten->genre_id = $request->input('genre_id');
         $rakuten->ng_keyword = $request->input('ng_keyword');
+        $rakuten->brand_set_id = $request->input('brand_set_id');
+        $rakuten->rate_set_id = $request->input('rate_set_id');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->price_min = $request->input('price_min');

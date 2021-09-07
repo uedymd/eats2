@@ -49,9 +49,9 @@
                             <div class="flex-shrink-0 w-3/12 ml-5">
                                 <x-label for="keyword" :value="__('対象ブランド')" />
                                 {{ Form::select(
-                                    'brand_Set', 
+                                    'brand_set_id', 
                                     $selector,
-                                    null,
+                                    $rakuten->brand_set_id,
                                     ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
                                 ) }}
                             </div>

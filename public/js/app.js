@@ -4989,6 +4989,8 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./rakuten */ "./resources/js/rakuten.js");
 
+__webpack_require__(/*! ./rate_set */ "./resources/js/rate_set.js");
+
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__.default;
 alpinejs__WEBPACK_IMPORTED_MODULE_0__.default.start();
@@ -5368,6 +5370,29 @@ $(function () {
     }
 
     return false;
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/rate_set.js":
+/*!**********************************!*\
+  !*** ./resources/js/rate_set.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+$(function () {
+  var add = '.rate_add';
+  var remove = '.rate_remove';
+  var origin = $('.rate_set_model');
+  var set = '.input_set';
+  $(document).on('click', add, function (e) {
+    var parent = $(this).parents(set);
+    origin.clone(true).removeClass('rate_set_model hidden').addClass('flex').insertAfter(parent);
+  });
+  $(document).on('click', remove, function (e) {
+    $(this).parents(set).remove();
   });
 });
 
