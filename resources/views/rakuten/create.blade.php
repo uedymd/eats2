@@ -28,20 +28,20 @@
 
                                 <x-input id="keyword" class="block mt-1 w-full" type="text" name="keyword" :value="old('keyword')" required autofocus />
                             </div>
-                            <div class="flex-shrink-0 w-4/12 ml-5">
+                            <div class="flex-shrink-0 w-3/12 ml-5">
                                 <x-label for="keyword" :value="__('対象ブランド')" />
                                 {{ Form::select(
                                     'brand_Set', 
-                                    $slector,
+                                    $selector,
                                     null,
-                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500']
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
                                 ) }}
                             </div>
                         </div>
 
                         <div class="mt-4">
                             <div class="flex-shrink-0 w-8/12">
-                                <x-label for="genre" :value="__('ジャンル')" />
+                                <x-label for="genre" :value="__('楽天ジャンル')" />
 
                                 <x-input id="genre" class="block mt-1 w-full" type="text" name="genre" :value="old('genre')" autofocus />
                                 <x-input id="genre_id" type="hidden" name="genre_id" :value="old('genre_id')" />

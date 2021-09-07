@@ -44,13 +44,13 @@ class RakutenController extends Controller
     {
 
         $brand_sets = BrandSet::select('id', 'name')->get();
-        $slector = [];
+        $selector = ['' => 'ブランドセットを選択'];
 
         foreach ($brand_sets as $brand_set) {
-            $slector[$brand_set->id] = $brand_set->name;
+            $selector[$brand_set->id] = $brand_set->name;
         }
 
-        return view('rakuten/create', compact('slector'));
+        return view('rakuten/create', compact('selector'));
     }
 
     /**
@@ -98,7 +98,14 @@ class RakutenController extends Controller
     {
         $rakuten = Rakuten::find($id);
         $status_array = $this->status_array;
-        return view('rakuten/edit', compact('rakuten', 'status_array'));
+
+        $brand_sets = BrandSet::select('id', 'name')->get();
+        $selector = ['' => 'ブランドセットを選択'];
+
+        foreach ($brand_sets as $brand_set) {
+            $selector[$brand_set->id] = $brand_set->name;
+        }
+        return view('rakuten/edit', compact('rakuten', 'status_array', 'selector'));
     }
 
     /**

@@ -38,13 +38,28 @@
                             </div>
                         </div>
 
-                        <div class="mt-4">
+                        <div class="mt-4 flex">
                             <div class="flex-shrink-0 w-8/12">
                                 <x-label for="genre" :value="__('ジャンル')" />
 
                                 <x-input id="genre" class="block mt-1 w-full" type="text" name="genre" value="{{$rakuten->genre}}" autofocus />
                                 <x-input id="genre_id" type="hidden" name="genre_id" value="{{$rakuten->genre_id}}" />
                             </div>
+
+                            <div class="flex-shrink-0 w-3/12 ml-5">
+                                <x-label for="keyword" :value="__('対象ブランド')" />
+                                {{ Form::select(
+                                    'brand_Set', 
+                                    $selector,
+                                    null,
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
+                                ) }}
+                            </div>
+
+
+                        </div>
+
+                        <div class="mt-4">
                             <div class="block rakuten__genre--button">
                                 <ul class="rakuten__genre--selector">
                                     <li class="rakuten__genre--parent hasChild" data-genre="0"><span class="block p-3 mt-5 rounded bg-blue-200 text-center w-2/12">ジャンルを選択</span></li>
