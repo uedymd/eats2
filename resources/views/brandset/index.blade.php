@@ -21,6 +21,7 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2">設定名</th>
                                 <th class="border px-4 py-2">ブランド</th>
+                                <th class="border px-4 py-2 w-1/12"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,6 +29,10 @@
                             <tr>
                                 <td class="border px-4 py-2">{{$brand_set->name}}</td>
                                 <td class="border px-4 py-2">{!!nl2br($brand_set->set)!!}</td>
+                                <td class=" border px-4 py-2 text-center">
+                                    <a href="{{ route('setting.brandset.edit',['id'=>$brand_set->id]) }}" class="block rounded bg-blue-600 p-2 text-white">編集</a>
+                                    <a href="{{ route('setting.brandset.destroy',['id'=>$brand_set->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">削除</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

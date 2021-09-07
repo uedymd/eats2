@@ -156,7 +156,7 @@ class RakutenController extends Controller
     {
         $rakuten = Rakuten::find($id);
         if ($rakuten->delete()) {
-            $result = RakutenItem::where('rakuten_id', $id)->delete();
+            RakutenItem::where('rakuten_id', $id)->delete();
         }
         return redirect('rakuten');
     }

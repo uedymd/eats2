@@ -36,7 +36,6 @@ class BrandSetController extends Controller
      */
     public function store(Request $request)
     {
-        $brand_set = new BrandSet();
         $validated = $request->validate([
             'name' => 'required',
             'set' => 'required',
@@ -44,6 +43,7 @@ class BrandSetController extends Controller
             'name.required' => '設定名は必須です',
             'set.required' => 'ブランドは必須です',
         ]);
+        $brand_set = new BrandSet();
         $brand_set->insert([
             'name'   => $request->input('name'),
             'set'   => $request->input('set'),
@@ -69,9 +69,10 @@ class BrandSetController extends Controller
      * @param  \App\Models\BrandSet  $brandSet
      * @return \Illuminate\Http\Response
      */
-    public function edit(BrandSet $brandSet)
+    public function edit(Request $request, BrandSet $brandSet)
     {
-        //
+        $brand_set = BrandSet::find($request->id);
+        return view('brandset/edit', compact('brand_set'));
     }
 
     /**
@@ -83,7 +84,12 @@ class BrandSetController extends Controller
      */
     public function update(Request $request, BrandSet $brandSet)
     {
-        //
+        $brand_set = BrandSet::find($request->id);
+        $brand_set->name = $request->input('name');
+        $brand_set->set = $request->input('set');
+        $brand_set->timestamps = false;
+        $brand_set->update();
+        return redirect('setting/brandset')->with('success', '保存完了');
     }
 
     /**
@@ -92,8 +98,10 @@ class BrandSetController extends Controller
      * @param  \App\Models\BrandSet  $brandSet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BrandSet $brandSet)
+    public function destroy(Request $request, BrandSet $brandSet)
     {
-        //
+        $brand_set = BrandSet::find($request->id);
+        $brand_set->delete();
+        return redirect('setting/brandset');
     }
 }
