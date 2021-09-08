@@ -100,18 +100,18 @@
                             <div class="flex-1">
                                 <x-label for="best_offer" :value="__('Best Offer')" />
                                 <div class="mt-2">
-                                    {{ Form::radio('best_offer', '1',old(false),['id'=>'best_offer_true'] );}}
+                                    {{ Form::radio('best_offer', '1',null,['id'=>'best_offer_true'] );}}
                                     {{Form::label('best_offer_true','有効',['class'=>'custom-control-label mr-10'])}}
-                                    {{ Form::radio('best_offer', '0',old(false),['id'=>'best_offer_false'] );}}
+                                    {{ Form::radio('best_offer', '0',null,['id'=>'best_offer_false'] );}}
                                     {{Form::label('best_offer_false','無効',['class'=>'custom-control-labelx'])}}
                                 </div>
                             </div>
                             <div class="flex-1">
                                 <x-label for="condition" :value="__('コンディション')" />
                                 <div class="mt-2">
-                                    {{ Form::radio('condition', '1',old(false),['id'=>'condition_new'] );}}
+                                    {{ Form::radio('condition', '1',null,['id'=>'condition_new'] );}}
                                     {{Form::label('condition_new','新品',['class'=>'custom-control-label mr-10'])}}
-                                    {{ Form::radio('condition', '2',old(false),['id'=>'condition_used'] );}}
+                                    {{ Form::radio('condition', '2',null,['id'=>'condition_used'] );}}
                                     {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
                                 </div>
                             </div>
