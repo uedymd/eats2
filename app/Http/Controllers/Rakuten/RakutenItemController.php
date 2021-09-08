@@ -111,6 +111,7 @@ class RakutenItemController extends Controller
                                 $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
                                 $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
                                 $jp_title = preg_replace('/《.*?》/', '', $jp_title);
+                                $jp_title = preg_replace('/（.*?）/', '', $jp_title);
 
 
 

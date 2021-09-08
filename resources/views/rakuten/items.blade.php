@@ -14,27 +14,22 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2">設定</th>
                                 <th class="border px-4 py-2">URL</th>
-                                <th class="border px-4 py-2">タイトル（JP）</th>
-                                <th class="border px-4 py-2">コンテンツ（JP）</th>
-                                <th class="border px-4 py-2">タイトル（EN）</th>
-                                <th class="border px-4 py-2">コンテンツ（EN）</th>
+                                <th class="border px-4 py-2">タイトル</th>
+                                <th class="border px-4 py-2">コンテンツ</th>
                                 <th class="border px-4 py-2">価格</th>
                                 <th class="border px-4 py-2">画像</th>
-                                <th class="border px-4 py-2">登録</th>
                                 <th class="border px-4 py-2">更新</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td class="border px-4 py-2">{{$rakutebn_data->title}}</td>
-                                <td class="border px-4 py-2"><a href="{{$item->url}}" target="_blank">{{$item->url}}</a></td>
+                                <td rowspan="2" class="border px-4 py-2">{{$rakutebn_data->title}}</td>
+                                <td rowspan="2" class="border px-4 py-2"><a href="{{$item->url}}" target="_blank">{{$item->url}}</a></td>
                                 <td class="border px-4 py-2">{{$item->jp_title}}</td>
                                 <td class="border px-4 py-2">{{$item->jp_content}}</td>
-                                <td class="border px-4 py-2">{{$item->en_title}}</td>
-                                <td class="border px-4 py-2">{{$item->en_content}}</td>
-                                <td class="border px-4 py-2">{{$item->price}}</td>
-                                <td class="border px-4 py-2">
+                                <td class="border px-4 py-2">{{$item->price}}円</td>
+                                <td rowspan="2" class="border px-4 py-2">
                                     @php
                                     $images = unserialize($item->images);
                                     @endphp
@@ -42,8 +37,13 @@
                                     <img src="{{$image}}" class="block">
                                     @endforeach
                                 </td>
-                                <td class="border px-4 py-2 text-right">{{$item->created_at}}</td>
-                                <td class="border px-4 py-2 text-right">{{$item->updated_at}}</td>
+                                {{-- <td class="border px-4 py-2 text-right">{{$item->created_at}}</td> --}}
+                                <td rowspan="2" class="border px-4 py-2 text-right">{{$item->updated_at}}</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">{{$item->en_title}}</td>
+                                <td class="border px-4 py-2">{{$item->en_content}}</td>
+                                <td class="border px-4 py-2">{{$item->doller}}ドル</td>
                             </tr>
                             @endforeach
                         </tbody>
