@@ -71,7 +71,7 @@
                             <div class="flex-1">
                                 <x-label for="ng_keyword" :value="__('除外キーワード')" />
 
-                                <x-input id="ng_keyword" class="block mt-1 w-10/12" type="text" name="ng_keyword" value="{{$rakuten->ng_url}}" autofocus />
+                                <x-input id="ng_keyword" class="block mt-1 w-10/12" type="text" name="ng_keyword" value="{{$rakuten->ng_keyword}}" autofocus />
                             </div>
                             <div class="flex-1">
                                 <x-label for="ng_url" :value="__('除外URL')" />
@@ -95,7 +95,64 @@
                             <div class="flex-1">
                                 <x-label for="rate" :value="__('レート')" />
 
-                                <x-input id="rate" class="mt-1 w-10/12" type="text" name="rate" value="{{$rakuten->rate}}" autofocus />倍
+                                {{ Form::select(
+                                    'rate_set_id', 
+                                    $rate_selector,
+                                    $rakuten->rate_set_id,
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
+                                ) }}
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex">
+                            <div class="flex-1">
+                                <x-label for="price_min" :value="__('ebayカテゴリー')" />
+
+                                <x-input id="ebay_category" class="mt-1 w-10/12" type="text" name="ebay_category" :value="old('ebay_category',$rakuten->ebay_category)" autofocus required />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="best_offer" :value="__('Best Offer')" />
+                                <div class="mt-2">
+                                    @php
+                                        if($rakuten->best_offer==1){
+                                            $best_offer = [
+                                                'best_offer_true' => true,
+                                                'best_offer_false' => false,
+                                            ];
+                                        }elseif(!is_null($rakuten->best_offer)&&$rakuten->best_offer==0){
+                                            $best_offer = [
+                                                'best_offer_true' => true,
+                                                'best_offer_false' => false,
+                                            ];
+                                        }
+                                    @endphp
+                                    {{ Form::radio('best_offer', '1',old('best_offer',$best_offer['best_offer_true']),['id'=>'best_offer_true'] );}}
+                                    {{Form::label('best_offer_true','有効',['class'=>'custom-control-label mr-10'])}}
+                                    {{ Form::radio('best_offer', '0',old('best_offer',$best_offer['best_offer_false']),['id'=>'best_offer_false'] );}}
+                                    {{Form::label('best_offer_false','無効',['class'=>'custom-control-labelx'])}}
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('コンディション')" />
+                                <div class="mt-2">
+                                    @php
+                                        if($rakuten->condition==1){
+                                            $condition = [
+                                                'condition_new' => true,
+                                                'condition_used' => false,
+                                            ];
+                                        }elseif($rakuten->condition==2){
+                                            $condition = [
+                                                'condition_new' => true,
+                                                'condition_used' => false,
+                                            ];
+                                        }
+                                    @endphp
+                                    {{ Form::radio('condition', '1',old('condition',$condition['condition_new']),['id'=>'condition_new'] );}}
+                                    {{Form::label('condition_new','新品',['class'=>'custom-control-label mr-10'])}}
+                                    {{ Form::radio('condition', '2',old('condition',$condition['condition_used']),['id'=>'condition_used'] );}}
+                                    {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
+                                </div>
                             </div>
                         </div>
 

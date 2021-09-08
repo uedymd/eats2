@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\BrandSet;
+use App\Models\Rateset;
 use Illuminate\Support\Facades\App;
 
 class RakutenController extends Controller
@@ -24,7 +25,10 @@ class RakutenController extends Controller
      */
     public function index()
     {
-        $rakutens = Rakuten::all();
+        $rakutens = Rakuten::leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
+            ->leftJoin('rate_sets', 'rakutens.rate_set_id', '=', 'rate_sets.id')
+            ->select('rakutens.id as id', 'title', 'keyword', 'genre', 'genre_id', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url', 'price_max', 'price_min', 'status', 'checked_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
+            ->get();
         $items = [];
         foreach ($rakutens as $rakuten) {
             $count = RakutenItem::where('rakuten_id', $rakuten->id)->count();
@@ -50,7 +54,15 @@ class RakutenController extends Controller
             $selector[$brand_set->id] = $brand_set->name;
         }
 
-        return view('rakuten/create', compact('selector'));
+        $rate_sets = RateSet::select('id', 'name')->get();
+        $rate_sets = RateSet::select('id', 'name')->get();
+        $rate_selector = ['' => '金額レートを選択'];
+
+        foreach ($rate_sets as $rate_set) {
+            $rate_selector[$rate_set->id] = $rate_set->name;
+        }
+
+        return view('rakuten/create', compact('selector', 'rate_selector'));
     }
 
     /**
@@ -66,14 +78,16 @@ class RakutenController extends Controller
         $rakuten->keyword = $request->input('keyword');
         $rakuten->genre = $request->input('genre');
         $rakuten->genre_id = $request->input('genre_id');
+        $rakuten->ebay_category = $request->input('ebay_category');
         $rakuten->ng_keyword = $request->input('ng_keyword');
-        $rakuten->brand_set = $request->input('brand_set');
-        $rakuten->rate_set = $request->input('rate_set');
+        $rakuten->brand_set_id = $request->input('brand_set_id');
+        $rakuten->rate_set_id = $request->input('rate_set_id');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->price_min = $request->input('price_min');
         $rakuten->price_max = $request->input('price_max');
-        $rakuten->rate = $request->input('rate');
+        $rakuten->best_offer = $request->input('best_offer');
+        $rakuten->condition = $request->input('condition');
         $rakuten->status = 1;
         $rakuten->save();
         return redirect('api/rakuten/search');
@@ -107,7 +121,15 @@ class RakutenController extends Controller
         foreach ($brand_sets as $brand_set) {
             $selector[$brand_set->id] = $brand_set->name;
         }
-        return view('rakuten/edit', compact('rakuten', 'status_array', 'selector'));
+
+        $rate_sets = RateSet::select('id', 'name')->get();
+        $rate_sets = RateSet::select('id', 'name')->get();
+        $rate_selector = ['' => '金額レートを選択'];
+
+        foreach ($rate_sets as $rate_set) {
+            $rate_selector[$rate_set->id] = $rate_set->name;
+        }
+        return view('rakuten/edit', compact('rakuten', 'status_array', 'selector', 'rate_selector'));
     }
 
     /**
@@ -124,6 +146,7 @@ class RakutenController extends Controller
         $rakuten->keyword = $request->input('keyword');
         $rakuten->genre = $request->input('genre');
         $rakuten->genre_id = $request->input('genre_id');
+        $rakuten->ebay_category = $request->input('ebay_category');
         $rakuten->ng_keyword = $request->input('ng_keyword');
         $rakuten->brand_set_id = $request->input('brand_set_id');
         $rakuten->rate_set_id = $request->input('rate_set_id');
@@ -131,7 +154,8 @@ class RakutenController extends Controller
         $rakuten->ng_url = $request->input('ng_url');
         $rakuten->price_min = $request->input('price_min');
         $rakuten->price_max = $request->input('price_max');
-        $rakuten->rate = $request->input('rate');
+        $rakuten->best_offer = $request->input('best_offer');
+        $rakuten->condition = $request->input('condition');
         $rakuten->status = $request->input('status');
         $rakuten->save();
         return redirect('api/rakuten/search');
@@ -159,9 +183,7 @@ class RakutenController extends Controller
     public function destroy($id)
     {
         $rakuten = Rakuten::find($id);
-        if ($rakuten->delete()) {
-            RakutenItem::where('rakuten_id', $id)->delete();
-        }
+        $rakuten->delete();
         return redirect('rakuten');
     }
 }

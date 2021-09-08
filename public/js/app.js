@@ -5043,7 +5043,11 @@ $(function () {
     if (!confirm('削除しますか？')) {
       return false;
     } else {
-      location.href = $(this).attr('href');
+      var nextPage = function nextPage() {
+        location.href = $(this).attr('href');
+      };
+
+      setTimeout(nextPage, 10000);
     }
   });
 });

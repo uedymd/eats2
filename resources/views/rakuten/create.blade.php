@@ -31,7 +31,7 @@
                             <div class="flex-shrink-0 w-3/12 ml-5">
                                 <x-label for="keyword" :value="__('対象ブランド')" />
                                 {{ Form::select(
-                                    'brand_Set', 
+                                    'brand_set_id', 
                                     $selector,
                                     null,
                                     ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
@@ -82,7 +82,38 @@
                             <div class="flex-1">
                                 <x-label for="rate" :value="__('レート')" />
 
-                                <x-input id="rate" class="mt-1 w-10/12" type="text" name="rate" :value="old('rate')" autofocus />倍
+                                {{ Form::select(
+                                    'rate_set_id', 
+                                    $rate_selector,
+                                    null,
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
+                                ) }}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 flex">
+                            <div class="flex-1">
+                                <x-label for="price_min" :value="__('ebayカテゴリー')" />
+
+                                <x-input id="ebay_category" class="mt-1 w-10/12" type="text" name="ebay_category" :value="old('ebay_category')" autofocus required />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="best_offer" :value="__('Best Offer')" />
+                                <div class="mt-2">
+                                    {{ Form::radio('best_offer', '1',old(false),['id'=>'best_offer_true'] );}}
+                                    {{Form::label('best_offer_true','有効',['class'=>'custom-control-label mr-10'])}}
+                                    {{ Form::radio('best_offer', '0',old(false),['id'=>'best_offer_false'] );}}
+                                    {{Form::label('best_offer_false','無効',['class'=>'custom-control-labelx'])}}
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('コンディション')" />
+                                <div class="mt-2">
+                                    {{ Form::radio('condition', '1',old(false),['id'=>'condition_new'] );}}
+                                    {{Form::label('condition_new','新品',['class'=>'custom-control-label mr-10'])}}
+                                    {{ Form::radio('condition', '2',old(false),['id'=>'condition_used'] );}}
+                                    {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
+                                </div>
                             </div>
                         </div>
 

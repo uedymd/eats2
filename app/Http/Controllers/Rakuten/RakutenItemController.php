@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\Setting;
+use App\Models\BrandSet;
 use Illuminate\Support\Facades\Log;
 
 class RakutenItemController extends Controller
@@ -35,14 +36,23 @@ class RakutenItemController extends Controller
 
     public function search()
     {
-        $rakutens = Rakuten::where('status', 1)->orderBy('checked_at')->first();
+        $rakutens = Rakuten::where('status', 1)
+            ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
+            ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+            ->orderBy('checked_at')
+            ->first();
         $setting = Setting::where('site', 'rakuten')->first();
+
+
+        $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $rakutens->brand_setting);
+        $target_brands = explode("\n", $target_brands);
 
         if ($rakutens) {
 
             $rakuten = json_decode($rakutens);
 
-            $request = "applicationId={config('app.rakuten_app_id')}";
+            $request = "applicationId=" . config('app.rakuten_app_id');
+
 
             if (!empty($rakuten->keyword)) {
                 $request .= "&keyword=" . urlencode($rakuten->keyword);
@@ -73,6 +83,7 @@ class RakutenItemController extends Controller
                     break;
                 }
             }
+
             if (!empty($respons)) {
 
                 for ($i = 0; $i < count($respons); $i++) {
@@ -81,22 +92,30 @@ class RakutenItemController extends Controller
                             ->count();
                         if (!$rakuten_item_count > 0) {
 
+                            //改行を除去 
                             $ng_title = $setting->ng_title;
                             $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
                             $ng_titles = explode("\n", $ng_title);
 
+                            // 除外文言を削除
                             $jp_title = str_replace($ng_titles, "", $item['Item']['itemName']);
 
-                            $rakuten_item = new RakutenItem();
-                            $rakuten_item->rakuten_id = $rakuten->id;
-                            $rakuten_item->jp_title = $jp_title;
-                            $rakuten_item->url = $item['Item']['itemUrl'];
-                            $rakuten_item->price = $item['Item']['itemPrice'];
-                            // if (isset($item['Item']['mediumImageUrls'][0]['imageUrl'])) {
-                            //     $imgae = serialize($item['Item']['mediumImageUrls'][0]['imageUrl']);
-                            //     $rakuten_item->images = $imgae;
-                            // }
-                            $rakuten_item->save();
+                            // カッコで囲われた部分を除去
+                            $jp_title = preg_replace('/【.*?】/', '', $jp_title);
+                            $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
+                            $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
+                            $jp_title = preg_replace('/《.*?》/', '', $jp_title);
+
+
+
+                            if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands)) {
+                                $rakuten_item = new RakutenItem();
+                                $rakuten_item->rakuten_id = $rakuten->rakuten_id;
+                                $rakuten_item->jp_title = $jp_title;
+                                $rakuten_item->url = $item['Item']['itemUrl'];
+                                $rakuten_item->price = $item['Item']['itemPrice'];
+                                $rakuten_item->save();
+                            }
                         }
                     }
                 }
@@ -106,6 +125,18 @@ class RakutenItemController extends Controller
             $rakutens->save();
             return redirect('rakuten');
         }
+    }
+
+    private function check_title_include_brand($title, $brands)
+    {
+        foreach ((array)$brands as $brand) {
+            $pattern = "/{$brand}/i";
+            if (preg_match($pattern, $title, $matches)) {
+                return true;
+                break;
+            }
+        }
+        return false;
     }
 
     public function get_url()
