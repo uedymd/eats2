@@ -8,6 +8,7 @@ use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\Setting;
 use App\Models\BrandSet;
+use App\Models\RateSet;
 use Illuminate\Support\Facades\Log;
 
 class RakutenItemController extends Controller
@@ -171,9 +172,43 @@ class RakutenItemController extends Controller
     {
         $rakuten_item = RakutenItem::where('doller', NULL)
             ->whereNotNull('price')
-            ->select('id', 'price')
-            ->orderBy('updated_at')->first();
-        return $rakuten_item;
+            ->join('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
+            ->join('rate_sets', 'rakutens.rate_set_id', '=', 'rate_sets.id')
+            ->select('rakuten_items.id as id', 'rakuten_items.price', 'rakuten_items.rakuten_id', 'rate_sets.set')
+            ->orderBy('rakuten_items.updated_at')->first();
+
+        $rates = unserialize($rakuten_item->set);
+
+        $return_price = 0;
+
+        foreach ($rates as $rate) {
+            switch ($rakuten_item->price) {
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > $rakuten_item->price:
+                    $return_price = $rakuten_item->price + $rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= $rakuten_item->price && $rate['max'] > $rakuten_item->price:
+                    $return_price = $rakuten_item->price + $rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= $rakuten_item->price:
+                    $return_price = $rakuten_item->price + $rate['rate'];
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+            if ($return_price > 0) {
+                break;
+            }
+        }
+
+        $returns = [
+            'id' => $rakuten_item->id,
+            'price' => $return_price,
+        ];
+        return $returns;
     }
 
     public function get_image()
