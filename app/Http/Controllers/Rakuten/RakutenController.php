@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\BrandSet;
-use App\Models\Rateset;
+use App\Models\RateSet;
 use Illuminate\Support\Facades\App;
 
 class RakutenController extends Controller
