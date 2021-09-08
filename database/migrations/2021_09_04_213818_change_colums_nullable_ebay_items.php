@@ -30,9 +30,9 @@ class ChangeColumsNullableEbayItems extends Migration
     public function down()
     {
         Schema::table('ebay_items', function (Blueprint $table) {
-            $table->char('ebay_id', 255)->change();
+            $table->int('ebay_id', 255)->change();
             $table->string('title', 256)->change();
-            $table->char('price', 255)->change();
+            $table->int('price', 255)->change();
             $table->longText('image')->change();
             $table->longText('error')->change();
         });
