@@ -140,8 +140,8 @@ class RakutenItemController extends Controller
     private function check_title_include_brand($title, $brands)
     {
         foreach ((array)$brands as $brand) {
-            $brand = str_replace('/', '\/', $brand);
             $pattern = "/{$brand}/i";
+            $pattern = str_replace('/', '\/', $pattern);
             if (preg_match($pattern, $title, $matches)) {
                 return true;
                 break;
