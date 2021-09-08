@@ -70,7 +70,7 @@
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-right @if($rakuten->status==2){{ 'text-red-700' }} @endif">{{$status_array[$rakuten->status]}}</td>
-                                <td class="border px-4 py-2 text-right">{{$rakuten->checked_at}}</td>
+                                <td class="border px-4 py-2 text-right">{{$rakuten->updated_at}}</td>
                                 <td class=" border px-4 py-2 text-center">
                                     <a href="{{ route('rakuten.edit',['id'=>$rakuten->id]) }}" class="block rounded bg-blue-600 p-2 text-white">編集</a>
                                     <a href="{{ route('rakuten.delete',['id'=>$rakuten->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">削除</a>

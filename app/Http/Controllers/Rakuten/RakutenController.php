@@ -27,7 +27,7 @@ class RakutenController extends Controller
     {
         $rakutens = Rakuten::leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
             ->leftJoin('rate_sets', 'rakutens.rate_set_id', '=', 'rate_sets.id')
-            ->select('rakutens.id as id', 'title', 'keyword', 'genre', 'genre_id', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url', 'price_max', 'price_min', 'status', 'checked_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
+            ->select('rakutens.id as id', 'title', 'keyword', 'genre', 'genre_id', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url', 'price_max', 'price_min', 'status', 'rakutens.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
             ->get();
         $items = [];
         foreach ($rakutens as $rakuten) {
