@@ -106,6 +106,9 @@ class RakutenItemController extends Controller
                                 // 除外文言を削除
                                 $jp_title = str_replace($ng_titles, "", $item['Item']['itemName']);
 
+                                //スラッシュをエスケープ
+                                $jp_title = str_replace("/", "\/", $jp_title);
+
                                 // カッコで囲われた部分を除去
                                 $jp_title = preg_replace('/【.*?】/', '', $jp_title);
                                 $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
