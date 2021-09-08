@@ -45,8 +45,13 @@ class RakutenItemController extends Controller
         $setting = Setting::where('site', 'rakuten')->first();
 
 
-        $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $rakutens->brand_setting);
-        $target_brands = explode("\n", $target_brands);
+
+        if ($rakutens->brand_setting) {
+            $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $rakutens->brand_setting);
+            $target_brands = explode("\n", $target_brands);
+        } else {
+            $target_brands = [];
+        }
 
         if ($rakutens) {
 
