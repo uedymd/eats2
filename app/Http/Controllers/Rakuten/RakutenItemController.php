@@ -328,8 +328,7 @@ class RakutenItemController extends Controller
         if (!empty($request->input('id'))) {
             $rakuten_item = RakutenItem::where('id', $request->input('id'))->first();
             if (!empty($request->input('doller'))) {
-                $rakuten = Rakuten::find($rakuten_item->rakuten_id);
-                $rakuten_item->doller = ceil($request->input('doller') * $rakuten->rate);
+                $rakuten_item->doller = ceil($request->input('doller'));
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
                 $rakuten_item->save();
                 Log::info('nodeからのドル変換 ID = ' . $request->input('id'));
