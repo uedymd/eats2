@@ -44,92 +44,93 @@ class RakutenItemController extends Controller
             ->first();
         $setting = Setting::where('site', 'rakuten')->first();
 
-
-
-        if ($rakutens->brand_setting) {
-            $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $rakutens->brand_setting);
-            $target_brands = explode("\n", $target_brands);
-        } else {
-            $target_brands = [];
-        }
-
         if ($rakutens) {
 
-            $rakuten = json_decode($rakutens);
-
-            $request = "applicationId=" . config('app.rakuten_app_id');
-
-
-            if (!empty($rakuten->keyword)) {
-                $request .= "&keyword=" . urlencode($rakuten->keyword);
-            }
-            if (!empty($rakuten->genre_id)) {
-                $request .= "&genreId={$rakuten->genre_id}";
-            }
-            if (!empty($rakuten->ng_keyword)) {
-                $request .= "&NGKeyword=" . urlencode($rakuten->ng_keyword);
-            }
-            if (!empty($rakuten->price_min)) {
-                $request .= "&minPrice={$rakuten->price_min}";
-            }
-            if (!empty($rakuten->price_max)) {
-                $request .= "&maxPrice={$rakuten->price_max}";
+            if ($rakutens->brand_setting) {
+                $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $rakutens->brand_setting);
+                $target_brands = explode("\n", $target_brands);
+            } else {
+                $target_brands = [];
             }
 
-            $respons = [];
-            $url = $this->rakutenSearchApi . "?" . $request;
+            if ($rakutens) {
 
-            for ($i = 1; $i <= 100; $i++) {
-                $_request = $request . "&page={$i}";
-                $url = $this->rakutenSearchApi . "?" . $_request;
-                $_response = $this->getApiDataCurl($url);
-                if (!empty($_response)) {
-                    $respons[] = $_response;
-                } else {
-                    break;
+                $rakuten = json_decode($rakutens);
+
+                $request = "applicationId=" . config('app.rakuten_app_id');
+
+
+                if (!empty($rakuten->keyword)) {
+                    $request .= "&keyword=" . urlencode($rakuten->keyword);
                 }
-            }
+                if (!empty($rakuten->genre_id)) {
+                    $request .= "&genreId={$rakuten->genre_id}";
+                }
+                if (!empty($rakuten->ng_keyword)) {
+                    $request .= "&NGKeyword=" . urlencode($rakuten->ng_keyword);
+                }
+                if (!empty($rakuten->price_min)) {
+                    $request .= "&minPrice={$rakuten->price_min}";
+                }
+                if (!empty($rakuten->price_max)) {
+                    $request .= "&maxPrice={$rakuten->price_max}";
+                }
 
-            if (!empty($respons)) {
+                $respons = [];
+                $url = $this->rakutenSearchApi . "?" . $request;
 
-                for ($i = 0; $i < count($respons); $i++) {
-                    foreach ((array)$respons[$i]['Items'] as $item) {
-                        $rakuten_item_count = RakutenItem::where('url', $item['Item']['itemUrl'])
-                            ->count();
-                        if (!$rakuten_item_count > 0) {
+                for ($i = 1; $i <= 100; $i++) {
+                    $_request = $request . "&page={$i}";
+                    $url = $this->rakutenSearchApi . "?" . $_request;
+                    $_response = $this->getApiDataCurl($url);
+                    if (!empty($_response)) {
+                        $respons[] = $_response;
+                    } else {
+                        break;
+                    }
+                }
 
-                            //改行を除去 
-                            $ng_title = $setting->ng_title;
-                            $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
-                            $ng_titles = explode("\n", $ng_title);
+                if (!empty($respons)) {
 
-                            // 除外文言を削除
-                            $jp_title = str_replace($ng_titles, "", $item['Item']['itemName']);
+                    for ($i = 0; $i < count($respons); $i++) {
+                        foreach ((array)$respons[$i]['Items'] as $item) {
+                            $rakuten_item_count = RakutenItem::where('url', $item['Item']['itemUrl'])
+                                ->count();
+                            if (!$rakuten_item_count > 0) {
 
-                            // カッコで囲われた部分を除去
-                            $jp_title = preg_replace('/【.*?】/', '', $jp_title);
-                            $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
-                            $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
-                            $jp_title = preg_replace('/《.*?》/', '', $jp_title);
+                                //改行を除去 
+                                $ng_title = $setting->ng_title;
+                                $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
+                                $ng_titles = explode("\n", $ng_title);
+
+                                // 除外文言を削除
+                                $jp_title = str_replace($ng_titles, "", $item['Item']['itemName']);
+
+                                // カッコで囲われた部分を除去
+                                $jp_title = preg_replace('/【.*?】/', '', $jp_title);
+                                $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
+                                $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
+                                $jp_title = preg_replace('/《.*?》/', '', $jp_title);
 
 
 
-                            if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands)) {
-                                $rakuten_item = new RakutenItem();
-                                $rakuten_item->rakuten_id = $rakuten->rakuten_id;
-                                $rakuten_item->jp_title = $jp_title;
-                                $rakuten_item->url = $item['Item']['itemUrl'];
-                                $rakuten_item->price = $item['Item']['itemPrice'];
-                                $rakuten_item->save();
+                                if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands)) {
+                                    $rakuten_item = new RakutenItem();
+                                    $rakuten_item->rakuten_id = $rakuten->rakuten_id;
+                                    $rakuten_item->jp_title = $jp_title;
+                                    $rakuten_item->url = $item['Item']['itemUrl'];
+                                    $rakuten_item->price = $item['Item']['itemPrice'];
+                                    $rakuten_item->save();
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            $rakutens->checked_at = date('Y-m-d H:i:s');
-            $rakutens->save();
-            return redirect('rakuten');
+                $rakutens->checked_at = date('Y-m-d H:i:s');
+                $rakutens->save();
+                return redirect('rakuten');
+            }
         }
     }
 
