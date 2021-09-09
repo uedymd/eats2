@@ -1306,9 +1306,6 @@ select {
 .table-auto {
 	table-layout: auto;
 }
-.table-fixed {
-	table-layout: fixed;
-}
 .origin-top-left {
 	transform-origin: top left;
 }
@@ -1415,6 +1412,9 @@ select {
 }
 .overflow-y-hidden {
 	overflow-y: hidden;
+}
+.overflow-x-scroll {
+	overflow-x: scroll;
 }
 .truncate {
 	overflow: hidden;
