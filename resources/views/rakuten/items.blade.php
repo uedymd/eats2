@@ -10,9 +10,11 @@
             <div class="bg-white overflow-scroll shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <table class="table-auto w-full mt-5 bg-white">
+                        <caption class="bg-gray-100">
+                            <div class="border px-4 py-2">{{$rakutebn_data->title}}</div>
+                        </caption>
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border px-4 py-2">設定</th>
                                 <th class="border px-4 py-2">URL</th>
                                 <th class="border px-4 py-2">タイトル</th>
                                 <th class="border px-4 py-2">コンテンツ</th>
@@ -24,11 +26,10 @@
                         <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td rowspan="2" class="border px-4 py-2">{{$rakutebn_data->title}}</td>
                                 <td rowspan="2" class="border px-4 py-2"><a href="{{$item->url}}" target="_blank">{{$item->url}}</a></td>
                                 <td class="border px-4 py-2">{{$item->jp_title}}</td>
                                 <td class="border px-4 py-2">{!!nl2br($item->jp_content)!!}</td>
-                                <td class="border px-4 py-2">{{$item->price}}円</td>
+                                <td class="border px-4 py-2">{!!number_format($item->price)!!}円</td>
                                 <td rowspan="2" class="border px-4 py-2">
                                     @php
                                     $images = unserialize($item->images);
@@ -43,7 +44,7 @@
                             <tr>
                                 <td class="border px-4 py-2">{{$item->en_title}}</td>
                                 <td class="border px-4 py-2">{!!nl2br($item->en_content)!!}</td>
-                                <td class="border px-4 py-2">{{$item->doller}}ドル</td>
+                                <td class="border px-4 py-2">{!!number_format($item->doller)!!}ドル</td>
                             </tr>
                             @endforeach
                         </tbody>
