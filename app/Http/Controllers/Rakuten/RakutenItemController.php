@@ -30,7 +30,7 @@ class RakutenItemController extends Controller
 
         $items = $rakuten_items
             ->where('rakuten_id', $id)
-            ->paginate(30);
+            ->paginate(150);
 
         return view('rakuten/items', compact('items', 'rakutebn_data'));
     }
