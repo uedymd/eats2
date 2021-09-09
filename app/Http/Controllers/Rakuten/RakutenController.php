@@ -170,6 +170,7 @@ class RakutenController extends Controller
     public function delete($id)
     {
         $rakuten = Rakuten::find($id);
+
         return view('rakuten/delete', compact('rakuten'));
     }
 
@@ -182,8 +183,11 @@ class RakutenController extends Controller
      */
     public function destroy($id)
     {
+        $rakuten_items = Rakuten::where('rakuten_id' . $id);
         $rakuten = Rakuten::find($id);
-        $rakuten->delete();
+        if ($rakuten_items->delete) {
+            $rakuten->delete();
+        }
         return redirect('rakuten');
     }
 }
