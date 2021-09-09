@@ -34,7 +34,10 @@
                             @foreach($rakutens as $rakuten)
                             <tr>
                                 <td class="border px-4 py-2"><a href="{{ route('rakuten.items',$rakuten->id) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$rakuten->id}}<a></td>
-                                <td class="border px-4 py-2">{{$rakuten->title}}<br>（対象：{{$items[$rakuten->id]}}件）</td>
+                                    <td class="border px-4 py-2">
+                                        {{$rakuten->title}}<br>（対象：{{$items[$rakuten->id]}}件）
+                                        <a href="{{ route('api.rakuten.search') }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時反映</a>
+                                </td>
                                 <td class="border px-4 py-2">
                                     <span class="text-gray-500">検索キーワード：</span><br>
                                     {{$rakuten->keyword}}

@@ -22,7 +22,7 @@ use App\Http\Controllers\EbayItemController;
 
 
 Route::group(['prefix' => 'rakuten'], function () {
-    Route::get('search', [RakutenItemController::class, 'search'])->name('api.search');
+    Route::get('search', [RakutenItemController::class, 'search'])->name('api.rakuten.search');
     Route::get('translate/get_url', [RakutenItemController::class, 'get_url']);
     Route::get('translate/get_title', [RakutenItemController::class, 'get_title']);
     Route::get('translate/get_content', [RakutenItemController::class, 'get_content']);

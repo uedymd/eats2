@@ -90,7 +90,7 @@ class RakutenController extends Controller
         $rakuten->condition = $request->input('condition');
         $rakuten->status = 1;
         $rakuten->save();
-        return redirect('api/rakuten/search');
+        return redirect('rakuten');
     }
 
     /**
@@ -158,7 +158,7 @@ class RakutenController extends Controller
         $rakuten->condition = $request->input('condition');
         $rakuten->status = $request->input('status');
         $rakuten->save();
-        return redirect('api/rakuten/search');
+        return redirect('rakuten');
     }
 
     /**

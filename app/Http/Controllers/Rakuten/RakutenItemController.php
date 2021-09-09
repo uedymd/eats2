@@ -83,13 +83,13 @@ class RakutenItemController extends Controller
                     $_request = $request . "&page={$i}";
                     $url = $this->rakutenSearchApi . "?" . $_request;
                     $_response = $this->getApiDataCurl($url);
+                    sleep(1);
                     if (!empty($_response)) {
                         $respons[] = $_response;
                     } else {
                         break;
                     }
                 }
-
                 if (!empty($respons)) {
 
                     for ($i = 0; $i < count($respons); $i++) {
