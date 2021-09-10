@@ -183,9 +183,8 @@ class RakutenController extends Controller
      */
     public function destroy($id)
     {
-        $rakuten_items = RakutenItem::where('rakuten_id', $id)->get();
-        $rakuten = Rakuten::find($id);
-        if ($rakuten_items->delete()) {
+        if (RakutenItem::where('rakuten_id', $id)->delete()) {
+            $rakuten = Rakuten::find($id);
             $rakuten->delete();
         }
         return redirect('rakuten');
