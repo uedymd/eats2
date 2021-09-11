@@ -28,7 +28,7 @@
                             <tr>
                                 <td rowspan="2" class="border px-4 py-2"><a href="{{$item->url}}" target="_blank">{{$item->url}}</a></td>
                                 <td class="border px-4 py-2">{{$item->jp_title}}</td>
-                                <td class="border px-4 py-2">{!!nl2br($item->jp_content)!!}</td>
+                                <td class="border px-4 py-2">{!!$item->jp_content!!}</td>
                                 <td class="border px-4 py-2">{!!number_format($item->price)!!}円</td>
                                 <td rowspan="2" class="border px-4 py-2">
                                     @php
@@ -43,7 +43,7 @@
                             </tr>
                             <tr>
                                 <td class="border px-4 py-2">{{$item->en_title}}</td>
-                                <td class="border px-4 py-2">{!!nl2br($item->en_content)!!}</td>
+                                <td class="border px-4 py-2">{!!$item->en_content!!}</td>
                                 <td class="border px-4 py-2">{!!number_format($item->doller)!!}ドル</td>
                             </tr>
                             @endforeach
