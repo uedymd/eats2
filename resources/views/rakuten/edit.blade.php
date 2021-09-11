@@ -101,6 +101,7 @@
                                 <x-label for="best_offer" :value="__('Best Offer')" />
                                 <div class="mt-2">
                                     @php
+                                        $best_offer = [];
                                         if($rakuten->best_offer==1){
                                             $best_offer = [
                                                 'best_offer_true' => true,
@@ -123,6 +124,7 @@
                                 <x-label for="condition" :value="__('コンディション')" />
                                 <div class="mt-2">
                                     @php
+                                        $condition = [];
                                         if($rakuten->condition==1){
                                             $condition = [
                                                 'condition_new' => true,
