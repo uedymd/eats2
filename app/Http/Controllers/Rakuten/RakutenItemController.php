@@ -269,10 +269,18 @@ class RakutenItemController extends Controller
             $setting = Setting::where('site', 'rakuten')->first();
             if (!empty($request->input('content'))) {
 
+
+                //除外キーワードを除去（共通設定）
                 $ng_content = $setting->ng_content;
                 $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
                 $ng_contents = explode("\n", $ng_content);
-                $jp_content = str_replace($ng_contents, "", $request->input('content'));
+
+                //改行コードを<br>に変換
+                $jp_content = str_replace(["\r\n", "\r", "\n"], "<br>", $request->input('content'));
+                $jp_content = str_replace($ng_contents, "", $jp_content);
+
+                //コンテンツのフォーマット
+                $jp_content = $this->format_jp_content($jp_content);
 
                 $rakuten_item->jp_content = $jp_content;
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
@@ -313,6 +321,26 @@ class RakutenItemController extends Controller
         } else {
             Log::error('nodeからの日本語コンテンツ書き込み : IDなし');
         }
+    }
+
+    private function format_jp_content($text)
+    {
+        //メールアドレスを除去
+        $text = preg_replace("/^[a-zA-Z0-9_.+-]+[@][a-zA-Z0-9.-]+$/", "", $text);
+        //電話番号を除去
+        $text = preg_replace("/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/", "", $text);
+        //URLを除去
+        $text = preg_replace("/^(https?|ftp)(:\/\/[-_.!~*'()a-zA-Z0-9;\/?:@&amp;amp;=+$,%#]+)$/", "", $text);
+        //日付（Y/m/d）を除去
+        $text = preg_replace("/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}$/", "", $text);
+        //日付（YYYY/mm/dd）を除去
+        $text = preg_replace("/^(19|20)[0-9]{2}\/\d{2}\/\d{2}$/", "", $text);
+        //日付（YYYY/mm）を除去
+        $text = preg_replace("/^(19|20)[0-9]{2}\/(0[1-9]|1[0-2])$/", "", $text);
+        //全角文字の除去
+        $text = $this->delete_zenkaku_symbol($text);
+
+        return $text;
     }
 
 
