@@ -330,17 +330,19 @@ class RakutenItemController extends Controller
     private function format_jp_content($text)
     {
         //メールアドレスを除去
-        $text = preg_replace("/^[a-zA-Z0-9_.+-]+[@][a-zA-Z0-9.-]+$/", "", $text);
+        $text = preg_replace("/[a-zA-Z0-9_.+-]+[@][a-zA-Z0-9.-]+/", "", $text);
         //電話番号を除去
-        $text = preg_replace("/^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$/", "", $text);
+        $text = preg_replace("/[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}/", "", $text);
         //URLを除去
-        $text = preg_replace("/^(https?|ftp)(:\/\/[-_.!~*'()a-zA-Z0-9;\/?:@&amp;amp;=+$,%#]+)$/", "", $text);
+        $text = preg_replace("/(https?|ftp)(:\/\/[-_.!~*'()a-zA-Z0-9;\/?:@&amp;amp;=+$,%#]+)/", "", $text);
         //日付（Y/m/d）を除去
-        $text = preg_replace("/^[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}$/", "", $text);
+        $text = preg_replace("/[1-9]{1}[0-9]{0,3}\/[0-9]{1,2}\/[0-9]{1,2}/", "", $text);
         //日付（YYYY/mm/dd）を除去
-        $text = preg_replace("/^(19|20)[0-9]{2}\/\d{2}\/\d{2}$/", "", $text);
+        $text = preg_replace("/(19|20)[0-9]{2}\/\d{2}\/\d{2}/", "", $text);
         //日付（YYYY/mm）を除去
-        $text = preg_replace("/^(19|20)[0-9]{2}\/(0[1-9]|1[0-2])$/", "", $text);
+        $text = preg_replace("/(19|20)[0-9]{2}\/(0[1-9]|1[0-2])/", "", $text);
+        //2回以上の連続<br>を一つにする
+        $text = preg_replace("/(<br>*\s){2,}/", "", $text);
         //全角文字の除去
         $text = $this->delete_zenkaku_symbol($text);
 
