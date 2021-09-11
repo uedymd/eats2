@@ -275,8 +275,9 @@ class RakutenItemController extends Controller
                 $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
                 $ng_contents = explode("\n", $ng_content);
 
+
                 //改行コードを<br>に変換
-                $jp_content = str_replace(["\r\n", "\r", "\n"], "<br>", $request->input('content'));
+                $jp_content = strip_tags($request->input('content'), ["<br>", "<br />"]);
                 $jp_content = str_replace($ng_contents, "", $jp_content);
 
                 //コンテンツのフォーマット
