@@ -138,6 +138,9 @@ class RakutenItemController extends Controller
         //全角記号を除去
         $jp_title = $this->delete_zenkaku_symbol($jp_title);
 
+        //URLエンコード&#160;を削除
+        $jp_title = str_replace("&#160;", "", $jp_title);
+
         // 前後のスペース削除
         $jp_title = trim($jp_title);
         return $jp_title;
