@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\Setting;
-use App\Models\BrandSet;
-use App\Models\RateSet;
 use Illuminate\Support\Facades\Log;
 
 class RakutenItemController extends Controller
@@ -39,7 +37,7 @@ class RakutenItemController extends Controller
     {
         $rakutens = Rakuten::where('status', 1)
             ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
-            ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+            ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
             ->orderBy('checked_at')
             ->first();
         $setting = Setting::where('site', 'rakuten')->first();
@@ -100,25 +98,9 @@ class RakutenItemController extends Controller
 
                                 //改行を除去 
                                 $ng_title = $setting->ng_title;
-                                $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
-                                $ng_titles = explode("\n", $ng_title);
+                                $jp_title = $this->format_jp_title($item['Item']['itemName'], $ng_title);
 
-                                // 除外文言を削除
-                                $jp_title = str_replace($ng_titles, "", $item['Item']['itemName']);
-
-                                // カッコで囲われた部分を除去
-                                $jp_title = preg_replace('/【.*?】/', '', $jp_title);
-                                $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
-                                $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
-                                $jp_title = preg_replace('/《.*?》/', '', $jp_title);
-                                $jp_title = preg_replace('/（.*?）/', '', $jp_title);
-
-                                // 前後のスペース削除
-                                $jp_title = trim($jp_title);
-
-
-
-                                if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands)) {
+                                if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands) && $this->check_url_include_ng_url($item['Item']['itemUrl'], $rakutens->ng_url) === false) {
                                     $rakuten_item = new RakutenItem();
                                     $rakuten_item->rakuten_id = $rakuten->rakuten_id;
                                     $rakuten_item->jp_title = $jp_title;
@@ -130,7 +112,6 @@ class RakutenItemController extends Controller
                         }
                     }
                 }
-
                 $rakutens->checked_at = date('Y-m-d H:i:s');
                 $rakutens->save();
                 return redirect('rakuten');
@@ -138,12 +119,49 @@ class RakutenItemController extends Controller
         }
     }
 
+    private function format_jp_title($title, $ng_title)
+    {
+        $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
+        $ng_titles = explode("\n", $ng_title);
+
+
+        // 除外文言を削除
+        $jp_title = str_replace($ng_titles, "", $title);
+
+        // カッコで囲われた部分を除去
+        $jp_title = preg_replace('/【.*?】/', '', $jp_title);
+        $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
+        $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
+        $jp_title = preg_replace('/《.*?》/', '', $jp_title);
+        $jp_title = preg_replace('/（.*?）/', '', $jp_title);
+
+        // 前後のスペース削除
+        $jp_title = trim($jp_title);
+        return $jp_title;
+    }
+
+    private function check_url_include_ng_url($url, $ng_url)
+    {
+        $ng_keywords = preg_split("/( |　)+/", $ng_url);
+        if ($ng_keywords) {
+            foreach ((array)$ng_keywords as $ng_keyword) {
+                $ng_keyword = str_replace('/', '\/', $ng_keyword);
+                $pattern = "/{$ng_keyword}/i";
+                if (preg_match($pattern, $url)) {
+                    return true;
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+
     private function check_title_include_brand($title, $brands)
     {
         foreach ((array)$brands as $brand) {
             $brand = str_replace('/', '\/', $brand);
             $pattern = "/{$brand}/i";
-            if (preg_match($pattern, $title, $matches)) {
+            if (preg_match($pattern, $title)) {
                 return true;
                 break;
             }
@@ -207,7 +225,6 @@ class RakutenItemController extends Controller
                     break;
 
                 default:
-                    # code...
                     break;
             }
             if ($return_price > 0) {
