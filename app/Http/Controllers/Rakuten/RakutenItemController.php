@@ -290,14 +290,14 @@ class RakutenItemController extends Controller
                 $jp_content = mb_convert_kana($request->input('content'), "KVa");
                 //<br>を残してHTMLタグを除去
                 $jp_content = strip_tags($jp_content, ["<br>", "<br />"]);
+                //除外キーワードを除去
+                $jp_content = str_replace($ng_contents, "", $jp_content);
                 //改行コードを削除
                 $jp_content = str_replace(["\r\n", "\r", "\n"], "", $jp_content);
                 //<br>が3つ以上続くものは除去
                 $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "", $jp_content);
                 //<br>を改行コードに変換
                 $jp_content = str_replace(["<br>", "<br />"], "\n", $jp_content);
-                //除外キーワードを除去
-                $jp_content = str_replace($ng_contents, "", $jp_content);
 
                 //コンテンツのフォーマット
                 $jp_content = $this->format_jp_content($jp_content);
