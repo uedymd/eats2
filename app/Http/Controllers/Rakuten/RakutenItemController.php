@@ -289,7 +289,7 @@ class RakutenItemController extends Controller
                 //半角カナを全角カナに変換、全角英数字を半角に変換
                 $jp_content = mb_convert_kana($request->input('content'), "KVa");
                 //<br><tr>を残してHTMLタグを除去
-                $jp_content = strip_tags($jp_content, ["<br>", "<br />", "<tr>"]);
+                $jp_content = strip_tags($jp_content, ["<br>", "<br />", "<tr>", "<td>", "<th>"]);
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
                 //改行コードを削除
@@ -297,7 +297,9 @@ class RakutenItemController extends Controller
                 //<br>が3つ以上続くものは除去
                 $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "", $jp_content);
                 //<tr>タグの開始タグを除去
-                $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
+                $jp_content = str_replace(["<tr>", "<TR>", "<th>", "<TH>", "<th>", "<TH>"], "", $jp_content);
+                //<th><td>タグの綴じタグをスペースに変換
+                $jp_content = str_replace(["</th>", "</TH>", "</td>", "</TD>",], " ", $jp_content);
                 //<tr>タグの綴じタグを<br>に変換
                 $jp_content = str_replace(["</tr>", "</TR>"], "<br>", $jp_content);
                 //<br>を改行コードに変換
