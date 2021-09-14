@@ -84,6 +84,7 @@ class RakutenItemController extends Controller
                     sleep(1);
                     if (!empty($_response)) {
                         $respons[] = $_response;
+                        break;
                     } else {
                         break;
                     }
@@ -168,14 +169,17 @@ class RakutenItemController extends Controller
 
     private function check_url_include_ng_url($url, $ng_url)
     {
-        $ng_keywords = preg_split("/( |　)+/", $ng_url);
-        if ($ng_keywords) {
-            foreach ((array)$ng_keywords as $ng_keyword) {
-                $ng_keyword = str_replace('/', '\/', $ng_keyword);
-                $pattern = "/{$ng_keyword}/i";
-                if (preg_match($pattern, $url)) {
-                    return true;
-                    break;
+        if ($ng_url) {
+            $ng_keywords = preg_split("/( |　)+/", $ng_url);
+            var_dump($ng_url);
+            if ($ng_keywords) {
+                foreach ((array)$ng_keywords as $ng_keyword) {
+                    $ng_keyword = str_replace('/', '\/', $ng_keyword);
+                    $pattern = "/{$ng_keyword}/i";
+                    if (preg_match($pattern, $url)) {
+                        return true;
+                        break;
+                    }
                 }
             }
         }
