@@ -73,7 +73,7 @@
                                     @endif
                                     @if($rakuten->rate_set_name)
                                     <hr class="block my-2">
-                                    <div class="mt-2"><span class="text-gray-500">価格レート設定：</span><a href="{{route('setting.rateset.edit',$rakuten->rate_set_id)}}" class="underline" target="_blank">{{$rakuten->rate_set_name}}</a></div>
+                                    <div class="mt-2"><span class="text-gray-500">価格レート設定：</span><br><a href="{{route('setting.rateset.edit',$rakuten->rate_set_id)}}" class="underline" target="_blank">{{$rakuten->rate_set_name}}</a></div>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-right @if($rakuten->status==2){{ 'text-red-700' }} @endif">{{$status_array[$rakuten->status]}}</td>
