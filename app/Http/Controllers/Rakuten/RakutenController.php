@@ -46,7 +46,7 @@ class RakutenController extends Controller
                 ->count();
             $items[$rakuten->id] = [
                 'count' => $count,
-                'jp_content' => $count_en_title_null,
+                'jp_content' => $count_jp_content_null,
                 'en_content' => $count_en_content_null,
                 'en_title' => $count_en_title_null,
                 'doller' => $count_doller_null,
