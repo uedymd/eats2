@@ -37,10 +37,10 @@
                                     <td class="border px-4 py-2">
                                         {{$rakuten->title}}<br>（対象：{{$items[$rakuten->id]['count']}}件）
                                         <a href="{{ route('api.rakuten.search') }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時反映</a><br>
-                                        ・コンテンツ取得待ち：{{$items[$rakuten->id]['jp_content']}}件<br>
-                                        ・タイトル翻訳待ち：{{$items[$rakuten->id]['en_title']}}件<br>
-                                        ・コンテンツ翻訳待ち：{{$items[$rakuten->id]['en_content']}}件<br>
-                                        ・ドル変換待ち：{{$items[$rakuten->id]['doller']}}件
+                                        ・コンテンツ取得待ち：<br>{{$items[$rakuten->id]['jp_content']}}件<br>
+                                        ・タイトル翻訳待ち：<br>{{$items[$rakuten->id]['en_title']}}件<br>
+                                        ・コンテンツ翻訳待ち：<br>{{$items[$rakuten->id]['en_content']}}件<br>
+                                        ・ドル変換待ち：<br>{{$items[$rakuten->id]['doller']}}件
                                 </td>
                                 <td class="border px-4 py-2">
                                     <span class="text-gray-500">検索キーワード：</span><br>
