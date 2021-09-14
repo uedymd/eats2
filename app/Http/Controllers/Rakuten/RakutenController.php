@@ -32,8 +32,29 @@ class RakutenController extends Controller
         $items = [];
         foreach ($rakutens as $rakuten) {
             $count = RakutenItem::where('rakuten_id', $rakuten->id)->count();
-            $items[$rakuten->id] = $count;
+            $count_jp_content_null = RakutenItem::where('rakuten_id', $rakuten->id)
+                ->whereNull('jp_content')
+                ->count();
+            $count_en_title_null = RakutenItem::where('rakuten_id', $rakuten->id)
+                ->whereNull('en_title')
+                ->count();
+            $count_en_content_null = RakutenItem::where('rakuten_id', $rakuten->id)
+                ->whereNull('en_content')
+                ->count();
+            $count_doller_null = RakutenItem::where('rakuten_id', $rakuten->id)
+                ->whereNull('doller')
+                ->count();
+            $items[$rakuten->id] = [
+                'count' => $count,
+                'jp_content' => $count_en_title_null,
+                'en_content' => $count_en_content_null,
+                'en_title' => $count_en_title_null,
+                'doller' => $count_doller_null,
+            ];
         }
+
+
+
         $status_array = $this->status_array;
 
         return view('rakuten/index', compact('rakutens', 'items', 'status_array'));
