@@ -84,7 +84,6 @@ class RakutenItemController extends Controller
                     sleep(1);
                     if (!empty($_response)) {
                         $respons[] = $_response;
-                        break;
                     } else {
                         break;
                     }
