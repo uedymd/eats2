@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                    <form method="POST" action="{{ route('rakuten.store') }}">
+                    <form method="POST" action="{{ route('rakuten.update',['id'=>$rakuten->id]) }}">
                         @csrf
 
                         <div class="mt-4">
@@ -148,6 +148,12 @@
                                     {{ Form::radio('condition', '2',$condition['condition_used'],['id'=>'condition_used'] );}}
                                     {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div>
+                                <label for="status">ステータス</label>
+                                {{ Form::select('status',$status_array,$rakuten->status) }}
                             </div>
                         </div>
 
