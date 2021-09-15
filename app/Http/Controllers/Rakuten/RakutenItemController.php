@@ -291,31 +291,17 @@ class RakutenItemController extends Controller
 
                 //半角カナを全角カナに変換、全角英数字を半角に変換
                 $jp_content = mb_convert_kana($request->input('content'), "KVa");
-                //<br><tr>を残してHTMLタグを除去
-                $jp_content = strip_tags($jp_content, ["<br>", "<br />", "<tr>", "<td>", "<th>", "<p>"]);
+
+
+
+                //コンテンツHTMLのフォーマット
+                $jp_content = $this->format_jp_content_html($jp_content);
+
+                //コンテンツテキストのフォーマット
+                $jp_content = $this->format_jp_content($jp_content);
+
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
-                //改行コードを削除
-                $jp_content = str_replace(["\r\n", "\r", "\n"], "", $jp_content);
-                //<br>が3つ以上続くものは除去
-                $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "", $jp_content);
-                //<tr>タグの開始タグを除去
-                $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
-                //<td>タグの開始タグを除去
-                $jp_content = preg_replace("/<td.*?>/i", "", $jp_content);
-                //<th>タグの開始タグを除去
-                $jp_content = preg_replace("/<th.*?>/i", "", $jp_content);
-                //<p>タグの開始タグを除去
-                $jp_content = preg_replace("/<p.*?>/i", "", $jp_content);
-                //<th><td>タグの綴じタグをスペースに変換
-                $jp_content = str_replace(["</th>", "</TH>", "</td>", "</TD>",], " ", $jp_content);
-                //<tr>タグの綴じタグを<br>に変換
-                $jp_content = str_replace(["</tr>", "</TR>", "</p>"], "<br>", $jp_content);
-                //<br>を改行コードに変換
-                $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
-
-                //コンテンツのフォーマット
-                $jp_content = $this->format_jp_content($jp_content);
 
                 $rakuten_item->jp_content = $jp_content;
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
@@ -358,6 +344,35 @@ class RakutenItemController extends Controller
         }
     }
 
+    private function format_jp_content_html($text)
+    {
+
+        //HTMLタグを除去
+        $jp_content = strip_tags($text, ["<br>", "<br />", "<table>", "<tr>", "<td>", "<th>", "<p>"]);
+        //改行コードを削除
+        $jp_content = str_replace(["\r\n", "\r", "\n"], "", $jp_content);
+        //<tr>タグの開始タグを除去
+        $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
+        //thまたはtdに続くth ,tdタグの開始タグをスペースに
+        $jp_content = preg_replace("/(<\/th>|<\/td>)+(<td.*?>|<th.*?>)/i", " ", $jp_content);
+        //<td>タグの開始タグを除去
+        $jp_content = preg_replace("/<td.*?>/i", "", $jp_content);
+        //<th>タグの開始タグを除去
+        $jp_content = preg_replace("/<th.*?>/i", "", $jp_content);
+        //<th><td>タグの綴じタグを除去
+        $jp_content = str_replace(["</th>", "</TH>", "</td>", "</TD>",], "", $jp_content);
+        // table,pタグの開始タグを<br>に変換
+        $jp_content = preg_replace("/(<table.*?>|<p.*?>)/i", "<br>", $jp_content);
+        //<tr>タグの綴じタグを<br>に変換
+        $jp_content = str_replace(["</table>", "</tr>", "</p>"], "<br>", $jp_content);
+        //<br>が3つ以上続くものは除去
+        $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "<br>", $jp_content);
+        //<br>を改行コードに変換
+        $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
+        //文頭、文末のスペース除去
+        $jp_content = trim($jp_content);
+        return $jp_content;
+    }
     private function format_jp_content($text)
     {
         //メールアドレスを除去
