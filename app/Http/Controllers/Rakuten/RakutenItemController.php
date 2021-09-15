@@ -387,8 +387,6 @@ class RakutenItemController extends Controller
         $text = preg_replace("/(19|20)[0-9]{2}\/\d{2}\/\d{2}/", "", $text);
         //日付（YYYY/mm）を除去
         $text = preg_replace("/(19|20)[0-9]{2}\/(0[1-9]|1[0-2])/", "", $text);
-        //2回以上の連続<br>を一つにする
-        $text = preg_replace("/(<br>*\s){2,}/", "", $text);
         //全角文字の除去
         $text = $this->delete_zenkaku_symbol($text);
 
