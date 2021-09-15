@@ -299,6 +299,9 @@ class RakutenItemController extends Controller
                 //コンテンツHTMLのフォーマット
                 $jp_content = $this->format_jp_content_html($jp_content);
 
+                //全角文字の除去
+                $jp_content = $this->delete_zenkaku_symbol($jp_content);
+
 
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
@@ -387,8 +390,6 @@ class RakutenItemController extends Controller
         $text = preg_replace("/(19|20)[0-9]{2}\/\d{2}\/\d{2}/", "", $text);
         //日付（YYYY/mm）を除去
         $text = preg_replace("/(19|20)[0-9]{2}\/(0[1-9]|1[0-2])/", "", $text);
-        //全角文字の除去
-        $text = $this->delete_zenkaku_symbol($text);
 
         return $text;
     }
