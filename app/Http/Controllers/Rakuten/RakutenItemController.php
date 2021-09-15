@@ -292,6 +292,8 @@ class RakutenItemController extends Controller
                 //半角カナを全角カナに変換、全角英数字を半角に変換
                 $jp_content = mb_convert_kana($request->input('content'), "KVa");
 
+                //除外キーワードを除去
+                $jp_content = str_replace($ng_contents, "", $jp_content);
 
                 //コンテンツテキストのフォーマット
                 $jp_content = $this->format_jp_content($jp_content);
@@ -303,8 +305,6 @@ class RakutenItemController extends Controller
                 $jp_content = $this->delete_zenkaku_symbol($jp_content);
 
 
-                //除外キーワードを除去
-                $jp_content = str_replace($ng_contents, "", $jp_content);
 
                 $rakuten_item->jp_content = $jp_content;
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
