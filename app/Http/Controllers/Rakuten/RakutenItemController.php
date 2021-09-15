@@ -293,12 +293,12 @@ class RakutenItemController extends Controller
                 $jp_content = mb_convert_kana($request->input('content'), "KVa");
 
 
+                //コンテンツテキストのフォーマット
+                $jp_content = $this->format_jp_content($jp_content);
 
                 //コンテンツHTMLのフォーマット
                 $jp_content = $this->format_jp_content_html($jp_content);
 
-                //コンテンツテキストのフォーマット
-                $jp_content = $this->format_jp_content($jp_content);
 
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
