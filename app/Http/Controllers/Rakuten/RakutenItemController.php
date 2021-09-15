@@ -369,7 +369,7 @@ class RakutenItemController extends Controller
         //<tr>タグの綴じタグを<br>に変換
         $jp_content = str_replace(["</table>", "</tr>", "</p>"], "<br>", $jp_content);
         //<br>が3つ以上続くものは除去
-        $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "", $jp_content);
+        $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "<br>", $jp_content);
         //<br>を改行コードに変換
         $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
         //文頭、文末のスペース除去
