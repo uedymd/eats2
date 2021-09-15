@@ -20,7 +20,7 @@
                     <table class="table-auto w-full mt-5">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border px-4 py-2">ID</th>
+                                <th class="border px-4 py-2"></th>
                                 <th class="border px-4 py-2">タイトル</th>
                                 <th class="border px-4 py-2">検索設定</th>
                                 <th class="border px-4 py-2">ジャンル</th>
@@ -31,9 +31,10 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php $cnt = 1; @endphp
                             @foreach($rakutens as $rakuten)
                             <tr>
-                                <td class="border px-4 py-2"><a href="{{ route('rakuten.items',$rakuten->id) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$rakuten->id}}<a></td>
+                                <td class="border px-4 py-2"><a href="{{ route('rakuten.items',$rakuten->id) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$cnt}}<a></td>
                                     <td class="border px-4 py-2">
                                         {{$rakuten->title}}<br>（対象：{{$items[$rakuten->id]['count']}}件）
                                         @php 
@@ -97,6 +98,7 @@
                                     <a href="{{ route('rakuten.delete',['id'=>$rakuten->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">削除</a>
                                 </td>
                             </tr>
+                            @php $cnt++; @endphp
                             @endforeach
                         </tbody>
                     </table>
