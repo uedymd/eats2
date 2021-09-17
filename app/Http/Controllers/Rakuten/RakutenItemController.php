@@ -128,9 +128,6 @@ class RakutenItemController extends Controller
         //半角カナを全角カナに変換、全角英数字を半角に変換
         $jp_title = mb_convert_kana($title, "KVa");
 
-        // 除外文言を削除
-        $jp_title = str_replace($ng_titles, "", $jp_title);
-
         // カッコで囲われた部分を除去
         $jp_title = preg_replace('/(【|】)/', ' ', $jp_title);
         $jp_title = preg_replace('/(\[|\])/', ' ', $jp_title);
@@ -145,6 +142,9 @@ class RakutenItemController extends Controller
 
         //全角記号を除去
         $jp_title = $this->delete_zenkaku_symbol($jp_title);
+
+        // 除外文言を削除
+        $jp_title = str_replace($ng_titles, "", $jp_title);
 
         //URLエンコード&#160;を削除
         $jp_title = str_replace("&#160;", "", $jp_title);
@@ -304,6 +304,8 @@ class RakutenItemController extends Controller
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
 
+                $jp_content = trim(preg_replace("/(\r\n){3,}|\r{3,}|\n{3,}/", "\n\n", $jp_content));
+
 
                 $rakuten_item->jp_content = $jp_content;
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
@@ -371,8 +373,9 @@ class RakutenItemController extends Controller
         $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "<br>", $jp_content);
         //<br>を改行コードに変換
         $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
-        //文頭、文末のスペース除去
-        $jp_content = trim($jp_content);
+
+        $jp_content = strip_tags($jp_content);
+
         return $jp_content;
     }
     private function format_jp_content($text)
