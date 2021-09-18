@@ -304,7 +304,7 @@ class RakutenItemController extends Controller
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
 
-                $jp_content = trim(preg_replace("/\r\n{3,}|\r{3,}|\n{3,}|/ {2,}/", "", $jp_content));
+                $jp_content = trim(preg_replace("/\r\n{3,}|\r{3,}|\n{3,}|/s+{2,}/", "", $jp_content));
 
 
                 $rakuten_item->jp_content = $jp_content;
