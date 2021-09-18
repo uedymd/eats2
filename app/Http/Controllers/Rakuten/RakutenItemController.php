@@ -304,7 +304,7 @@ class RakutenItemController extends Controller
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
 
-                $jp_content = trim(preg_replace("/(\r\n){3,}|\r{3,}|\n{3,}/", "", $jp_content));
+                $jp_content = trim(preg_replace("/\r\n{3,}|\r{3,}|\n{3,}|/ {2,}/", "", $jp_content));
 
 
                 $rakuten_item->jp_content = $jp_content;
@@ -352,7 +352,7 @@ class RakutenItemController extends Controller
     {
 
         //HTMLタグを除去
-        $jp_content = strip_tags($text, ["<br>", "<br />", "<table>", "<tr>", "<td>", "<th>", "<p>"]);
+        $jp_content = strip_tags($text, ["br", "table", "tr", "td", "th", "p"]);
         //改行コードを削除
         $jp_content = str_replace(["\r\n", "\r", "\n"], "", $jp_content);
         //<tr>タグの開始タグを除去
