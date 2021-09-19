@@ -170,7 +170,6 @@ class RakutenItemController extends Controller
     {
         if ($ng_url) {
             $ng_keywords = preg_split("/( |　)+/", $ng_url);
-            var_dump($ng_url);
             if ($ng_keywords) {
                 foreach ((array)$ng_keywords as $ng_keyword) {
                     $ng_keyword = str_replace('/', '\/', $ng_keyword);
@@ -304,7 +303,7 @@ class RakutenItemController extends Controller
                 //除外キーワードを除去
                 $jp_content = str_replace($ng_contents, "", $jp_content);
 
-                $jp_content = trim(preg_replace("/\r\n{3,}|\r{3,}|\n{3,}|\s{2,}/", "", $jp_content));
+                $jp_content = trim(preg_replace("/\r\n{3,}|\r{3,}|\n{3,}|\s{3,}/", "", $jp_content));
 
 
                 $rakuten_item->jp_content = $jp_content;
