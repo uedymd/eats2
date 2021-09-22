@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class RakutenItemController extends Controller
@@ -33,13 +34,22 @@ class RakutenItemController extends Controller
         return view('rakuten/items', compact('items', 'rakutebn_data'));
     }
 
-    public function search()
+    public function search($id = null)
     {
-        $rakutens = Rakuten::where('status', 1)
-            ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
-            ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
-            ->orderBy('checked_at')
-            ->first();
+        if (is_null($id)) {
+            $rakutens = Rakuten::where('status', 1)
+                ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
+                ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+                ->orderBy('checked_at', 'desc')
+                ->first();
+        } else {
+            $rakutens = Rakuten::where('status', 1)
+                ->where('rakutens.id', $id)
+                ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
+                ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+                ->orderBy('checked_at', 'desc')
+                ->first();
+        }
         $setting = Setting::where('site', 'rakuten')->first();
 
         if ($rakutens) {
@@ -112,8 +122,12 @@ class RakutenItemController extends Controller
                         }
                     }
                 }
-                $rakutens->checked_at = date('Y-m-d H:i:s');
-                $rakutens->save();
+
+                $current_rakuten = Rakuten::find($rakutens->rakuten_id);
+
+                $check_time = Carbon::now();
+                $current_rakuten->checked_at = $check_time->format('Y-m-d H:i:s');
+                $current_rakuten->update();
                 return redirect('rakuten');
             }
         }

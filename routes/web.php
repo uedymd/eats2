@@ -29,17 +29,17 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
         Route::get('/', [BrandSetController::class, 'index'])->name('setting.brandset.index');
         Route::get('/create', [BrandSetController::class, 'create'])->name('setting.brandset.create');
         Route::post('/store', [BrandSetController::class, 'store'])->name('setting.brandset.store');
-        Route::get('/edit/{id}', [BrandSetController::class, 'edit'])->name('setting.brandset.edit');
-        Route::post('/update/{id}', [BrandSetController::class, 'update'])->name('setting.brandset.update');
-        Route::get('/destroy/{id}', [BrandSetController::class, 'destroy'])->name('setting.brandset.destroy');
+        Route::get('/edit/{id}', [BrandSetController::class, 'edit'])->name('setting.brandset.edit')->where('id', '[0-9]+');
+        Route::post('/update/{id}', [BrandSetController::class, 'update'])->name('setting.brandset.update')->where('id', '[0-9]+');
+        Route::get('/destroy/{id}', [BrandSetController::class, 'destroy'])->name('setting.brandset.destroy')->where('id', '[0-9]+');
     });
     Route::group(['prefix' => 'rateset'], function () {
         Route::get('/', [RateSetController::class, 'index'])->name('setting.rateset.index');
         Route::get('/create', [RateSetController::class, 'create'])->name('setting.rateset.create');
         Route::post('/store', [RateSetController::class, 'store'])->name('setting.rateset.store');
-        Route::get('/edit/{id}', [RateSetController::class, 'edit'])->name('setting.rateset.edit');
-        Route::post('/update/{id}', [RateSetController::class, 'update'])->name('setting.rateset.update');
-        Route::get('/destroy/{id}', [RateSetController::class, 'destroy'])->name('setting.rateset.destroy');
+        Route::get('/edit/{id}', [RateSetController::class, 'edit'])->name('setting.rateset.edit')->where('id', '[0-9]+');
+        Route::post('/update/{id}', [RateSetController::class, 'update'])->name('setting.rateset.update')->where('id', '[0-9]+');
+        Route::get('/destroy/{id}', [RateSetController::class, 'destroy'])->name('setting.rateset.destroy')->where('id', '[0-9]+');
     });
 });
 
@@ -48,14 +48,14 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [RakutenController::class, 'create'])->name('rakuten.create');
         Route::post('store', [RakutenController::class, 'store'])->name('rakuten.store');
-        Route::get('edit/{id}', [RakutenController::class, 'edit'])->name('rakuten.edit');
-        Route::post('update/{id}', [RakutenController::class, 'update'])->name('rakuten.update');
-        Route::get('delete/{id}', [RakutenController::class, 'delete'])->name('rakuten.delete');
-        Route::get('destroy/{id}', [RakutenController::class, 'destroy'])->name('rakuten.destroy');
+        Route::get('edit/{id}', [RakutenController::class, 'edit'])->name('rakuten.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [RakutenController::class, 'update'])->name('rakuten.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [RakutenController::class, 'delete'])->name('rakuten.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [RakutenController::class, 'destroy'])->name('rakuten.destroy')->where('id', '[0-9]+');
         Route::get('recheck', [RakutenItemController::class, 'recheck'])->name('rakuten.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
-        Route::get('/{id}', [RakutenItemController::class, 'items'])->name('rakuten.items');
+        Route::get('/{id}', [RakutenItemController::class, 'items'])->name('rakuten.items')->where('id', '[0-9]+');
     });
 });
 

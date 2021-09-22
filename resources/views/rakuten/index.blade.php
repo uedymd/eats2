@@ -54,7 +54,7 @@
                                         }
 
                                         @endphp
-                                        <a href="{{ route('api.rakuten.search') }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時検索</a>
+                                        <a href="{{ route('api.rakuten.search',['id'=>$rakuten->id]) }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時検索</a>
                                         <div class="mt-5">
                                             コンテンツ取得待ち：<div class="text-right">{{$items[$rakuten->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
                                             タイトル翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
