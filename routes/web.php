@@ -52,6 +52,7 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [RakutenController::class, 'update'])->name('rakuten.update');
         Route::get('delete/{id}', [RakutenController::class, 'delete'])->name('rakuten.delete');
         Route::get('destroy/{id}', [RakutenController::class, 'destroy'])->name('rakuten.destroy');
+        Route::get('recheck', [RakutenItemController::class, 'recheck'])->name('rakuten.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [RakutenItemController::class, 'items'])->name('rakuten.items');

@@ -1404,17 +1404,11 @@ select {
 .overflow-hidden {
 	overflow: hidden;
 }
-.overflow-scroll {
-	overflow: scroll;
-}
 .overflow-y-auto {
 	overflow-y: auto;
 }
 .overflow-y-hidden {
 	overflow-y: hidden;
-}
-.overflow-x-scroll {
-	overflow-x: scroll;
 }
 .truncate {
 	overflow: hidden;
@@ -1556,6 +1550,10 @@ select {
 .bg-gray-700 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(55, 65, 81, var(--tw-bg-opacity));
+}
+.bg-green-600 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
 }
 .bg-blue-200 {
 	--tw-bg-opacity: 1;

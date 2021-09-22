@@ -96,7 +96,6 @@ class RakutenItemController extends Controller
                                 ->count();
                             if (!$rakuten_item_count > 0) {
 
-                                //改行を除去 
                                 $ng_title = $setting->ng_title;
                                 $jp_title = $this->format_jp_title($item['Item']['itemName'], $ng_title);
 
@@ -104,6 +103,7 @@ class RakutenItemController extends Controller
                                     $rakuten_item = new RakutenItem();
                                     $rakuten_item->rakuten_id = $rakuten->rakuten_id;
                                     $rakuten_item->jp_title = $jp_title;
+                                    $rakuten_item->origin_title = $item['Item']['itemName'];
                                     $rakuten_item->url = $item['Item']['itemUrl'];
                                     $rakuten_item->price = $item['Item']['itemPrice'];
                                     $rakuten_item->save();
@@ -134,11 +134,6 @@ class RakutenItemController extends Controller
         $jp_title = preg_replace('/(\(|\))/', ' ', $jp_title);
         $jp_title = preg_replace('/(《|》)/', ' ', $jp_title);
         $jp_title = preg_replace('/(（|）)/', ' ', $jp_title);
-        // $jp_title = preg_replace('/【.*?】/', '', $jp_title);
-        // $jp_title = preg_replace('/\[.*?\]/', '', $jp_title);
-        // $jp_title = preg_replace('/\(.*?\)/', '', $jp_title);
-        // $jp_title = preg_replace('/《.*?》/', '', $jp_title);
-        // $jp_title = preg_replace('/（.*?）/', '', $jp_title);
 
         //全角記号を除去
         $jp_title = $this->delete_zenkaku_symbol($jp_title);
@@ -288,26 +283,11 @@ class RakutenItemController extends Controller
                 $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
                 $ng_contents = explode("\n", $ng_content);
 
-                //半角カナを全角カナに変換、全角英数字を半角に変換
-                $jp_content = mb_convert_kana($request->input('content'), "KVa");
-
-                //コンテンツテキストのフォーマット
-                $jp_content = $this->format_jp_content($jp_content);
-
-                //コンテンツHTMLのフォーマット
-                $jp_content = $this->format_jp_content_html($jp_content);
-
-                //全角文字の除去
-                $jp_content = $this->delete_zenkaku_symbol($jp_content);
-
-                //除外キーワードを除去
-                $jp_content = str_replace($ng_contents, "", $jp_content);
-
-                $jp_content = trim(preg_replace("/\t/", "", $jp_content));
+                $jp_content = $this->adjust_jp_content_html($request->input('content'), $ng_contents);
 
 
                 $rakuten_item->jp_content = $jp_content;
-                $rakuten_item->html_content = $request->input('content');
+                $rakuten_item->origin_content = $request->input('content');
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
                 if ($rakuten_item->save() && !empty($jp_content)) {
                     Log::info('nodeからの日本語コンテンツ登録 ID = ' . $request->input('id'));
@@ -348,6 +328,30 @@ class RakutenItemController extends Controller
         }
     }
 
+
+
+
+    private function adjust_jp_content_html($text, $ng_contents)
+    {
+        //半角カナを全角カナに変換、全角英数字を半角に変換
+        $jp_content = mb_convert_kana($text);
+
+        //コンテンツテキストのフォーマット
+        $jp_content = $this->format_jp_content($jp_content);
+
+        //コンテンツHTMLのフォーマット
+        $jp_content = $this->format_jp_content_html($jp_content);
+
+        //全角文字の除去
+        $jp_content = $this->delete_zenkaku_symbol($jp_content);
+
+        //除外キーワードを除去
+        $jp_content = str_replace($ng_contents, "", $jp_content);
+
+        $jp_content = trim(preg_replace("/\t/", "", $jp_content));
+
+        return $jp_content;
+    }
     private function format_jp_content_html($text)
     {
 
@@ -452,6 +456,33 @@ class RakutenItemController extends Controller
         } else {
             Log::error('nodeからのドル変換 : IDなし');
         }
+    }
+
+
+    public function recheck(Request $request)
+    {
+        $rakuten_items = RakutenItem::whereNotNull('origin_title')
+            ->whereNotNull('origin_content')->get();
+
+        foreach ($rakuten_items as $item) {
+            $setting = Setting::where('site', 'rakuten')->first();
+            $origin_title = $item->origin_title;
+            $origin_content = $item->origin_content;
+            $ng_title = $setting->ng_title;
+            $ng_content = $setting->ng_content;
+            $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
+            $ng_contents = explode("\n", $ng_content);
+
+            $title = $this->format_jp_title($origin_title, $ng_title);
+            $content = $this->adjust_jp_content_html($origin_content, $ng_contents);
+
+            $rakuten_item = RakutenItem::find($item->id);
+            $rakuten_item->jp_title = $title;
+            $rakuten_item->jp_content = $content;
+            $rakuten_item->update();
+            Log::info('リチェック ID = ' . $item->id);
+        }
+        return redirect('rakuten');
     }
 
 
