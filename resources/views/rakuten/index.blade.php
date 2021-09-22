@@ -15,7 +15,10 @@
                                 <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path>
                             </svg>
                         </a>
-                        <a href="{{ route('setting.edit',['site'=>'rakuten']) }}" class="block rounded bg-blue-600 p-2 text-white">共通設定</a>
+                        <div class="flex">
+                            <a href="{{ route('rakuten.recheck') }}" class="block rounded bg-green-600 p-2 text-white text-center mr-3">再反映</a><br>
+                            <a href="{{ route('setting.edit',['site'=>'rakuten']) }}" class="block rounded bg-blue-600 p-2 text-white">共通設定</a>
+                        </div>
                     </div>
                     <table class="table-auto w-full mt-5">
                         <thead>
@@ -52,11 +55,12 @@
 
                                         @endphp
                                         <a href="{{ route('api.rakuten.search') }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時検索</a>
-                                        <a href="{{ route('rakuten.recheck') }}" class="block rounded bg-green-600 p-2 text-white text-center mt-3">再反映</a><br>
-                                        コンテンツ取得待ち：<div class="text-right">{{$items[$rakuten->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
-                                        タイトル翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
-                                        コンテンツ翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_content']}}件（進捗{{$en_content_progress}}%）</div>
-                                        ドル変換待ち：<div class="text-right">{{$items[$rakuten->id]['doller']}}件（進捗{{$doller_progress}}%）</div>
+                                        <div class="mt-5">
+                                            コンテンツ取得待ち：<div class="text-right">{{$items[$rakuten->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
+                                            タイトル翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
+                                            コンテンツ翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_content']}}件（進捗{{$en_content_progress}}%）</div>
+                                            ドル変換待ち：<div class="text-right">{{$items[$rakuten->id]['doller']}}件（進捗{{$doller_progress}}%）</div>
+                                        </div>
                                 </td>
                                 <td class="border px-4 py-2">
                                     <span class="text-gray-500">検索キーワード：</span><br>
