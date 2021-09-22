@@ -109,11 +109,20 @@ class RakutenItemController extends Controller
                                 $ng_title = $setting->ng_title;
                                 $jp_title = $this->format_jp_title($item['Item']['itemName'], $ng_title);
 
-                                if (!empty($jp_title) && $this->check_title_include_brand($jp_title, $target_brands) && $this->check_url_include_ng_url($item['Item']['itemUrl'], $rakutens->ng_url) === false) {
+                                $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
+
+                                if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['Item']['itemUrl'], $rakutens->ng_url) === false) {
                                     $rakuten_item = new RakutenItem();
                                     $rakuten_item->rakuten_id = $rakuten->rakuten_id;
                                     $rakuten_item->jp_title = $jp_title;
                                     $rakuten_item->origin_title = $item['Item']['itemName'];
+                                    $rakuten_item->jp_brand = $brand_check['brand'];
+
+                                    //ブランド名が英語の場合はen_brandにも入れる
+                                    if (strlen($brand_check['brand']) == mb_strlen($brand_check['brand'], 'utf8')) {
+                                        $rakuten_item->en_brand = $brand_check['brand'];
+                                    }
+
                                     $rakuten_item->url = $item['Item']['itemUrl'];
                                     $rakuten_item->price = $item['Item']['itemPrice'];
                                     $rakuten_item->save();
@@ -195,15 +204,21 @@ class RakutenItemController extends Controller
 
     private function check_title_include_brand($title, $brands)
     {
+        $result = [
+            'brand' => '',
+            'result' => false,
+        ];
+        array_multisort(array_map("mb_strlen", $brands), SORT_DESC, $brands);
         foreach ((array)$brands as $brand) {
             $brand = str_replace('/', '\/', $brand);
             $pattern = "/{$brand}/i";
-            if (preg_match($pattern, $title)) {
-                return true;
+            if (preg_match($pattern, $title, $return)) {
+                $result['result'] = true;
+                $result['brand'] = $return[0];
                 break;
             }
         }
-        return false;
+        return $result;
     }
 
     public function get_url()
