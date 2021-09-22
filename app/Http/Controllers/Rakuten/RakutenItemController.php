@@ -307,6 +307,7 @@ class RakutenItemController extends Controller
 
 
                 $rakuten_item->jp_content = $jp_content;
+                $rakuten_item->html_content = $request->input('content');
                 $rakuten_item->updated_at = date('Y-m-d H:i:s');
                 if ($rakuten_item->save() && !empty($jp_content)) {
                     Log::info('nodeからの日本語コンテンツ登録 ID = ' . $request->input('id'));

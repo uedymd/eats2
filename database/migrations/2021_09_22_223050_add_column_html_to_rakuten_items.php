@@ -14,7 +14,8 @@ class AddColumnHtmlToRakutenItems extends Migration
     public function up()
     {
         Schema::table('rakuten_items', function (Blueprint $table) {
-            $table->longText('html_content')->nullable()->after('jp_content');
+            $table->longText('origin_title')->nullable()->after('jp_title');
+            $table->longText('origin_content')->nullable()->after('jp_content');
         });
     }
 
@@ -26,7 +27,8 @@ class AddColumnHtmlToRakutenItems extends Migration
     public function down()
     {
         Schema::table('rakuten_items', function (Blueprint $table) {
-            $table->dropColumn('html_content');
+            $table->dropColumn('origin_title');
+            $table->dropColumn('origin_content');
         });
     }
 }
