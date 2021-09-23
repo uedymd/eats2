@@ -507,7 +507,9 @@ class RakutenItemController extends Controller
 
             $rakuten_item = RakutenItem::find($item->id);
             $rakuten_item->jp_title = $title;
+            $rakuten_item->en_title = "";
             $rakuten_item->jp_content = $content;
+            $rakuten_item->en_content = "";
             $rakuten_item->update();
             Log::info('リチェック ID = ' . $item->id);
         }
