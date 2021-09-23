@@ -387,7 +387,7 @@ class RakutenItemController extends Controller
         //HTMLタグを除去
         $jp_content = strip_tags($text, ["br", "table", "tr", "td", "th", "p"]);
         //改行コードを削除
-        $jp_content = preg_replace("\s", "", $jp_content);
+        $jp_content = preg_replace("/\s/", "", $jp_content);
         //<tr>タグの開始タグを除去
         $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
         //thまたはtdに続くth ,tdタグの開始タグをスペースに
