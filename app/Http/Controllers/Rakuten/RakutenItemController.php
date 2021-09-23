@@ -407,6 +407,8 @@ class RakutenItemController extends Controller
         //<br>を改行コードに変換
         $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
 
+        $jp_content = trim(preg_replace("/\s{3,}/", "\n", $jp_content));
+
         $jp_content = strip_tags($jp_content);
 
         return $jp_content;
