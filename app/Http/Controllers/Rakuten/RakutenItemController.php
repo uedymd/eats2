@@ -374,6 +374,7 @@ class RakutenItemController extends Controller
         //全角文字の除去
         $jp_content = $this->delete_zenkaku_symbol($jp_content);
 
+        $jp_content = trim(preg_replace("/\s{3,}/", "\n", $jp_content));
         //除外キーワードを除去
         $jp_content = str_replace($ng_contents, "", $jp_content);
 
