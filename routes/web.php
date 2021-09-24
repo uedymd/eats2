@@ -8,6 +8,7 @@ use App\Http\Controllers\EbayItemController;
 use App\Http\Controllers\BrandSetController;
 use App\Http\Controllers\RateSetController;
 use App\Http\Controllers\TemplatesController;
+use App\Http\Controllers\StocksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,10 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
 
 Route::group(['prefix' => 'ebay', 'middleware' => ['auth']], function () {
     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
+});
+
+Route::group(['prefix' => 'stock', 'middleware' => ['auth']], function () {
+    Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');
 });
 
 

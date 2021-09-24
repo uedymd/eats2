@@ -3,10 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stocks;
+use App\Models\RakutenItem;
 use Illuminate\Http\Request;
 
 class StocksController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search()
+    {
+        $stocks = RakutenItem::whereNotNull('en_title')
+            ->whereNotNull('en_content')
+            ->leftJoin('rakutens', 'rakutens.id', '=', 'rakuten_items.id')
+            ->where('rakutens.status', '=', 3)
+            ->get();
+
+        dd($stocks);
+    }
+
     /**
      * Display a listing of the resource.
      *
