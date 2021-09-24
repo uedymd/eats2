@@ -37,13 +37,13 @@ class RakutenItemController extends Controller
     public function search($id = null)
     {
         if (is_null($id)) {
-            $rakutens = Rakuten::where('status', 1)
+            $rakutens = Rakuten::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
                 ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
         } else {
-            $rakutens = Rakuten::where('status', 1)
+            $rakutens = Rakuten::whereIn('status', [1, 3])
                 ->where('rakutens.id', $id)
                 ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
                 ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)

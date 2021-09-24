@@ -14,7 +14,8 @@ class RakutenController extends Controller
 {
 
     public $status_array = [
-        1 => "稼働",
+        1 => "保留",
+        3 => "稼働",
         2 => "停止",
     ];
 
@@ -108,6 +109,7 @@ class RakutenController extends Controller
         $rakuten->price_min = $request->input('price_min');
         $rakuten->price_max = $request->input('price_max');
         $rakuten->best_offer = $request->input('best_offer');
+        $rakuten->sku = $request->input('sku');
         $rakuten->condition = $request->input('condition');
         $rakuten->status = 1;
         $rakuten->save();
@@ -176,6 +178,7 @@ class RakutenController extends Controller
         $rakuten->price_min = $request->input('price_min');
         $rakuten->price_max = $request->input('price_max');
         $rakuten->best_offer = $request->input('best_offer');
+        $rakuten->sku = $request->input('sku');
         $rakuten->condition = $request->input('condition');
         $rakuten->status = $request->input('status');
         $rakuten->save();
