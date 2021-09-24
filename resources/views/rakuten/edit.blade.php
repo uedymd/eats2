@@ -149,10 +149,22 @@
                                     {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-4 flex">
                             <div class="flex-1">
                                 <x-label for="condition" :value="__('SKU')" />
                                 <x-input id="sku" class="block mt-1" type="text" name="sku" :value="old('sku',$rakuten->sku)" autofocus />
-                        </div>
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="keyword" :value="__('テンプレート')" />
+                                {{ Form::select(
+                                    'template', 
+                                    $template_selector,
+                                    old('template',$rakuten->template),
+                                    ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
+                                ) }}
+                            </div>
+
                         </div>
                         <div class="mt-4">
                             <div>
