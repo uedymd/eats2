@@ -149,6 +149,10 @@
                                     {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
                                 </div>
                             </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('SKU')" />
+                                <x-input id="sku" class="block mt-1" type="text" name="sku" :value="old('sku',$rakuten->sku)" autofocus />
+                        </div>
                         </div>
                         <div class="mt-4">
                             <div>

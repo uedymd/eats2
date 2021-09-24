@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSkuColumnToRakutenItems extends Migration
+class AddSkuColumnToRakutens extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddSkuColumnToRakutenItems extends Migration
      */
     public function up()
     {
-        Schema::table('rakuten_items', function (Blueprint $table) {
-            $table->text('ebay_category')->nullable()->after('images');
-            $table->text('sku')->nullable()->after('ebay_category');
+        Schema::table('rakutens', function (Blueprint $table) {
+            $table->text('sku')->nullable()->after('condition');
         });
     }
 
@@ -26,8 +25,7 @@ class AddSkuColumnToRakutenItems extends Migration
      */
     public function down()
     {
-        Schema::table('rakuten_items', function (Blueprint $table) {
-            $table->dropColumn('ebay_category');
+        Schema::table('rakutens', function (Blueprint $table) {
             $table->dropColumn('sku');
         });
     }
