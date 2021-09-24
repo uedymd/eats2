@@ -14,7 +14,8 @@ class AddSkuColumnToRakutenItems extends Migration
     public function up()
     {
         Schema::table('rakuten_items', function (Blueprint $table) {
-            $table->text('sku')->nullable()->after('images');
+            $table->text('ebay_category')->nullable()->after('images');
+            $table->text('sku')->nullable()->after('ebay_category');
         });
     }
 
@@ -26,6 +27,7 @@ class AddSkuColumnToRakutenItems extends Migration
     public function down()
     {
         Schema::table('rakuten_items', function (Blueprint $table) {
+            $table->dropColumn('ebay_category');
             $table->dropColumn('sku');
         });
     }
