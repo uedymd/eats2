@@ -7,6 +7,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EbayItemController;
 use App\Http\Controllers\BrandSetController;
 use App\Http\Controllers\RateSetController;
+use App\Http\Controllers\TemplatesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,14 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
         Route::get('/edit/{id}', [RateSetController::class, 'edit'])->name('setting.rateset.edit')->where('id', '[0-9]+');
         Route::post('/update/{id}', [RateSetController::class, 'update'])->name('setting.rateset.update')->where('id', '[0-9]+');
         Route::get('/destroy/{id}', [RateSetController::class, 'destroy'])->name('setting.rateset.destroy')->where('id', '[0-9]+');
+    });
+    Route::group(['prefix' => 'template'], function () {
+        Route::get('/', [TemplatesController::class, 'index'])->name('setting.template.index');
+        Route::get('/create', [TemplatesController::class, 'create'])->name('setting.template.create');
+        Route::post('/store', [TemplatesController::class, 'store'])->name('setting.template.store');
+        Route::get('/edit/{id}', [TemplatesController::class, 'edit'])->name('setting.template.edit')->where('id', '[0-9]+');
+        Route::post('/update/{id}', [TemplatesController::class, 'update'])->name('setting.template.update')->where('id', '[0-9]+');
+        Route::get('/destroy/{id}', [TemplatesController::class, 'destroy'])->name('setting.template.destroy')->where('id', '[0-9]+');
     });
 });
 
