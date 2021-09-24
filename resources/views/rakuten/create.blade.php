@@ -118,8 +118,8 @@
                         </div>
                         <div class="mt-4 flex">
                             <div class="flex-1">
-                                    <x-label for="condition" :value="__('SKU')" />
-                                    <x-input id="sku" class="block mt-1" type="text" name="sku" :value="old('sku')" autofocus />
+                                <x-label for="condition" :value="__('SKU')" />
+                                <x-input id="sku" class="block mt-1" type="text" name="sku" :value="old('sku')" autofocus />
                             </div>
                             <div class="flex-1">
                                 <x-label for="keyword" :value="__('テンプレート')" />
@@ -128,10 +128,24 @@
                                     $template_selector,
                                     null,
                                     ['class'=>'block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500','required']
-                                ) }}
+                                    ) }}
                             </div>
                         </div>
-
+                        <div class="mt-4 flex">
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Payment Profile')" />
+                                <x-input id="payment_profile" class="block mt-1 w-10/12 mr-3" type="text" name="payment_profile" :value="old('payment_profile')" autofocus />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Return Profile')" />
+                                <x-input id="return_profile" class="block mt-1 w-10/12 mr-3" type="text" name="return_profile" :value="old('return_profile')" autofocus />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Shipping Profile')" />
+                                <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile')" autofocus />
+                            </div>
+                        </div>
+                        
                         <div class="flex items-center justify-end mt-4">
                             <x-button class="ml-4">
                                 {{ __('登録') }}

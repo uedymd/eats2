@@ -166,6 +166,20 @@
                             </div>
 
                         </div>
+                        <div class="mt-4 flex">
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Payment Profile')" />
+                                <x-input id="payment_profile" class="block mt-1 w-10/12 mr-3" type="text" name="payment_profile" :value="old('payment_profile',$rakuten->payment_profile)" autofocus />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Return Profile')" />
+                                <x-input id="return_profile" class="block mt-1 w-10/12 mr-3" type="text" name="return_profile" :value="old('return_profile',$rakuten->return_profile)" autofocus />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="condition" :value="__('Shipping Profile')" />
+                                <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile',$rakuten->shipping_profile)" autofocus />
+                            </div>
+                        </div>
                         <div class="mt-4">
                             <div>
                                 <label for="status">ステータス</label>
