@@ -17,7 +17,7 @@ class CreateStocksTable extends Migration
             $table->id();
             $table->string('item_id', 10);
             $table->string('site', 100);
-            $table->longText('error');
+            $table->longText('error')->nullable();
             $table->string('status', 100);
             $table->timestamps();
         });

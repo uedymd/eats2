@@ -37,5 +37,6 @@ Route::group(['prefix' => 'rakuten'], function () {
 });
 
 Route::group(['prefix' => 'ebay'], function () {
-    Route::get('add/item/{id}/site/{site}', [EbayItemController::class, 'add']);
+    Route::get('add/item/{site}/{id?}/', [EbayItemController::class, 'add']);
+    Route::get('add/items/', [EbayItemController::class, 'add_items']);
 });

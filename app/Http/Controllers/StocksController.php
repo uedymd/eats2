@@ -15,13 +15,26 @@ class StocksController extends Controller
      */
     public function search()
     {
-        $stocks = RakutenItem::whereNotNull('en_title')
-            ->whereNotNull('en_content')
-            ->leftJoin('rakutens', 'rakutens.id', '=', 'rakuten_items.id')
+        $items = RakutenItem::where('en_title', '!=', '')
+            ->where('en_content', '!=', '')
+            ->where('en_brand', '!=', '')
+            ->leftJoin('rakutens', 'rakutens.id', '=', 'rakuten_items.rakuten_id')
+            ->select('rakuten_items.id', 'rakuten_items.en_title', 'rakuten_items.en_content')
             ->where('rakutens.status', '=', 3)
             ->get();
 
-        dd($stocks);
+
+        foreach ($items as $item) {
+            $stock_count = Stocks::where('item_id', '=', $item->id)
+                ->where('site', 'rakuten')->count();
+            if ($stock_count == 0) {
+                $stocks = new Stocks();
+                $stocks->item_id = $item->id;
+                $stocks->site = 'rakuten';
+                $stocks->status = 1;
+                $stocks->save();
+            }
+        }
     }
 
     /**
@@ -31,7 +44,8 @@ class StocksController extends Controller
      */
     public function index()
     {
-        //
+        $stocks = Stocks::all();
+        return view('stock/index', compact('stocks'));
     }
 
     /**

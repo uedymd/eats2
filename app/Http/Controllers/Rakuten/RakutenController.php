@@ -118,6 +118,7 @@ class RakutenController extends Controller
         $rakuten->price_max = $request->input('price_max');
         $rakuten->best_offer = $request->input('best_offer');
         $rakuten->sku = $request->input('sku');
+        $rakuten->type = $request->input('type');
         $rakuten->payment_profile = $request->input('payment_profile');
         $rakuten->return_profile = $request->input('return_profile');
         $rakuten->shipping_profile = $request->input('shipping_profile');
@@ -198,6 +199,7 @@ class RakutenController extends Controller
         $rakuten->price_max = $request->input('price_max');
         $rakuten->best_offer = $request->input('best_offer');
         $rakuten->sku = $request->input('sku');
+        $rakuten->type = $request->input('type');
         $rakuten->payment_profile = $request->input('payment_profile');
         $rakuten->return_profile = $request->input('return_profile');
         $rakuten->shipping_profile = $request->input('shipping_profile');

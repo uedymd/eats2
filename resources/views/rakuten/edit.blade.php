@@ -136,24 +136,28 @@
                                                 'condition_new' => true,
                                                 'condition_used' => false,
                                             ];
-                                        }elseif(!is_null($rakuten->condition)&&$rakuten->condition==0){
+                                        }elseif(!is_null($rakuten->condition)&&$rakuten->condition==2){
                                             $condition = [
-                                                'condition_new' => true,
-                                                'condition_used' => false,
+                                                'condition_new' => false,
+                                                'condition_used' => true,
                                             ];
                                         }
                                     @endphp
-                                    {{ Form::radio('condition', '1',$condition['condition_new'],['id'=>'condition_new'] );}}
+                                    {{ Form::radio('condition', '1',$condition['condition_new'],['id'=>'condition_new','required'] );}}
                                     {{Form::label('condition_new','新品',['class'=>'custom-control-label mr-10'])}}
-                                    {{ Form::radio('condition', '2',$condition['condition_used'],['id'=>'condition_used'] );}}
+                                    {{ Form::radio('condition', '2',$condition['condition_used'],['id'=>'condition_used','required'] );}}
                                     {{Form::label('condition_used','中古',['class'=>'custom-control-labelx'])}}
                                 </div>
                             </div>
                         </div>
                         <div class="mt-4 flex">
                             <div class="flex-1">
-                                <x-label for="condition" :value="__('SKU')" />
+                                <x-label for="sku" :value="__('SKU')" />
                                 <x-input id="sku" class="block mt-1" type="text" name="sku" :value="old('sku',$rakuten->sku)" autofocus />
+                            </div>
+                            <div class="flex-1">
+                                <x-label for="type" :value="__('Type')" />
+                                <x-input id="type" class="block mt-1" type="text" name="type" :value="old('type',$rakuten->type)" autofocus required />
                             </div>
                             <div class="flex-1">
                                 <x-label for="keyword" :value="__('テンプレート')" />
@@ -168,16 +172,16 @@
                         </div>
                         <div class="mt-4 flex">
                             <div class="flex-1">
-                                <x-label for="condition" :value="__('Payment Profile')" />
-                                <x-input id="payment_profile" class="block mt-1 w-10/12 mr-3" type="text" name="payment_profile" :value="old('payment_profile',$rakuten->payment_profile)" autofocus />
+                                <x-label for="payment_profile" :value="__('Payment Profile')" />
+                                <x-input id="payment_profile" class="block mt-1 w-10/12 mr-3" type="text" name="payment_profile" :value="old('payment_profile',$rakuten->payment_profile)" autofocus required />
                             </div>
                             <div class="flex-1">
-                                <x-label for="condition" :value="__('Return Profile')" />
-                                <x-input id="return_profile" class="block mt-1 w-10/12 mr-3" type="text" name="return_profile" :value="old('return_profile',$rakuten->return_profile)" autofocus />
+                                <x-label for="return_profile" :value="__('Return Profile')" />
+                                <x-input id="return_profile" class="block mt-1 w-10/12 mr-3" type="text" name="return_profile" :value="old('return_profile',$rakuten->return_profile)" autofocus required />
                             </div>
                             <div class="flex-1">
-                                <x-label for="condition" :value="__('Shipping Profile')" />
-                                <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile',$rakuten->shipping_profile)" autofocus />
+                                <x-label for="shipping_profile" :value="__('Shipping Profile')" />
+                                <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile',$rakuten->shipping_profile)" autofocus required />
                             </div>
                         </div>
                         <div class="mt-4">

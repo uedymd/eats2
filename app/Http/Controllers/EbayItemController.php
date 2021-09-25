@@ -6,6 +6,8 @@ use App\Models\EbayItem;
 use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
+use App\Models\templates;
+use App\Models\Stocks;
 
 class EbayItemController extends Controller
 {
@@ -92,6 +94,32 @@ class EbayItemController extends Controller
         //
     }
 
+    public function add_items()
+    {
+        $stocks = Stocks::where('status', 1)
+            ->limit(3)
+            ->get();
+
+        foreach ($stocks as $stock) {
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/ebay/add/item/{$stock->site}/{$stock->item_id}";
+            //cURLセッションを初期化する
+            $ch = curl_init();
+
+            //URLとオプションを指定する
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+            //URLの情報を取得する
+            $res =  curl_exec($ch);
+
+            //結果を表示する
+            var_dump($res);
+
+            //セッションを終了する
+            curl_close($ch);
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -99,8 +127,21 @@ class EbayItemController extends Controller
      * @param  \App\Models\EbayItem  $ebayItem
      * @return \Illuminate\Http\Response
      */
-    public function add(EbayItem $ebayItem, $id, $site)
+    public function add(EbayItem $ebayItem, $site, $id = null)
     {
+
+
+        if (is_null($id)) {
+            $item = RakutenItem::leftJoin('stocks', 'rakuten_items.id', '=', 'stocks.item_id')
+                ->where('stocks.status', 1)
+                ->first();
+
+            if (is_null($item)) {
+                return false;
+            }
+            $id = $item->item_id;
+        }
+
         switch ($site) {
             case 'rakuten':
                 $item = RakutenItem::find($id);
@@ -112,27 +153,27 @@ class EbayItemController extends Controller
         }
 
         $xml = $this->make_add_item_xml($item);
-        $register = $this->ebay_regist_item($xml);
-        $ebay_item = new EbayItem();
-        if ($register['Ack'] !== 'Failure') {
-            $ebay_item->ebay_id = $register['ItemID'];
+        $registed_item = $this->ebay_regist_item($xml);
+        if ($registed_item['Ack'] !== 'Failure') {
+            $ebay_item = new EbayItem();
+            $ebay_item->ebay_id = $registed_item['ItemID'];
             $ebay_item->site = $site;
             $ebay_item->supplier_id = $id;
-            $ebay_item->title = mb_strimwidth($item->en_title, 0, 70);
+            $ebay_item->title = $item->en_title;
             $ebay_item->price = $item->doller;
-            $images = unserialize($item->images);
-            $ebay_item->image = $images[0];
-            $ebay_item->save();
+            // $ebay_item->image = $register['ProductSuggestions']['ProductSuggestion']['StockPhoto'];
+            if ($ebay_item->save()) {
+                $stock = Stocks::where('site', 'rakuten')
+                    ->where('item_id', $id)->first();
+                $stock->status = 2;
+                $stock->save();
+            }
         } else {
-            $ebay_item->ebay_id = 0;
-            $ebay_item->site = $site;
-            $ebay_item->supplier_id = $id;
-            $ebay_item->title = mb_strimwidth($item->en_title, 0, 70);
-            $ebay_item->price = $item->doller;
-            $images = unserialize($item->images);
-            $ebay_item->image = $images[0];
-            $ebay_item->error = serialize($register['Errors']);
-            $ebay_item->save();
+            $stock = Stocks::where('site', 'rakuten')
+                ->where('item_id', $id)->first();
+            $stock->error = serialize($registed_item['Errors']);
+            $stock->status = 3;
+            $stock->save();
         }
     }
 
@@ -141,29 +182,31 @@ class EbayItemController extends Controller
     {
 
         $item_settings = Rakuten::find($item->rakuten_id);
-        $condtionID = 3000;
-        $category = 33034;
+        if ($item_settings->condition == 2) {
+            $condtionID = 3000;
+        } else {
+            $condtionID = 1000;
+        }
+        $category = $item_settings->ebay_category;
         $Duration = 'GTC';
         $MinimumBestOfferPrice = '';
         $location = 'OSAKA';
         $Quantity = 1;
-        $PaymentProfileName = "PayPal";
-        $ReturnProfileName = "30Days";
-        $ShippingProfileName = "guitar2";
-        $type = "Electric Guitar";
-        $brand = "Fender Japan";
-
-        $title = mb_strimwidth($item->en_title, 0, 70);
+        $PaymentProfileName = $item_settings->payment_profile;
+        $ReturnProfileName = $item_settings->return_profile;
+        $ShippingProfileName = $item_settings->shipping_profile;
+        $type = $item_settings->type;
+        $brand = $item->en_brand;
+        $sku = $item_settings->sku;
 
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
         $text .= "<AddFixedPriceItemRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">\n";
         $text .= "<RequesterCredentials>\n";
-        $text .= "<eBayAuthToken>{config('app.ebay_token')}</eBayAuthToken>\n";
+        $text .= "<eBayAuthToken>" . config('app.ebay_token') . "</eBayAuthToken>\n";
         $text .= "</RequesterCredentials>\n";
         $text .= "<ErrorLanguage>en_US</ErrorLanguage>\n";
         $text .= "<Item>\n";
-        $item_title = htmlspecialchars($title);
-        $text .= "<Title>EN {$item_title}</Title>\n";
+        $text .= "<Title>{$item->en_title}</Title>\n";
         $description = $this->make_description_html($item);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
@@ -174,7 +217,7 @@ class EbayItemController extends Controller
         $text .= "<Country>JP</Country>\n";
         $text .= "<Currency>USD</Currency>\n";
         $text .= "<DispatchTimeMax>5</DispatchTimeMax>\n";
-        // if (array_key_exists("CustomLabel", $data) && !empty($data['CustomLabel'])) {
+        // if (!empty($sku)) {
         //     $text .= "<InventoryTrackingMethod>SKU</InventoryTrackingMethod>\n";
         // }
         $text .= "<ItemSpecifics>\n";
@@ -255,9 +298,14 @@ class EbayItemController extends Controller
         $text .= "<GalleryType>Gallery</GalleryType>\n";
 
         $imgaes = unserialize($item->images);
+        $count = 0;
         foreach ($imgaes as $picture) {
             if (!empty($picture)) {
                 $text .= "<PictureURL>{$picture}</PictureURL>\n";
+                $count++;
+                if ($count > 11) {
+                    break;
+                }
             }
         }
         $text .= "</PictureDetails>\n";
@@ -292,9 +340,9 @@ class EbayItemController extends Controller
         $text .= "</SellerShippingProfile>\n";
         $text .= "</SellerProfiles>\n";
         $text .= "<Site>US</Site>\n";
-        // if (array_key_exists("CustomLabel", $data) && !empty($data['CustomLabel'])) {
-        //     $text .= "<SKU>{$data['CustomLabel']}</SKU>\n";
-        // }
+        if (!empty($sku)) {
+            $text .= "<SKU>{$sku}</SKU>\n";
+        }
 
         // if (array_key_exists("StoreCategory", $data) && !empty($data['StoreCategory'])) {
         //     $text .= "<Storefront>\n";
@@ -309,136 +357,23 @@ class EbayItemController extends Controller
 
         $text .= "</Item>\n";
         $text .= "</AddFixedPriceItemRequest>";
-        $test_xml = new \SimpleXMLElement($text);
-        return $test_xml;
+        $xml = new \SimpleXMLElement($text);
+        return $xml;
     }
 
     private function make_description_html($item)
     {
-
-        $images = unserialize($item->images);
+        $item_settings = Rakuten::find($item->rakuten_id);
+        $template = templates::find($item_settings->template);
         $slider = "";
 
-        // foreach ((array)$images as $image) {
-        //     $slider .= "<div class=\"image-gallery-slider\">
-        //     <input name=\"image-swap\" id=\"image1\" type=\"radio\" checked=\"checked\">
-        //     <label for=\"image1\">
-        //         <img src=\"{$image}\" width=\"50\" alt=\"image\">
-        //     </label>
-        //     <div class=\"image-thumbnail\">
-        //         <img src=\"{$image}\" alt=\"image\">
-        //     </div>
-        // </div>";
-        // }
+        $html = $template->source;
+        $title = $item->en_title;
+        $description = nl2br($item->en_content);
 
-        $html = "<head>
-        <meta charset=\"utf-8\">
-        <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">
-        <title>{$item->en_title}</title>
-        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-        <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\">
-        <link href=\"https://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700,800,900\" rel=\"stylesheet\">
-        <link rel=\"stylesheet\" type=\"text/css\" href=\"https://tricraft.net/template/style-eg.css\">
-    </head>
-    
-    <body><input class=\"toggle-nav\" id=\"toggle-nav\" type=\"checkbox\">
-        <div class=\"mobile-bar\"><label for=\"toggle-nav\"></label></div>
-        <div class=\"container\">
-            </header>
-            <div class=\"container-fluid content\">
-                <div class=\"row\">
-                    <div class=\"col-md-9 col-md-push-3\">
-                        <div class=\"listing-title\">
-                            <h1>{$item->en_title}</h1>
-                        </div>
-                        <div class=\"image-gallery-frame\" style=\"font-size: 14pt;\">
-                            <div class=\"image-gallery\">
-                                {$slider}
-                            </div>
-                        </div>
-                        <div class=\"panel panel-default\" style=\"font-size: 14pt;\">
-                            <div class=\"panel-heading\">
-                                <h4 class=\"panel-title\"><i class=\"fa fa-file\" aria-hidden=\"true\"></i> <b>Item
-                                        Description</b></h4>
-                            </div>
-                            <div class=\"panel-body\">
-                                <p>{$item->en_content}</p>
-                            </div>
-                        </div>
-                        <div class=\"panel panel-default\" style=\"\">
-                            <div class=\"panel-heading\" style=\"font-size: 14pt;\">
-                                <h4 class=\"panel-title\"><i class=\"fa fa-truck\" aria-hidden=\"true\"></i> <b>Shipping</b></h4>
-                            </div>
-                            <div class=\"panel-body\" style=\"\">
-                                <p style=\"\">
-                                    <font size=\"3\">Shipping by EMS, FedEx or DHL(international express mail service, with
-                                        Tracking and Insurance, handling cost).&nbsp;<br>EMS takes 3-7 days, FedEx, DHL
-                                        takes 2-4 days.<br>We will ship your item within 5 business days with carefully
-                                        packed.&nbsp;<br></font>
-                                </p>
-                            </div>
-                        </div>
-                        <div class=\"panel panel-default\" style=\"\">
-                            <div class=\"panel-heading\" style=\"font-size: 14pt;\">
-                                <h4 class=\"panel-title\"><i class=\"fa fa-repeat\" aria-hidden=\"true\"></i> <b>Returns</b></h4>
-                            </div>
-                            <div class=\"panel-body\" style=\"\">
-                                <p style=\"font-size: 14pt;\"><u>Money back guarantee within 30 days.</u>&nbsp;</p>
-                                <p style=\"\">
-                                    <font size=\"3\">We offer 30 days money back guarantee for defective products.<br>The
-                                        buyer must pay for returning it back to us.<br>When there were defects in a
-                                        instrument, please contact us.</font>
-                                </p>
-                            </div>
-                            <font size=\"3\"></font>
-                        </div>
-                        <font size=\"3\">
-                            <div class=\"panel panel-default\" style=\"\">
-                                <div class=\"panel-heading\" style=\"font-size: 14pt;\">
-                                    <h4 class=\"panel-title\"><i class=\"fa fa-tag\" aria-hidden=\"true\"></i> <b>International
-                                            Buyers - Please Note:</b></h4>
-                                </div>
-                                <div class=\"panel-body\" style=\"\">
-                                    <p style=\"\">
-                                        <font size=\"3\">Import duties, taxes and charges are not included in the item price
-                                            or shipping charges. These charges are the buyer's responsibility.<br>Please
-                                            check with your country's customs office to determine what these additional
-                                            costs will be prior to bidding/buying.<br>These charges are normally collected
-                                            by the delivering freight (shipping) company or when you pick the item up - do
-                                            not confuse them for additional shipping charges.<br>We do not mark merchandise
-                                            values below value or mark items as 窶徃ifts窶 - US and International government
-                                            regulations prohibit such behavior.</font>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class=\"panel panel-default\" style=\"\">
-                                <div class=\"panel-heading\" style=\"font-size: 14pt;\">
-                                    <h4 class=\"panel-title\"><i class=\"fa fa-tag\" aria-hidden=\"true\"></i> <b>About Us</b>
-                                    </h4>
-                                </div>
-                                <div class=\"panel-body\" style=\"\">
-                                    <p style=\"font-size: 14pt;\"><u>If you have any problem, please contact us.</u>&nbsp;
-                                        Your satisfaction is important to us.&nbsp;</p>
-                                    <p style=\"\">
-                                        <font size=\"3\">We have results that I sold of tens of thousands of by Internet
-                                            sale.<br>We have pride ourselves in the Quality of items we offer. </font>
-                                    </p>
-                                    <p style=\"font-size: 14pt;\"><span style=\"font-size: 14pt;\"><u>All our items has been
-                                                checked by technician.</u>&nbsp;</span></p>
-                                    <p style=\"\">
-                                        <font size=\"3\">As every seller dealing with pre-owned branded items in Japan we have
-                                            as well license from local government to offer services of this
-                                            kind.&nbsp;<br>We are officially registered as legal business and we have to
-                                            comply with all rules and regulations including tax requirements from the
-                                            Japanese government.</font>
-                                    </p>
-                                </div>
-                            </div>
-                        </font>
-                    </div><!-- right column ends -->
-                </div>
-            </div>
-        </div>";
+        $html = str_replace(['##TITLE##', '##DESCRIPTION##'], [$title, $description], $html);
+        $html = preg_replace('/\n/', '', $html);
+
         return $html;
     }
 
@@ -453,6 +388,7 @@ class EbayItemController extends Controller
             "X-EBAY-API-APP-NAME: {config('app.ebay_client_id')}",
             "X-EBAY-API-CERT-NAME: {config('app.ebay_client_id')}"
         );
+
 
         $xml = $xml_data->asXML();
         $ch = curl_init();
