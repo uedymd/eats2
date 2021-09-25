@@ -35,16 +35,16 @@ class RakutenController extends Controller
         foreach ($rakutens as $rakuten) {
             $count = RakutenItem::where('rakuten_id', $rakuten->id)->count();
             $count_jp_content_null = RakutenItem::where('rakuten_id', $rakuten->id)
-                ->where('jp_content', '!=', "")
+                ->whereNull('jp_content')
                 ->count();
             $count_en_title_null = RakutenItem::where('rakuten_id', $rakuten->id)
-                ->where('en_title', '!=', "")
+                ->whereNull('en_title')
                 ->count();
             $count_en_content_null = RakutenItem::where('rakuten_id', $rakuten->id)
-                ->where('en_content', '!=', "")
+                ->whereNull('en_content')
                 ->count();
             $count_doller_null = RakutenItem::where('rakuten_id', $rakuten->id)
-                ->where('doller', '!=', "")
+                ->whereNull('doller')
                 ->count();
             $items[$rakuten->id] = [
                 'count' => $count,
