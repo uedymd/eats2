@@ -240,6 +240,15 @@ class RakutenItemController extends Controller
         return $rakuten_item;
     }
 
+    public function get_brand()
+    {
+        $rakuten_item = RakutenItem::where('en_brand', NULL)
+            ->whereNotNull('jp_brand')
+            ->select('id', 'jp_brand')
+            ->orderBy('updated_at')->first();
+        return $rakuten_item;
+    }
+
     public function get_content()
     {
         $rakuten_item = RakutenItem::where('en_content', NULL)
@@ -449,6 +458,25 @@ class RakutenItemController extends Controller
             }
         } else {
             Log::error('nodeからの翻訳タイトル書き込み : IDなし');
+        }
+    }
+
+    public function set_brad(Request $request)
+    {
+        if (!empty($request->input('id'))) {
+            $rakuten_item = RakutenItem::where('id', $request->input('id'))->first();
+            if (!empty($request->input('content'))) {
+                $rakuten_item->en_brand = $request->input('content');
+                $rakuten_item->updated_at = date('Y-m-d H:i:s');
+                $rakuten_item->save();
+                Log::info('nodeからの翻訳ブランド登録 ID = ' . $request->input('id'));
+            } else {
+                $rakuten_item->updated_at = date('Y-m-d H:i:s');
+                $rakuten_item->save();
+                Log::info('nodeからの翻訳ブランド失敗 ID = ' . $request->input('id'));
+            }
+        } else {
+            Log::error('nodeからの翻訳ブランド書き込み : IDなし');
         }
     }
 
