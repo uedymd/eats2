@@ -25,7 +25,23 @@ class EbayItemController extends Controller
     public function index()
     {
         $ebay_items = EbayItem::all();
-        return view('ebay/index', compact('ebay_items'));
+
+        $suppliers = [];
+
+        foreach ($ebay_items as $ebay_item) {
+            switch ($ebay_item->site) {
+                case 'rakuten':
+                    $rakuten_item = RakutenItem::find($ebay_item->supplier_id);
+                    $suppliers[$ebay_item->id] = $rakuten_item->url;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        return view('ebay/index', compact('ebay_items', 'suppliers'));
     }
 
     /**
