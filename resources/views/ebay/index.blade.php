@@ -38,7 +38,8 @@
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">
-                                    <a href="{{$suppliers[$ebay_items->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center">{{$ebay_items->site}} View</a>
+                                    {{$ebay_items->site}}
+                                    <a href="{{$suppliers[$ebay_items->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
                                 </td>
                                 <td class="border px-4 py-2 text-right">${{number_format($ebay_items->price)}}
                                 </td>
