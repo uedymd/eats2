@@ -25,6 +25,7 @@ Route::group(['prefix' => 'rakuten'], function () {
     Route::get('search/{id?}', [RakutenItemController::class, 'search'])->name('api.rakuten.search')->where('id', '[0-9]+');
     Route::get('translate/get_url', [RakutenItemController::class, 'get_url']);
     Route::get('translate/get_title', [RakutenItemController::class, 'get_title']);
+    Route::get('translate/get_brand', [RakutenItemController::class, 'get_brand']);
     Route::get('translate/get_content', [RakutenItemController::class, 'get_content']);
     Route::get('translate/get_price', [RakutenItemController::class, 'get_price']);
     Route::get('translate/get_image', [RakutenItemController::class, 'get_image']);
