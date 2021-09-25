@@ -29,6 +29,8 @@
                                     @endif
                                     @if(!is_null($ebay_items->view_url))
                                     <a href="{{$ebay_items->view_url}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
+                                    @else
+                                     <small>詳細取得中</small>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">
