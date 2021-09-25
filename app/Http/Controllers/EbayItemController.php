@@ -13,7 +13,7 @@ class EbayItemController extends Controller
 {
 
 
-    private $url = 'https://api.ebay.com/ws/api.dll';
+    private $api_url = 'https://api.ebay.com/ws/api.dll';
     // private $url = 'https://api.sandbox.ebay.com/ws/api.dll';
 
 
@@ -392,7 +392,7 @@ class EbayItemController extends Controller
 
         $xml = $xml_data->asXML();
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_URL, $this->api_url);
         curl_setopt($ch, CURLOPT_POST, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
@@ -403,5 +403,70 @@ class EbayItemController extends Controller
         $result = json_encode($result);
         $result = json_decode($result, true);
         return $result;
+    }
+
+    public function get_items_detail()
+    {
+        // date_default_timezone_set('UTF');
+        $start = date("Y-m-d", strtotime("-1 day"));
+        $end = date("Y-m-d H:i:s");
+        $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+					<GetSellerListRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
+					  <RequesterCredentials>
+                      <eBayAuthToken>" . config('app.ebay_token') . "</eBayAuthToken>\n;
+					  </RequesterCredentials>
+					  <StartTimeFrom>{$start}</StartTimeFrom> 
+  					  <StartTimeTo>{$end}</StartTimeTo> 
+					  <ErrorLanguage>en_US</ErrorLanguage>
+					  <WarningLevel>High</WarningLevel>
+					  <GranularityLevel>Coarse</GranularityLevel> 
+					  <IncludeWatchCount>true</IncludeWatchCount> 
+					  <Pagination> 
+					    <EntriesPerPage>200</EntriesPerPage> 
+					  </Pagination> 
+					</GetSellerListRequest>";
+        $http_headers = array(
+            "Content-Type: text/xml",
+            "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
+            "X-EBAY-API-CALL-NAME: GetSellerList",
+            "X-EBAY-API-SITEID: 0",
+            "X-EBAY-API-DEV-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-APP-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-CERT-NAME: " . config('app.ebay_client_id')
+        );
+
+        $xml = $text;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->api_url);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+
+        $_result = curl_exec($ch);
+        $result = simplexml_load_string($_result);
+        $result = json_encode($result);
+        $result = json_decode($result, true);
+        return $result;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\EbayItem  $ebayItem
+     * @return \Illuminate\Http\Response
+     */
+    public function set_items_detail(EbayItem $ebayItem)
+    {
+        $data = $this->get_items_detail();
+
+        foreach ((array)$data['ItemArray']['Item'] as $value) {
+            $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
+            if ($ebay_item) {
+                $ebay_item->image = $value['PictureDetails']['PictureURL'][0];
+                $ebay_item->view_url = $value['ListingDetails']['ViewItemURL'];
+                $ebay_item->save();
+            }
+        }
     }
 }
