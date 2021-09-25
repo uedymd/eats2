@@ -461,7 +461,7 @@ class RakutenItemController extends Controller
         }
     }
 
-    public function set_brad(Request $request)
+    public function set_brand(Request $request)
     {
         if (!empty($request->input('id'))) {
             $rakuten_item = RakutenItem::where('id', $request->input('id'))->first();
