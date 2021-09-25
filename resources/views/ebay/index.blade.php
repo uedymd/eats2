@@ -14,7 +14,7 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2 w-1/12">アイテム</th>
                                 <th class="border px-4 py-2 w-3/12">タイトル</th>
-                                <th class="border px-4 py-2 w-2/12">元サイト</th>
+                                <th class="border px-4 py-2 w-1/12">元サイト</th>
                                 <th class="border px-4 py-2">販売価格</th>
                                 <th class="border px-4 py-2">エラー</th>
                                 <th class="border px-4 py-2">仕入元チェック</th>
@@ -37,7 +37,7 @@
                                     {{$ebay_items->ebay_id}}
                                     @endif
                                 </td>
-                                <td class="border px-4 py-2">
+                                <td class="border px-4 py-2 text-center">
                                     {{$ebay_items->site}}
                                     <a href="{{$suppliers[$ebay_items->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
                                 </td>
