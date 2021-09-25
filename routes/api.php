@@ -33,6 +33,7 @@ Route::group(['prefix' => 'rakuten'], function () {
     Route::post('translate/set_doller', [RakutenItemController::class, 'set_doller']);
     Route::get('translate/set_doller', [RakutenItemController::class, 'set_doller']);
     Route::post('translate/set_title', [RakutenItemController::class, 'set_title']);
+    Route::post('translate/set_brand', [RakutenItemController::class, 'set_brand']);
     Route::post('translate/set_en_content', [RakutenItemController::class, 'set_en_content']);
 });
 
