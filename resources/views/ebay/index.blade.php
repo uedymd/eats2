@@ -12,9 +12,9 @@
                     <table class="table-auto w-full mt-5">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border px-4 py-2">アイテム</th>
-                                <th class="border px-4 py-2">タイトル</th>
-                                <th class="border px-4 py-2">元サイト</th>
+                                <th class="border px-4 py-2 w-1/12">アイテム</th>
+                                <th class="border px-4 py-2 w-3/12">タイトル</th>
+                                <th class="border px-4 py-2 w-2/12">元サイト</th>
                                 <th class="border px-4 py-2">販売価格</th>
                                 <th class="border px-4 py-2">エラー</th>
                                 <th class="border px-4 py-2">仕入元チェック</th>
@@ -23,12 +23,12 @@
                         <tbody>
                             @foreach($ebay_items as $ebay_items)
                             <tr>
-                                <td class="border px-4 py-2 w-1/12">
+                                <td class="border px-4 py-2">
                                     @if($ebay_items->image!=='')
                                     <img src="{{$ebay_items->image}}" alt="" class="block" style="max-width:100%;height:auto;">
                                     @endif
                                     @if(!is_null($ebay_items->view_url))
-                                    <a href="{{$ebay_items->view_url}}" target="_blank" class="block rounded bg-gray-600 p-2 text-white text-center">View</a>
+                                    <a href="{{$ebay_items->view_url}}" target="_blank" class="block rounded bg-gray-600 p-2 text-white text-center mt-2">View</a>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">
