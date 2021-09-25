@@ -17,6 +17,11 @@
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('ebay.index') }}" :active="request()->routeIs('setting.brandset.index')">
+                        出品管理
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('setting.brandset.index') }}" :active="request()->routeIs('setting.brandset.index')">
                         ブランド設定
                     </x-jet-nav-link>
