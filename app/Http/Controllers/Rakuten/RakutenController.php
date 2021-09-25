@@ -40,6 +40,9 @@ class RakutenController extends Controller
             $count_en_title_null = RakutenItem::where('rakuten_id', $rakuten->id)
                 ->whereNull('en_title')
                 ->count();
+            $count_en_brand_null = RakutenItem::where('rakuten_id', $rakuten->id)
+                ->whereNull('en_brand')
+                ->count();
             $count_en_content_null = RakutenItem::where('rakuten_id', $rakuten->id)
                 ->whereNull('en_content')
                 ->count();
@@ -51,6 +54,7 @@ class RakutenController extends Controller
                 'jp_content' => $count_jp_content_null,
                 'en_content' => $count_en_content_null,
                 'en_title' => $count_en_title_null,
+                'en_brand' => $count_en_brand_null,
                 'doller' => $count_doller_null,
             ];
         }

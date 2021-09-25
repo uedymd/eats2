@@ -44,6 +44,7 @@
                                         if($items[$rakuten->id]['count']>0){
                                             $jp_content_progress = round(100-($items[$rakuten->id]['jp_content']/$items[$rakuten->id]['count'])*100,1);
                                             $en_title_progress = round(100-($items[$rakuten->id]['en_title']/$items[$rakuten->id]['count'])*100,1);
+                                            $en_brand_progress = round(100-($items[$rakuten->id]['en_brand']/$items[$rakuten->id]['count'])*100,1);
                                             $en_content_progress = round(100-($items[$rakuten->id]['en_content']/$items[$rakuten->id]['count'])*100,1);
                                             $doller_progress = round(100-($items[$rakuten->id]['doller']/$items[$rakuten->id]['count'])*100,1);
                                         }else{
@@ -58,6 +59,7 @@
                                         <div class="mt-5">
                                             コンテンツ取得待ち：<div class="text-right">{{$items[$rakuten->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
                                             タイトル翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
+                                            ブランド翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_brand']}}件（進捗{{$en_brand_progress}}%）</div>
                                             コンテンツ翻訳待ち：<div class="text-right">{{$items[$rakuten->id]['en_content']}}件（進捗{{$en_content_progress}}%）</div>
                                             ドル変換待ち：<div class="text-right">{{$items[$rakuten->id]['doller']}}件（進捗{{$doller_progress}}%）</div>
                                         </div>
