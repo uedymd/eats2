@@ -12,6 +12,7 @@
                     <table class="table-auto w-full mt-5">
                         <thead>
                             <tr class="bg-gray-100">
+                                <th class="border px-4 py-2">アイテム</th>
                                 <th class="border px-4 py-2">タイトル</th>
                                 <th class="border px-4 py-2">元サイト</th>
                                 <th class="border px-4 py-2">販売価格</th>
@@ -22,17 +23,22 @@
                         <tbody>
                             @foreach($ebay_items as $ebay_items)
                             <tr>
+                                <td class="border px-4 py-2 w-1/12">
+                                    @if($ebay_items->image!=='')
+                                    <img src="{{$ebay_items->image}}" alt="" class="block" style="max-width:100%;height:auto;">
+                                    @endif
+                                    @if(!is_null($ebay_items->view_url))
+                                    <a href="{{$ebay_items->view_url}}" target="_blank" class="block rounded bg-gray-600 p-2 text-white text-center">View</a>
+                                    @endif
+                                </td>
                                 <td class="border px-4 py-2">
                                     {{$ebay_items->title}}
-                                    @if($ebay_items->image!=='')
-                                    <img src="{{$ebay_items->image}}" alt="" class="block" style="max-width:200px;height:auto;">
-                                    @endif
                                     @if($ebay_items->ebay_id>0)
                                     {{$ebay_items->ebay_id}}
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">{{$ebay_items->site}}
-                                <td class="border px-4 py-2">${{$ebay_items->price}}
+                                <td class="border px-4 py-2 text-right">${{number_format($ebay_items->price)}}
                                 </td>
                                 <td class="border px-4 py-2">
                                     <?php
@@ -47,7 +53,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td class="border px-4 py-2">{{$ebay_items->supllier_checked_id}}</td>
+                                <td class="border px-4 py-2">{{$ebay_items->tracking_at}}</td>
                             </tr>
                             @endforeach
                         </tbody>

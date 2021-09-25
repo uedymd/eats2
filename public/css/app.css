@@ -1270,11 +1270,11 @@ select {
 .w-2\/12 {
 	width: 16.666667%;
 }
-.w-3\/12 {
-	width: 25%;
-}
 .w-8\/12 {
 	width: 66.666667%;
+}
+.w-3\/12 {
+	width: 25%;
 }
 .w-10\/12 {
 	width: 83.333333%;
@@ -1554,6 +1554,10 @@ select {
 .bg-green-600 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(5, 150, 105, var(--tw-bg-opacity));
+}
+.bg-gray-600 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(75, 85, 99, var(--tw-bg-opacity));
 }
 .bg-blue-200 {
 	--tw-bg-opacity: 1;
