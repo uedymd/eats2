@@ -116,7 +116,7 @@ class EbayItemController extends Controller
             if ($request['result']['status'] >= 500) {
                 $erros[] = 'アクセスが拒否されました。現状が確認できていません。';
             }
-            if (!empty($errors)) {
+            if (!empty($erros)) {
                 $ebay_item->error = serialize($erros);
             } else {
                 $ebay_item->error = null;
