@@ -22,33 +22,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($ebay_items as $ebay_items)
+                            @foreach($ebay_items as $ebay_item)
                             <tr>
                                 <td class="border px-4 py-2">
-                                    @if($ebay_items->image!=='')
-                                    <img src="{{$ebay_items->image}}" alt="" class="block" style="max-width:100%;height:auto;">
+                                    @if($ebay_item->image!=='')
+                                    <img src="{{$ebay_item->image}}" alt="" class="block" style="max-width:100%;height:auto;">
                                     @endif
-                                    @if(!is_null($ebay_items->view_url))
-                                    <a href="{{$ebay_items->view_url}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
+                                    @if(!is_null($ebay_item->view_url))
+                                    <a href="{{$ebay_item->view_url}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
                                     @else
                                      <small>詳細取得中</small>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">
-                                    {{$ebay_items->title}}
-                                    @if($ebay_items->ebay_id>0)
-                                    <br>【{{$ebay_items->ebay_id}}】
+                                    {{$ebay_item->title}}
+                                    @if($ebay_item->ebay_id>0)
+                                    <br>【{{$ebay_item->ebay_id}}】
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-center">
-                                    {{$ebay_items->site}}
-                                    <a href="{{$suppliers[$ebay_items->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
+                                    {{$ebay_item->site}}
+                                    <a href="{{$suppliers[$ebay_item->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
                                 </td>
-                                <td class="border px-4 py-2 text-right">${{number_format($ebay_items->price)}}
+                                <td class="border px-4 py-2 text-right">${{number_format($ebay_item->price)}}
                                 </td>
                                 <td class="border px-4 py-2">
                                     <?php
-                                    $errors = unserialize($ebay_items->error);
+                                    $errors = unserialize($ebay_item->error);
                                     if ($errors !== false) {
                                         foreach ($errors as $error) {
                                             echo $error;
@@ -59,7 +59,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td class="border px-4 py-2 text-right">{{$ebay_items->tracking_at}}</td>
+                                <td class="border px-4 py-2 text-right">{{$ebay_item->tracking_at}}</td>
                             </tr>
                             @endforeach
                         </tbody>
