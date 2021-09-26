@@ -46,5 +46,6 @@ Route::group(['prefix' => 'ebay'], function () {
 });
 
 Route::group(['prefix' => 'stock', 'middleware' => ['auth']], function () {
+    dd('hoge');
     Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');
 });
