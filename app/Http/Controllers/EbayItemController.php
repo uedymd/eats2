@@ -101,7 +101,9 @@ class EbayItemController extends Controller
                 switch ($site) {
                     case 'rakuten':
                         $rakuten_items = RakutenItem::find($ebay_item->supplier_id);
-                        $rakuten_items->price = $request['result']['price'];
+                        if (!empty($rakuten_items->price) && $rakuten_items->price > 0) {
+                            $rakuten_items->price = $request['result']['price'];
+                        }
                         $rakuten_items->save();
                         $returns[] = "楽天価格保存";
                         break;
