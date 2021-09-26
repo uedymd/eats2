@@ -23,8 +23,6 @@ class StocksController extends Controller
             ->where('rakutens.status', '=', 3)
             ->get();
 
-        dd($items);
-
         foreach ($items as $item) {
             $stock_count = Stocks::where('item_id', '=', $item->id)
                 ->where('site', 'rakuten')->count();
