@@ -65,7 +65,7 @@
                         </tbody>
                     </table>
                     <div class="mt-10">
-                        {{ $items->links() }}
+                        {{ $ebay_items->links() }}
                     </div>
                 </div>
             </div>
