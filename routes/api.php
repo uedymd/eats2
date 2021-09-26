@@ -43,8 +43,9 @@ Route::group(['prefix' => 'ebay'], function () {
     Route::get('add/item/{site}/{id?}/', [EbayItemController::class, 'add']);
     Route::get('add/items/', [EbayItemController::class, 'add_items']);
     Route::get('set/items_detail/', [EbayItemController::class, 'set_items_detail']);
+    Route::get('tracking/{site}', [EbayItemController::class, 'tracking']);
 });
 
 Route::group(['prefix' => 'stock'], function () {
-    Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');
+    Route::get('/search', [StocksController::class, 'search']);
 });

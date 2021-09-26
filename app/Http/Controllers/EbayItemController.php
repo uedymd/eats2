@@ -45,13 +45,30 @@ class EbayItemController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function tracking($site)
     {
-        //
+        $items = "";
+        switch ($site) {
+            case 'rakuten':
+                $items = EbayItem::leftJoin('stocks', 'ebay_items.supplier_id', '=', 'stocks.item_id')
+                    ->leftJoin('rakuten_items', 'ebay_items.supplier_id', '=', 'rakuten_items.id')
+                    ->select('ebay_items.id', 'rakuten_items.url')
+                    ->where('ebay_items.site', $site)
+                    ->where('stocks.status', 2)
+                    ->orderBy('ebay_items.tracking_at')
+                    ->orderBy('ebay_items.created_at')
+                    ->first();
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        return $items;
     }
 
     /**
@@ -110,31 +127,31 @@ class EbayItemController extends Controller
         //
     }
 
-    public function add_items()
-    {
-        $stocks = Stocks::where('status', 1)
-            ->limit(3)
-            ->get();
+    // public function add_items()
+    // {
+    //     $stocks = Stocks::where('status', 1)
+    //         ->limit(3)
+    //         ->get();
 
-        foreach ($stocks as $stock) {
-            $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/ebay/add/item/{$stock->site}/{$stock->item_id}";
-            //cURLセッションを初期化する
-            $ch = curl_init();
+    //     foreach ($stocks as $stock) {
+    //         $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/ebay/add/item/{$stock->site}/{$stock->item_id}";
+    //         //cURLセッションを初期化する
+    //         $ch = curl_init();
 
-            //URLとオプションを指定する
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //         //URLとオプションを指定する
+    //         curl_setopt($ch, CURLOPT_URL, $url);
+    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-            //URLの情報を取得する
-            $res =  curl_exec($ch);
+    //         //URLの情報を取得する
+    //         $res =  curl_exec($ch);
 
-            //結果を表示する
-            var_dump($res);
+    //         //結果を表示する
+    //         var_dump($res);
 
-            //セッションを終了する
-            curl_close($ch);
-        }
-    }
+    //         //セッションを終了する
+    //         curl_close($ch);
+    //     }
+    // }
 
 
     /**
