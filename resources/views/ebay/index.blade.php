@@ -15,9 +15,10 @@
                                 <th class="border px-4 py-2 w-1/12">アイテム</th>
                                 <th class="border px-4 py-2 w-3/12">タイトル</th>
                                 <th class="border px-4 py-2 w-1/12">仕入元</th>
-                                <th class="border px-4 py-2 w-1/12"">販売価格</th>
+                                <th class="border px-4 py-2 w-1/12">販売価格</th>
                                 <th class="border px-4 py-2">エラー</th>
-                                <th class="border px-4 py-2">追跡</th>
+                                <th class="border px-4 py-2 w-2/12">追跡</th>
+                                <th class="border px-4 py-2 w-1/12">操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,7 +59,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td class="border px-4 py-2">{{$ebay_items->tracking_at}}</td>
+                                <td class="border px-4 py-2 text-right">{{$ebay_items->tracking_at}}</td>
                             </tr>
                             @endforeach
                         </tbody>
