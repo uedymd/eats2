@@ -51,7 +51,7 @@
                                     $errors = unserialize($ebay_items->error);
                                     if ($errors !== false) {
                                         foreach ($errors as $error) {
-                                            echo $error['LongMessage'];
+                                            echo $error;
                                             if ($error !== end($errors)) {
                                                 echo "<br>";
                                             }
