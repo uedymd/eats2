@@ -96,15 +96,15 @@ class EbayItemController extends Controller
 
             $erros = ['id' => $request['id']];
 
-            if ($ebay_item->price > $request['result']['price']) {
+            if ($ebay_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
                 switch ($site) {
                     case 'rakuten':
                         $rakuten_items = RakutenItem::find($ebay_item->supplier_id);
                         if (!empty($rakuten_items->price) && $rakuten_items->price > 0) {
                             $rakuten_items->price = $request['result']['price'];
+                            $rakuten_items->save();
                         }
-                        $rakuten_items->save();
                         $returns[] = "楽天価格保存";
                         break;
 
