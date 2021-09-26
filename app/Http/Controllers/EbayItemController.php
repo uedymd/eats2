@@ -25,7 +25,7 @@ class EbayItemController extends Controller
      */
     public function index()
     {
-        $ebay_items = EbayItem::all();
+        $ebay_items = EbayItem::all()->paginate(150);;
 
         $suppliers = [];
 

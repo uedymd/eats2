@@ -104,7 +104,7 @@ class RakutenItemController extends Controller
                         foreach ((array)$respons[$i]['Items'] as $item) {
                             $rakuten_item_count = RakutenItem::where('url', $item['Item']['itemUrl'])
                                 ->count();
-                            if (!$rakuten_item_count > 0) {
+                            if ($rakuten_item_count < 0) {
 
                                 $ng_title = $setting->ng_title;
                                 $jp_title = $this->format_jp_title($item['Item']['itemName'], $ng_title);
