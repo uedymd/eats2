@@ -36,7 +36,7 @@
                                 <td class="border px-4 py-2">
                                     {{$ebay_items->title}}
                                     @if($ebay_items->ebay_id>0)
-                                    {{$ebay_items->ebay_id}}
+                                    <br>【{{$ebay_items->ebay_id}}】
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-center">
