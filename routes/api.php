@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Rakuten\RakutenItemController;
 use App\Http\Controllers\EbayItemController;
+use App\Http\Controllers\StocksController;
 
 /*
 |--------------------------------------------------------------------------
