@@ -80,18 +80,19 @@ class EbayItemController extends Controller
 
         $returns = [];
 
+        switch ($site) {
+            case 'rakuten':
+                $ebay_item = EbayItem::where('ebay_items.site', $site)
+                    ->where('ebay_items.id', $request['id'])
+                    ->first();
+                break;
+
+            default:
+
+                break;
+        }
+
         if (isset($request['result']['check']) && $request['result']['check']) {
-            switch ($site) {
-                case 'rakuten':
-                    $ebay_item = EbayItem::where('ebay_items.site', $site)
-                        ->where('ebay_items.id', $request['id'])
-                        ->first();
-                    break;
-
-                default:
-
-                    break;
-            }
 
             $erros = ['id' => $request['id']];
 
@@ -115,23 +116,14 @@ class EbayItemController extends Controller
             }
             if (!empty($errors)) {
                 $ebay_item->error = serialize($erros);
+            } else {
+                $ebay_item->error = null;
             }
             $check_time = Carbon::now();
             $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         } elseif (!isset($request['result']['check'])) {
-            switch ($site) {
-                case 'rakuten':
-                    $ebay_item = EbayItem::where('ebay_items.site', $site)
-                        ->where('ebay_items.id', $request['id'])
-                        ->first();
-                    break;
-
-                default:
-
-                    break;
-            }
             $erros[] = 'アクセスが拒否されました。現状が確認できていません。';
             $ebay_item->error = serialize($erros);
             $check_time = Carbon::now();
