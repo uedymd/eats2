@@ -94,7 +94,7 @@ class EbayItemController extends Controller
 
         if (isset($request['result']['check']) && $request['result']['check']) {
 
-            $erros = ['id' => $request['id']];
+            $erros = [];
 
             if ($ebay_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
