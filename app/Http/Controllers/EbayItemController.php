@@ -92,6 +92,10 @@ class EbayItemController extends Controller
                 break;
         }
 
+        if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
+            return false;
+        }
+
         if (isset($request['result']['check']) && $request['result']['check']) {
 
             $erros = [];
@@ -123,13 +127,15 @@ class EbayItemController extends Controller
             }
             $check_time = Carbon::now();
             $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
+            $ebay_item->status_code = $request['result']['status'];
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         } elseif (!isset($request['result']['check'])) {
-            $erros[] = 'アクセスが拒否されました。現状が確認できていません。';
+            $erros[] = '商品が削除されています。削除対象です。';
             $ebay_item->error = serialize($erros);
             $check_time = Carbon::now();
             $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
+            $ebay_item->status_code = $request['result']['status'];
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         }
