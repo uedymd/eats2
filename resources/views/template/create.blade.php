@@ -33,6 +33,10 @@
                         </div>
                     </form>
 
+                    <div id="preview" class="mt-10">
+                        
+                    </div>
+
                 </div>
             </div>
         </div>

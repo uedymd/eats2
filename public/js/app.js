@@ -4993,6 +4993,8 @@ __webpack_require__(/*! ./rate_set */ "./resources/js/rate_set.js");
 
 __webpack_require__(/*! ./common */ "./resources/js/common.js");
 
+__webpack_require__(/*! ./template */ "./resources/js/template.js");
+
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__.default;
 alpinejs__WEBPACK_IMPORTED_MODULE_0__.default.start();
@@ -5419,6 +5421,34 @@ $(function () {
   });
   $(document).on('click', remove, function (e) {
     $(this).parents(set).remove();
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/template.js":
+/*!**********************************!*\
+  !*** ./resources/js/template.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+$(function () {
+  var preview = $('#preview');
+  var input = $('#source');
+
+  var show_previre = function show_previre() {
+    var soruce = input.val();
+    preview.html(soruce);
+  };
+
+  var init = function init() {
+    show_previre();
+  };
+
+  init();
+  input.keyup(function () {
+    show_previre();
   });
 });
 
