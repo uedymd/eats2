@@ -49,8 +49,9 @@ class DigimartItemsController extends Controller
                 ->select('digimarts.id as digimart_id', 'keyword', 'digimart_category', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
-        }
-        $setting = Setting::where('site', 'rakuten')->first();
+            
+            if()}
+        $setting = Setting::where('site', 'digimart')->first();
 
         if ($digimarts) {
 
@@ -81,13 +82,16 @@ class DigimartItemsController extends Controller
                     $request .= "&pricemax={$digimart->price_max}";
                 }
 
-                ini_set('max_execution_time', 0);
 
                 $respons = [];
                 $url = $this->digimartSearchApi . "?" . $request;
 
-                $respons = $this->getApiDataCurl($url);
 
+                try {
+                    $respons = $this->getApiDataCurl($url);
+                } catch (\InvalidArgumentException $e) {
+                    echo $e->getMessage() . PHP_EOL;
+                }
                 if (!empty($respons)) {
 
                     foreach ((array)$respons as $item) {
@@ -95,8 +99,12 @@ class DigimartItemsController extends Controller
                             ->count();
                         if ($digimart_item_count == 0) {
 
-                            $ng_title = $setting->ng_title;
-                            $jp_title = $this->format_jp_title($item['title'], $ng_title);
+                            if($setting){
+                                $ng_title = $setting->ng_title;
+                                $jp_title = $this->format_jp_title($item['title'], $ng_title);
+                            }else{
+                                $jp_title = $item['title'];
+                            }
 
                             $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
@@ -118,8 +126,6 @@ class DigimartItemsController extends Controller
 
                                 $digimart_item->price = $price;
                                 $digimart_item->save();
-                                var_dump($price);
-                                var_dump($jp_title);
                             }
                         }
                     }
@@ -130,7 +136,7 @@ class DigimartItemsController extends Controller
                 $check_time = Carbon::now();
                 $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
                 $current_digimart->update();
-                // return redirect('digimart');
+                return redirect('digimart');
             }
         }
     }
@@ -309,10 +315,14 @@ class DigimartItemsController extends Controller
             if (!empty($request->input('content'))) {
 
 
-                //除外キーワードを除去（共通設定）
-                $ng_content = $setting->ng_content;
-                $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
-                $ng_contents = explode("\n", $ng_content);
+                if($setting){
+                    //除外キーワードを除去（共通設定）
+                    $ng_content = $setting->ng_content;
+                    $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
+                    $ng_contents = explode("\n", $ng_content);
+                }else{
+                    $ng_contents = "";
+                }
 
                 $jp_content = $this->adjust_jp_content_html($request->input('content'), $ng_contents);
 
