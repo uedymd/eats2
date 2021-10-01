@@ -50,7 +50,6 @@ class DigimartItemsController extends Controller
                 ->orderBy('checked_at', 'desc')
                 ->first();
             
-            if()}
         $setting = Setting::where('site', 'digimart')->first();
 
         if ($digimarts) {
