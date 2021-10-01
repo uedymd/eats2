@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Rakuten\RakutenItemController;
 use App\Http\Controllers\EbayItemController;
 use App\Http\Controllers\StocksController;
+use App\Http\Controllers\DigimartItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,22 @@ Route::group(['prefix' => 'rakuten'], function () {
     Route::post('translate/set_title', [RakutenItemController::class, 'set_title']);
     Route::post('translate/set_brand', [RakutenItemController::class, 'set_brand']);
     Route::post('translate/set_en_content', [RakutenItemController::class, 'set_en_content']);
+});
+Route::group(['prefix' => 'digimart'], function () {
+    Route::get('search/{id?}', [DigimartItemsController::class, 'search'])->name('api.digimart.search')->where('id', '[0-9]+');
+    Route::get('translate/get_url', [DigimartItemsController::class, 'get_url']);
+    Route::get('translate/get_title', [DigimartItemsController::class, 'get_title']);
+    Route::get('translate/get_brand', [DigimartItemsController::class, 'get_brand']);
+    Route::get('translate/get_content', [DigimartItemsController::class, 'get_content']);
+    Route::get('translate/get_price', [DigimartItemsController::class, 'get_price']);
+    Route::get('translate/get_image', [DigimartItemsController::class, 'get_image']);
+    Route::post('translate/set_content', [DigimartItemsController::class, 'set_content']);
+    Route::get('translate/set_content', [DigimartItemsController::class, 'set_content']);
+    Route::post('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
+    Route::get('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
+    Route::post('translate/set_title', [DigimartItemsController::class, 'set_title']);
+    Route::post('translate/set_brand', [DigimartItemsController::class, 'set_brand']);
+    Route::post('translate/set_en_content', [DigimartItemsController::class, 'set_en_content']);
 });
 
 Route::group(['prefix' => 'ebay'], function () {

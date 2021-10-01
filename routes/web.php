@@ -9,6 +9,7 @@ use App\Http\Controllers\BrandSetController;
 use App\Http\Controllers\RateSetController;
 use App\Http\Controllers\TemplatesController;
 use App\Http\Controllers\StocksController;
+use App\Http\Controllers\DigimartsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,22 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [RakutenItemController::class, 'items'])->name('rakuten.items')->where('id', '[0-9]+');
+    });
+});
+
+Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
+    Route::get('/', [DigimartsController::class, 'index'])->name('digimart.index');
+    Route::group(['prefix' => 'reserve'], function () {
+        Route::get('create', [DigimartsController::class, 'create'])->name('digimart.create');
+        Route::post('store', [DigimartsController::class, 'store'])->name('digimart.store');
+        Route::get('edit/{id}', [DigimartsController::class, 'edit'])->name('digimart.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [DigimartsController::class, 'update'])->name('digimart.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [DigimartsController::class, 'delete'])->name('digimart.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [DigimartsController::class, 'destroy'])->name('digimart.destroy')->where('id', '[0-9]+');
+        Route::get('recheck', [RakutenItemController::class, 'recheck'])->name('digimart.recheck');
+    });
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/{id}', [RakutenItemController::class, 'items'])->name('digimart.items')->where('id', '[0-9]+');
     });
 });
 
