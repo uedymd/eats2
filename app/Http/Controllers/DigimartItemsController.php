@@ -273,15 +273,15 @@ class DigimartItemsController extends Controller
         foreach ($rates as $rate) {
             switch ($digimart_item->price) {
                 case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > $digimart_item->price:
-                    $return_price = $digimart_item->price + $rate['rate'];
+                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
                 case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= $digimart_item->price && $rate['max'] > $digimart_item->price:
-                    $return_price = $digimart_item->price + $rate['rate'];
+                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
                 case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= $digimart_item->price:
-                    $return_price = $digimart_item->price + $rate['rate'];
+                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
                 default:
