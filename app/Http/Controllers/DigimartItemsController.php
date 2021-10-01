@@ -49,98 +49,99 @@ class DigimartItemsController extends Controller
                 ->select('digimarts.id as digimart_id', 'keyword', 'digimart_category', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
-            
-        $setting = Setting::where('site', 'digimart')->first();
 
-        if ($digimarts) {
-
-            if ($digimarts->brand_setting) {
-                $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $digimarts->brand_setting);
-                $target_brands = explode("\n", $target_brands);
-            } else {
-                $target_brands = [];
-            }
+            $setting = Setting::where('site', 'digimart')->first();
 
             if ($digimarts) {
 
-                $digimart = json_decode($digimarts);
-
-                $request = "site=digim";
-
-
-                if (!empty($digimart->digimart_category)) {
-                    $request .= "&category=" . $digimart->digimart_category;
-                }
-                if (!empty($digimart->keyword)) {
-                    $request .= "&keyword=" . urlencode($digimart->keyword);
-                }
-                if (!empty($digimart->price_min)) {
-                    $request .= "&pricemin={$digimart->price_min}";
-                }
-                if (!empty($digimart->price_max)) {
-                    $request .= "&pricemax={$digimart->price_max}";
+                if ($digimarts->brand_setting) {
+                    $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $digimarts->brand_setting);
+                    $target_brands = explode("\n", $target_brands);
+                } else {
+                    $target_brands = [];
                 }
 
+                if ($digimarts) {
 
-                $respons = [];
-                $url = $this->digimartSearchApi . "?" . $request;
+                    $digimart = json_decode($digimarts);
+
+                    $request = "site=digim";
 
 
-                try {
-                    $respons = $this->getApiDataCurl($url);
-                } catch (\InvalidArgumentException $e) {
-                    echo $e->getMessage() . PHP_EOL;
-                }
-                if (!empty($respons)) {
+                    if (!empty($digimart->digimart_category)) {
+                        $request .= "&category=" . $digimart->digimart_category;
+                    }
+                    if (!empty($digimart->keyword)) {
+                        $request .= "&keyword=" . urlencode($digimart->keyword);
+                    }
+                    if (!empty($digimart->price_min)) {
+                        $request .= "&pricemin={$digimart->price_min}";
+                    }
+                    if (!empty($digimart->price_max)) {
+                        $request .= "&pricemax={$digimart->price_max}";
+                    }
 
-                    foreach ((array)$respons as $item) {
-                        $digimart_item_count = DigimartItems::where('url', $item['href'])
-                            ->count();
-                        if ($digimart_item_count == 0) {
 
-                            if($setting){
-                                $ng_title = $setting->ng_title;
-                                $jp_title = $this->format_jp_title($item['title'], $ng_title);
-                            }else{
-                                $jp_title = $item['title'];
-                            }
+                    $respons = [];
+                    $url = $this->digimartSearchApi . "?" . $request;
 
-                            $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false) {
-                                $digimart_item = new DigimartItems();
-                                $digimart_item->digimart_id = $digimarts->digimart_id;
-                                $digimart_item->jp_title = $jp_title;
-                                $digimart_item->origin_title = $item['title'];
-                                $digimart_item->jp_brand = $brand_check['brand'];
+                    try {
+                        $respons = $this->getApiDataCurl($url);
+                    } catch (\InvalidArgumentException $e) {
+                        echo $e->getMessage() . PHP_EOL;
+                    }
+                    if (!empty($respons)) {
 
-                                //ブランド名が英語の場合はen_brandにも入れる
-                                if (strlen($brand_check['brand']) == mb_strlen($brand_check['brand'], 'utf8')) {
-                                    $digimart_item->en_brand = $brand_check['brand'];
+                        foreach ((array)$respons as $item) {
+                            $digimart_item_count = DigimartItems::where('url', $item['href'])
+                                ->count();
+                            if ($digimart_item_count == 0) {
+
+                                if ($setting) {
+                                    $ng_title = $setting->ng_title;
+                                    $jp_title = $this->format_jp_title($item['title'], $ng_title);
+                                } else {
+                                    $jp_title = $item['title'];
                                 }
 
-                                $digimart_item->url = $item['href'];
+                                $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                                $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
+                                if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false) {
+                                    $digimart_item = new DigimartItems();
+                                    $digimart_item->digimart_id = $digimarts->digimart_id;
+                                    $digimart_item->jp_title = $jp_title;
+                                    $digimart_item->origin_title = $item['title'];
+                                    $digimart_item->jp_brand = $brand_check['brand'];
 
-                                $digimart_item->price = $price;
-                                $digimart_item->save();
+                                    //ブランド名が英語の場合はen_brandにも入れる
+                                    if (strlen($brand_check['brand']) == mb_strlen($brand_check['brand'], 'utf8')) {
+                                        $digimart_item->en_brand = $brand_check['brand'];
+                                    }
+
+                                    $digimart_item->url = $item['href'];
+
+                                    $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
+
+                                    $digimart_item->price = $price;
+                                    $digimart_item->save();
+                                }
                             }
                         }
                     }
+
+                    $current_digimart = Digimarts::find($digimarts->digimart_id);
+
+                    $check_time = Carbon::now();
+                    $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
+                    $current_digimart->update();
+                    return redirect('digimart');
                 }
-
-                $current_digimart = Digimarts::find($digimarts->digimart_id);
-
-                $check_time = Carbon::now();
-                $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
-                $current_digimart->update();
-                return redirect('digimart');
             }
         }
     }
 
-    function format_jp_title($title, $ng_title)
+    public function format_jp_title($title, $ng_title)
     {
         $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
         $ng_titles = explode("\n", $ng_title);
@@ -314,12 +315,12 @@ class DigimartItemsController extends Controller
             if (!empty($request->input('content'))) {
 
 
-                if($setting){
+                if ($setting) {
                     //除外キーワードを除去（共通設定）
                     $ng_content = $setting->ng_content;
                     $ng_content = str_replace(["\r\n", "\r", "\n"], "\n", $ng_content);
                     $ng_contents = explode("\n", $ng_content);
-                }else{
+                } else {
                     $ng_contents = "";
                 }
 
