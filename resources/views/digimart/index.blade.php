@@ -26,7 +26,7 @@
                                 <th class="border px-4 py-2"></th>
                                 <th class="border px-4 py-2">タイトル</th>
                                 <th class="border px-4 py-2">検索設定</th>
-                                <th class="border px-4 py-2">ジャンル</th>
+                                <th class="border px-4 py-2">カテゴリー</th>
                                 <th class="border px-4 py-2">価格設定</th>
                                 <th class="border px-4 py-2">ステータス</th>
                                 <th class="border px-4 py-2">更新日</th>
@@ -81,8 +81,8 @@
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">
-                                    @if($digimart->genre || $digimart->genre_id)
-                                    {{$digimart->genre}}<br>（{{$digimart->genre_id}}）
+                                    @if($digimart->digimart_category)
+                                    {{$digimart->digimart_category}}
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-right">
