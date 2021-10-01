@@ -140,7 +140,7 @@ class DigimartItemsController extends Controller
         }
     }
 
-    private function format_jp_title($title, $ng_title)
+    function format_jp_title($title, $ng_title)
     {
         $ng_title = str_replace(["\r\n", "\r", "\n"], "\n", $ng_title);
         $ng_titles = explode("\n", $ng_title);
