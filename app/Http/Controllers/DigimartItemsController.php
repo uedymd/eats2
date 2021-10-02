@@ -429,6 +429,12 @@ class DigimartItemsController extends Controller
         //日付（YYYY/mm）を除去
         $text = preg_replace("/(19|20)[0-9]{2}\/(0[1-9]|1[0-2])/", "", $text);
 
+        //¥ 123,456,789の除去
+        $text = preg_replace("/(¥\s)?(\d{0,3}\,\d{0,3})+/", "", $text);
+        //（税込）の除去
+        $text = preg_replace("/(\(税込\)|（税込）)/", "", $text);
+
+
         return $text;
     }
 
