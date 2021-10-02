@@ -550,7 +550,7 @@ class DigimartItemsController extends Controller
     {
         $option = [
             CURLOPT_RETURNTRANSFER => true, //文字列として返す
-            CURLOPT_TIMEOUT        => 1800, // タイムアウト時間
+            CURLOPT_TIMEOUT        => 3600, // タイムアウト時間
         ];
 
         $ch = curl_init($url);
