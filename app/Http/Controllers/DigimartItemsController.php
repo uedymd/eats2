@@ -49,82 +49,81 @@ class DigimartItemsController extends Controller
                 ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
+        }
+        $setting = Setting::where('site', 'digimart')->first();
 
-            $setting = Setting::where('site', 'digimart')->first();
 
+        if ($digimarts) {
+
+            if ($digimarts->brand_setting) {
+                $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $digimarts->brand_setting);
+                $target_brands = explode("\n", $target_brands);
+            } else {
+                $target_brands = [];
+            }
 
             if ($digimarts) {
 
-                if ($digimarts->brand_setting) {
-                    $target_brands = str_replace(["\r\n", "\r", "\n"], "\n", $digimarts->brand_setting);
-                    $target_brands = explode("\n", $target_brands);
-                } else {
-                    $target_brands = [];
+                $digimart = urlencode($digimarts->url);
+
+                $request = "query={$digimart}";
+
+
+                $respons = [];
+                $url = $this->digimartSearchApi . "?" . $request;
+
+
+                try {
+                    $respons = $this->getApiDataCurl($url);
+                } catch (\InvalidArgumentException $e) {
+                    echo $e->getMessage() . PHP_EOL;
                 }
 
-                if ($digimarts) {
+                if (!empty($respons)) {
 
-                    $digimart = urlencode($digimarts->url);
+                    foreach ((array)$respons as $item) {
+                        $digimart_item_count = DigimartItems::where('url', $item['href'])
+                            ->count();
+                        if ($digimart_item_count == 0) {
 
-                    $request = "query={$digimart}";
+                            if ($setting) {
+                                $ng_title = $setting->ng_title;
+                                $jp_title = $this->format_jp_title($item['title'], $ng_title);
+                            } else {
+                                $jp_title = $item['title'];
+                            }
 
+                            $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                    $respons = [];
-                    $url = $this->digimartSearchApi . "?" . $request;
+                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false) {
+                                $digimart_item = new DigimartItems();
+                                $digimart_item->digimart_id = $digimarts->digimart_id;
+                                $digimart_item->jp_title = $jp_title;
+                                $digimart_item->origin_title = $item['title'];
+                                $digimart_item->jp_brand = $brand_check['brand'];
 
-
-                    try {
-                        $respons = $this->getApiDataCurl($url);
-                    } catch (\InvalidArgumentException $e) {
-                        echo $e->getMessage() . PHP_EOL;
-                    }
-
-                    if (!empty($respons)) {
-
-                        foreach ((array)$respons as $item) {
-                            $digimart_item_count = DigimartItems::where('url', $item['href'])
-                                ->count();
-                            if ($digimart_item_count == 0) {
-
-                                if ($setting) {
-                                    $ng_title = $setting->ng_title;
-                                    $jp_title = $this->format_jp_title($item['title'], $ng_title);
-                                } else {
-                                    $jp_title = $item['title'];
+                                //ブランド名が英語の場合はen_brandにも入れる
+                                if (strlen($brand_check['brand']) == mb_strlen($brand_check['brand'], 'utf8')) {
+                                    $digimart_item->en_brand = $brand_check['brand'];
                                 }
 
-                                $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
+                                $digimart_item->url = $item['href'];
 
-                                if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false) {
-                                    $digimart_item = new DigimartItems();
-                                    $digimart_item->digimart_id = $digimarts->digimart_id;
-                                    $digimart_item->jp_title = $jp_title;
-                                    $digimart_item->origin_title = $item['title'];
-                                    $digimart_item->jp_brand = $brand_check['brand'];
+                                $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
-                                    //ブランド名が英語の場合はen_brandにも入れる
-                                    if (strlen($brand_check['brand']) == mb_strlen($brand_check['brand'], 'utf8')) {
-                                        $digimart_item->en_brand = $brand_check['brand'];
-                                    }
-
-                                    $digimart_item->url = $item['href'];
-
-                                    $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
-
-                                    $digimart_item->price = $price;
-                                    $digimart_item->save();
-                                }
+                                $digimart_item->price = $price;
+                                $digimart_item->save();
                             }
                         }
                     }
-
-                    $current_digimart = Digimarts::find($digimarts->digimart_id);
-
-                    $check_time = Carbon::now();
-                    $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
-                    $current_digimart->update();
-                    return redirect('digimart');
                 }
+
+                $current_digimart = Digimarts::find($digimarts->digimart_id);
+
+                $check_time = Carbon::now();
+                $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
+                $current_digimart->update();
+                return redirect('digimart');
             }
         }
     }
