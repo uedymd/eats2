@@ -26,7 +26,6 @@ class ChangeErrorColumnToStocks extends Migration
     public function down()
     {
         Schema::table('stocks', function (Blueprint $table) {
-            $table->longText('error')->nullable();
         });
     }
 }

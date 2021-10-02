@@ -29,7 +29,7 @@ class DigimartsController extends Controller
     {
         $digimarts = Digimarts::leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
             ->leftJoin('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
-            ->select('digimarts.id as id', 'title', 'keyword', 'digimart_category', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url', 'price_max', 'price_min', 'status', 'digimarts.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
+            ->select('digimarts.id as id', 'title', 'url', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url',  'status', 'digimarts.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
             ->get();
         $items = [];
         foreach ($digimarts as $digimart) {
@@ -109,16 +109,12 @@ class DigimartsController extends Controller
     {
         $digimart = new Digimarts();
         $digimart->title = $request->input('title');
-        $digimart->keyword = $request->input('keyword');
-        $digimart->digimart_category = $request->input('digimart_category');
+        $digimart->url = $request->input('url');
         $digimart->ebay_category = $request->input('ebay_category');
         $digimart->ng_keyword = $request->input('ng_keyword');
         $digimart->brand_set_id = $request->input('brand_set_id');
         $digimart->rate_set_id = $request->input('rate_set_id');
         $digimart->ng_url = $request->input('ng_url');
-        $digimart->ng_url = $request->input('ng_url');
-        $digimart->price_min = $request->input('price_min');
-        $digimart->price_max = $request->input('price_max');
         $digimart->best_offer = $request->input('best_offer');
         $digimart->sku = $request->input('sku');
         $digimart->type = $request->input('type');
@@ -189,16 +185,12 @@ class DigimartsController extends Controller
     {
         $digimart = Digimarts::find($id);
         $digimart->title = $request->input('title');
-        $digimart->keyword = $request->input('keyword');
-        $digimart->digimart_category = $request->input('digimart_category');
+        $digimart->url = $request->input('url');
         $digimart->ebay_category = $request->input('ebay_category');
         $digimart->ng_keyword = $request->input('ng_keyword');
         $digimart->brand_set_id = $request->input('brand_set_id');
         $digimart->rate_set_id = $request->input('rate_set_id');
         $digimart->ng_url = $request->input('ng_url');
-        $digimart->ng_url = $request->input('ng_url');
-        $digimart->price_min = $request->input('price_min');
-        $digimart->price_max = $request->input('price_max');
         $digimart->best_offer = $request->input('best_offer');
         $digimart->sku = $request->input('sku');
         $digimart->type = $request->input('type');
@@ -234,10 +226,11 @@ class DigimartsController extends Controller
      */
     public function destroy($id)
     {
-        if (DigimartItems::where('digimart_id', $id)->delete()) {
-            $digimart = Digimarts::find($id);
-            $digimart->delete();
+
+        if (DigimartItems::where('digimart_id', $id)->count() > 0) {
+            DigimartItems::where('digimart_id', $id)->delete();
         }
+        Digimarts::find($id)->delete();
         return redirect('digimart');
     }
 }

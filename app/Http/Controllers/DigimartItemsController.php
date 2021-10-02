@@ -39,18 +39,19 @@ class DigimartItemsController extends Controller
         if (is_null($id)) {
             $digimarts = Digimarts::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
-                ->select('digimarts.id as digimart_id', 'keyword', 'digimart_category', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
         } else {
             $digimarts = Digimarts::whereIn('status', [1, 3])
                 ->where('digimarts.id', $id)
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
-                ->select('digimarts.id as digimart_id', 'keyword', 'digimart_category', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
+                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
                 ->first();
 
             $setting = Setting::where('site', 'digimart')->first();
+
 
             if ($digimarts) {
 
@@ -63,23 +64,9 @@ class DigimartItemsController extends Controller
 
                 if ($digimarts) {
 
-                    $digimart = json_decode($digimarts);
+                    $digimart = urlencode($digimarts->url);
 
-                    $request = "site=digim";
-
-
-                    if (!empty($digimart->digimart_category)) {
-                        $request .= "&category=" . $digimart->digimart_category;
-                    }
-                    if (!empty($digimart->keyword)) {
-                        $request .= "&keyword=" . urlencode($digimart->keyword);
-                    }
-                    if (!empty($digimart->price_min)) {
-                        $request .= "&pricemin={$digimart->price_min}";
-                    }
-                    if (!empty($digimart->price_max)) {
-                        $request .= "&pricemax={$digimart->price_max}";
-                    }
+                    $request = "query={$digimart}";
 
 
                     $respons = [];
@@ -91,6 +78,10 @@ class DigimartItemsController extends Controller
                     } catch (\InvalidArgumentException $e) {
                         echo $e->getMessage() . PHP_EOL;
                     }
+
+                    var_dump($respons);
+                    return false;
+
                     if (!empty($respons)) {
 
                         foreach ((array)$respons as $item) {

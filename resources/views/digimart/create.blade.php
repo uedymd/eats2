@@ -23,10 +23,10 @@
                         </div>
 
                         <div class="mt-4 flex">
-                            <div class="flex-shrink-0 w-8/12">
-                                <x-label for="keyword" :value="__('検索キーワード')" />
+                            <div class="flex-1 flex-shrink-0 w-9/12">
+                                <x-label for="keyword" :value="__('検索URL')" />
 
-                                <x-input id="keyword" class="block mt-1 w-full" type="text" name="keyword" :value="old('keyword')" required autofocus />
+                                <x-input id="url" class="block mt-1 w-full" type="text" name="url" :value="old('url')" required autofocus />
                             </div>
                             <div class="flex-shrink-0 w-3/12 ml-5">
                                 <x-label for="keyword" :value="__('対象ブランド')" />
@@ -41,11 +41,6 @@
 
                         <div class="mt-4 flex">
                             <div class="flex-1">
-                                <x-label for="digimart_category" :value="__('デジマートカテゴリー')" />
-
-                                <x-input id="digimart_category" class="block mt-1 w-10/12" type="text" name="digimart_category" :value="old('digimart_category')" autofocus required />
-                            </div>
-                            <div class="flex-1">
                                 <x-label for="ng_keyword" :value="__('除外キーワード')" />
 
                                 <x-input id="ng_keyword" class="block mt-1 w-10/12" type="text" name="ng_keyword" :value="old('ng_keyword')" autofocus />
@@ -55,24 +50,9 @@
 
                                 <x-input id="ng_url" class="block mt-1 w-10/12" type="text" name="ng_url" :value="old('ng_url')" autofocus />
                             </div>
-                        </div>
-
-
-
-                        <div class="mt-4 flex">
-                            <div class="flex-1">
-                                <x-label for="price_min" :value="__('最小価格')" />
-
-                                <x-input id="price_min" class="mt-1 w-10/12" type="number" name="price_min" :value="old('price_min')" autofocus />円
-                            </div>
-                            <div class="flex-1">
-                                <x-label for="price_max" :value="__('最大価格')" />
-
-                                <x-input id="price_max" class="mt-1 w-10/12" type="number" name="price_max" :value="old('price_max')" autofocus />円
-                            </div>
                             <div class="flex-1">
                                 <x-label for="rate" :value="__('レート')" />
-
+    
                                 {{ Form::select(
                                     'rate_set_id', 
                                     $rate_selector,
@@ -81,7 +61,9 @@
                                 ) }}
                             </div>
                         </div>
-                        
+
+
+
                         <div class="mt-4 flex">
                             <div class="flex-1">
                                 <x-label for="price_min" :value="__('ebayカテゴリー')" />

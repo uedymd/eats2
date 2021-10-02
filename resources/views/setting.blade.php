@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            楽天設定
+            サイトごとの共通設定
         </h2>
     </x-slot>
 

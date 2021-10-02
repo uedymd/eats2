@@ -25,8 +25,7 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2"></th>
                                 <th class="border px-4 py-2">タイトル</th>
-                                <th class="border px-4 py-2">検索設定</th>
-                                <th class="border px-4 py-2">カテゴリー</th>
+                                <th class="border px-4 py-2 w-3/12">検索設定</th>
                                 <th class="border px-4 py-2">価格設定</th>
                                 <th class="border px-4 py-2">ステータス</th>
                                 <th class="border px-4 py-2">更新日</th>
@@ -67,8 +66,7 @@
                                         </div>
                                 </td>
                                 <td class="border px-4 py-2">
-                                    <span class="text-gray-500">検索キーワード：</span><br>
-                                    {{$digimart->keyword}}
+                                    <span class="text-gray-500">検索URL：</span><a href="{{$digimart->url}}" target="_blank">確認する</a>
                                     @if(!empty($digimart->ng_keyword))
                                     <hr class="block my-2"><span class="text-gray-500">除外キーワード：</span><br>{{$digimart->ng_keyword}}
                                     @endif
@@ -80,23 +78,8 @@
                                     <div class="mt-2"><span class="text-gray-500">対象ブランド設定：</span><br><a href="{{route('setting.brandset.edit',$digimart->brand_set_id)}}" class="underline" target="_blank">{{$digimart->brand_set_name}}</a></div>
                                     @endif
                                 </td>
-                                <td class="border px-4 py-2">
-                                    @if($digimart->digimart_category)
-                                    {{$digimart->digimart_category}}
-                                    @endif
-                                </td>
                                 <td class="border px-4 py-2 text-right">
-                                    @if($digimart->price_min)
-                                    {{number_format($digimart->price_min)}}円
-                                    @endif
-                                    @if($digimart->price_min||$digimart->price_max)
-                                    〜
-                                    @endif
-                                    @if($digimart->price_max)
-                                    {{number_format($digimart->price_max)}}円
-                                    @endif
                                     @if($digimart->rate_set_name)
-                                    <hr class="block my-2">
                                     <div class="mt-2"><span class="text-gray-500">価格レート設定：</span><br><a href="{{route('setting.rateset.edit',$digimart->rate_set_id)}}" class="underline" target="_blank">{{$digimart->rate_set_name}}</a></div>
                                     @endif
                                 </td>
