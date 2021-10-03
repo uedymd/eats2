@@ -82,6 +82,11 @@ class EbayItemController extends Controller
         $erros = [];
         $ebay_item = EbayItem::find($request['id']);
 
+        $models = [
+            'rakuten' => 'App\Models\RakutenItem',
+            'digimart' => 'App\Models\DigimartItems',
+        ];
+
 
         if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
             $erros[] = '商品が削除されています。削除対象です。';
@@ -96,8 +101,10 @@ class EbayItemController extends Controller
 
         if (isset($request['result']['check']) && $request['result']['check']) {
 
+            $site_item = $models[$site]::find($ebay_item->supplier_id);
 
-            if ($ebay_item->price < $request['result']['price']) {
+
+            if ($site_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
                 switch ($site) {
                     case 'rakuten':
