@@ -236,7 +236,7 @@ class DigimartItemsController extends Controller
             ->leftJoin('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->select('digimart_items.id as id', 'jp_brand')
             ->where('digimarts.status', '!=', 3)
-            ->orderBy('updated_at')->first();
+            ->orderBy('digimarts.updated_at')->first();
         return $digimart_item;
     }
 
