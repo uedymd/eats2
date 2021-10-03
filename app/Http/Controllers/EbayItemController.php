@@ -285,7 +285,7 @@ class EbayItemController extends Controller
 
         $models = [
             'rakuten' => 'App\Models\Rakutens',
-            'digimart' => 'App\Models\Digimartss',
+            'digimart' => 'App\Models\Digimarts',
         ];
 
         switch ($site) {
@@ -485,7 +485,7 @@ class EbayItemController extends Controller
     {
         $models = [
             'rakuten' => 'App\Models\Rakutens',
-            'digimart' => 'App\Models\Digimartss',
+            'digimart' => 'App\Models\Digimarts',
         ];
         switch ($site) {
             case 'rakuten':
