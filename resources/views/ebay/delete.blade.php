@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h3 class="font-semibold text-xm text-gray-800 leading-tight">
-                        楽天検索設定「{{$ebay->title}}」を削除します。
+                        ebay出品「{{$ebay->title}}」を削除します。
                     </h3>
                     <div class="mt-5 text-gray-600 dark:text-gray-400 text-sm">
                         設定を削除する場合は、以下のボタンをクリックしてください。
