@@ -284,8 +284,8 @@ class EbayItemController extends Controller
     {
 
         $models = [
-            'rakuten' => 'App\Models\RakutenItem',
-            'digimart' => 'App\Models\DigimartItems',
+            'rakuten' => 'App\Models\Rakutens',
+            'digimart' => 'App\Models\Digimartss',
         ];
 
         switch ($site) {
@@ -484,8 +484,8 @@ class EbayItemController extends Controller
     private function make_description_html($item, $site)
     {
         $models = [
-            'rakuten' => 'App\Models\RakutenItem',
-            'digimart' => 'App\Models\DigimartItems',
+            'rakuten' => 'App\Models\Rakutens',
+            'digimart' => 'App\Models\Digimartss',
         ];
         switch ($site) {
             case 'rakuten':
