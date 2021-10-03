@@ -216,7 +216,7 @@ class EbayItemController extends Controller
         $xml = $this->make_delete_item_xml($item);
 
         $result = $this->ebay_delete_item($xml);
-        if ($result['Ack'] !== 'Failure' || $result['Ack'] !== 'PartialFailure') {
+        if ($result['Ack'] !== 'Failure' && $result['Ack'] !== 'PartialFailure') {
 
             $target = $models[$item->site]::find($item->supplier_id)->delete();
             $stock = Stocks::where('site', $item->site)
