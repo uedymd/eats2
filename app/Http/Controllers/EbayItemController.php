@@ -40,7 +40,6 @@ class EbayItemController extends Controller
                     break;
                 case 'digimart':
                     $digimart_item = DigimartItems::find($ebay_item->supplier_id);
-                    var_dump($ebay_item->supplier_id);
                     $suppliers[$ebay_item->id] = $digimart_item->url;
                     break;
 
