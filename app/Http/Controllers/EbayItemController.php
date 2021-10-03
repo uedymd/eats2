@@ -144,13 +144,11 @@ class EbayItemController extends Controller
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         } else {
-            $erros[] = '商品が削除されています。削除対象です。';
-            $ebay_item->error = serialize($erros);
-            $check_time = Carbon::now();
-            $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
-            $ebay_item->status_code = 999;
-            $ebay_item->update();
-            $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
+
+
+            $this->destroy(new EbayItem, $ebay_item->id);
+
+            $returns[] = "ebay_item削除：ID {$ebay_item->id}";
         }
         return $returns;
     }
