@@ -104,17 +104,13 @@ class EbayItemController extends Controller
             $site_item = $models[$site]::find($ebay_item->supplier_id);
             $result_price = preg_replace("/[^0-9]+/", '', $request['result']['price']);
 
-            echo $site_item->price;
-            echo $result_price;
-            return false;
-
             if ($site_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
                 switch ($site) {
                     case 'rakuten':
                         $rakuten_items = RakutenItem::find($ebay_item->supplier_id);
                         if (!empty($rakuten_items->price) && $rakuten_items->price > 0) {
-                            $rakuten_items->price = $request['result']['price'];
+                            $rakuten_items->price = $result_price;
                             $rakuten_items->save();
                         }
                         $returns[] = "デジマート価格保存";
@@ -122,7 +118,7 @@ class EbayItemController extends Controller
                     case 'digimart':
                         $digimart_items = DigimartItems::find($ebay_item->supplier_id);
                         if (!empty($digimart_items->price) && $digimart_items->price > 0) {
-                            $digimart_items->price = $request['result']['price'];
+                            $digimart_items->price = $result_price;
                             $digimart_items->save();
                         }
                         $returns[] = "デジマート価格保存";
