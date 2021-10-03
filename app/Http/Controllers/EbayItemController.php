@@ -102,7 +102,7 @@ class EbayItemController extends Controller
         if (isset($request['result']['check']) && $request['result']['check']) {
 
             $site_item = $models[$site]::find($ebay_item->supplier_id);
-            $result_price = (float)preg_replace("/\/D+/", '', $request['result']['price']);
+            $result_price = preg_replace("/\/D+/", '', $request['result']['price']);
 
             echo $site_item->price;
             echo $result_price;
