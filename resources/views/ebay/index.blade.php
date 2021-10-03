@@ -65,7 +65,7 @@
                                 </td>
                                 <td class="border px-4 py-2 text-right">{{$ebay_item->tracking_at}}</td>
                                 <td class=" border px-4 py-2 text-center">
-                                    <a href="{{ route('ebay.delete',['id'=>$ebay->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">出品取り消し</a>
+                                    <a href="{{ route('ebay.delete',['id'=>$ebay_item->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">出品取り消し</a>
                                 </td>
                             </tr>
                             @endforeach
