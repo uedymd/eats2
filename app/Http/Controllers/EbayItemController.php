@@ -32,10 +32,15 @@ class EbayItemController extends Controller
         $suppliers = [];
 
         foreach ($ebay_items as $ebay_item) {
+            dd($ebay_item->site);
             switch ($ebay_item->site) {
                 case 'rakuten':
                     $rakuten_item = RakutenItem::find($ebay_item->supplier_id);
                     $suppliers[$ebay_item->id] = $rakuten_item->url;
+                    break;
+                case 'digimart':
+                    $digimart_item = DigimartItems::find($ebay_item->supplier_id);
+                    $suppliers[$ebay_item->id] = $digimart_item->url;
                     break;
 
                 default:
