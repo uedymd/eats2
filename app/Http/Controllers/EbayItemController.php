@@ -99,7 +99,7 @@ class EbayItemController extends Controller
             return false;
         }
 
-        if (isset($request['result']['check']) && $request['result']['check']) {
+        if ($request['result']['check']) {
 
             $site_item = $models[$site]::find($ebay_item->supplier_id);
             $result_price = preg_replace("/[^0-9]+/", '', $request['result']['price']);
@@ -113,7 +113,7 @@ class EbayItemController extends Controller
                             $rakuten_items->price = $result_price;
                             $rakuten_items->save();
                         }
-                        $returns[] = "デジマート価格保存";
+                        $returns[] = "楽天価格保存";
                         break;
                     case 'digimart':
                         $digimart_items = DigimartItems::find($ebay_item->supplier_id);
@@ -148,7 +148,7 @@ class EbayItemController extends Controller
             $ebay_item->error = serialize($erros);
             $check_time = Carbon::now();
             $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
-            $ebay_item->status_code = $request['result']['status'];
+            $ebay_item->status_code = 999;
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         }
