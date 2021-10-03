@@ -26,7 +26,7 @@
                             @foreach($ebay_items as $ebay_item)
                             <tr>
                                 <td class="border px-4 py-2">
-                                    {{$ebay->id}}
+                                    {{$ebay_item->id}}
                                 </td>
                                 <td class="border px-4 py-2">
                                     @if($ebay_item->image!=='')
