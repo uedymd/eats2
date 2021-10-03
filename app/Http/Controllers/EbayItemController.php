@@ -143,7 +143,7 @@ class EbayItemController extends Controller
             $ebay_item->status_code = $request['result']['status'];
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
-        } elseif (!isset($request['result']['check'])) {
+        } else {
             $erros[] = '商品が削除されています。削除対象です。';
             $ebay_item->error = serialize($erros);
             $check_time = Carbon::now();
