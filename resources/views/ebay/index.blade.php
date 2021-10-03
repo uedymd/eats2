@@ -18,6 +18,7 @@
                                 <th class="border px-4 py-2 w-1/12">仕入元</th>
                                 <th class="border px-4 py-2 w-1/12">販売価格</th>
                                 <th class="border px-4 py-2">エラー</th>
+                                <th class="border px-4 py-2">ステータス</th>
                                 <th class="border px-4 py-2 w-2/12">追跡</th>
                                 <th class="border px-4 py-2 w-1/12">操作</th>
                             </tr>
@@ -63,6 +64,7 @@
                                     }
                                     ?>
                                 </td>
+                                <td class="border px-4 py-2 text-center">{{$ebay_item->status_code}}</td>
                                 <td class="border px-4 py-2 text-right">{{$ebay_item->tracking_at}}</td>
                                 <td class=" border px-4 py-2 text-center">
                                     <a href="{{ route('ebay.delete',['id'=>$ebay_item->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">出品取消</a>
