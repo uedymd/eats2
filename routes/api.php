@@ -65,5 +65,5 @@ Route::group(['prefix' => 'ebay'], function () {
 });
 
 Route::group(['prefix' => 'stock'], function () {
-    Route::get('/search', [StocksController::class, 'search']);
+    Route::get('/search/{site}', [StocksController::class, 'search']);
 });
