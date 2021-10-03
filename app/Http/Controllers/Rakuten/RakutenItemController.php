@@ -227,7 +227,7 @@ class RakutenItemController extends Controller
             ->orWhere('images', NULL)
             ->leftJoin('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
             ->select('rakuten_items.id as id', 'url')
-            ->where('rakutens.status', '!=', 3)
+            ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at', 'asc')
             ->first();
         return $rakuten_item;
@@ -239,7 +239,7 @@ class RakutenItemController extends Controller
             ->whereNotNull('jp_title')
             ->leftJoin('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
             ->select('rakuten_items.id as id', 'jp_title')
-            ->where('rakutens.status', '!=', 3)
+            ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at')->first();
         return $rakuten_item;
     }
@@ -250,7 +250,7 @@ class RakutenItemController extends Controller
             ->whereNotNull('jp_brand')
             ->leftJoin('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
             ->select('rakuten_items.id as id', 'jp_brand')
-            ->where('rakutens.status', '!=', 3)
+            ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at', 'asc')->first();
         return $rakuten_item;
     }
@@ -261,7 +261,7 @@ class RakutenItemController extends Controller
             ->whereNotNull('jp_content')
             ->leftJoin('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
             ->select('rakuten_items.id as id', 'jp_content')
-            ->where('rakutens.status', '!=', 3)
+            ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at', 'asc')->first();
         return $rakuten_item;
     }
@@ -273,7 +273,7 @@ class RakutenItemController extends Controller
             ->join('rakutens', 'rakuten_items.rakuten_id', '=', 'rakutens.id')
             ->join('rate_sets', 'rakutens.rate_set_id', '=', 'rate_sets.id')
             ->select('rakuten_items.id as id', 'rakuten_items.price', 'rakuten_items.rakuten_id', 'rate_sets.set')
-            ->where('rakutens.status', '!=', 3)
+            ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at', 'asc')->first();
 
         $rates = unserialize($rakuten_item->set);

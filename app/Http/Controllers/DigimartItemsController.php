@@ -213,7 +213,7 @@ class DigimartItemsController extends Controller
             ->orWhere('images', NULL)
             ->leftJoin('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->select('digimart_items.id as id', 'digimart_items.url')
-            ->where('digimarts.status', '!=', 3)
+            ->where('digimarts.status', '!=', 2)
             ->first();
         return $digimart_item;
     }
@@ -224,7 +224,7 @@ class DigimartItemsController extends Controller
             ->whereNotNull('jp_title')
             ->leftJoin('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->select('digimart_items.id as id', 'jp_title')
-            ->where('digimarts.status', '!=', 3)
+            ->where('digimarts.status', '!=', 2)
             ->orderBy('digimart_items.updated_at')->first();
         return $digimart_item;
     }
@@ -235,7 +235,7 @@ class DigimartItemsController extends Controller
             ->whereNotNull('jp_brand')
             ->leftJoin('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->select('digimart_items.id as id', 'jp_brand')
-            ->where('digimarts.status', '!=', 3)
+            ->where('digimarts.status', '!=', 2)
             ->orderBy('digimarts.updated_at')->first();
         return $digimart_item;
     }
@@ -246,7 +246,7 @@ class DigimartItemsController extends Controller
             ->whereNotNull('jp_content')
             ->leftJoin('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->select('digimart_items.id as id', 'jp_content')
-            ->where('digimarts.status', '!=', 3)
+            ->where('digimarts.status', '!=', 2)
             ->orderBy('digimart_items.updated_at')->first();
         return $digimart_item;
     }
@@ -258,7 +258,7 @@ class DigimartItemsController extends Controller
             ->join('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->join('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
             ->select('digimart_items.id as id', 'digimart_items.price', 'digimart_items.digimart_id', 'rate_sets.set')
-            ->where('digimarts.status', '!=', 3)
+            ->where('digimarts.status', '!=', 2)
             ->where('digimart_items.price', '>', 0)
             ->orderBy('digimart_items.updated_at')->first();
 
