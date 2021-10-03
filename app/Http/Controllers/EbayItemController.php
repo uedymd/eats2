@@ -230,7 +230,7 @@ class EbayItemController extends Controller
             $item->save();
         }
 
-        dd($result['Ack']);
+        return redirect('ebay/trading');
     }
 
     // public function add_items()
@@ -518,8 +518,11 @@ class EbayItemController extends Controller
 
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
         <EndItemRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
-          <EndingReason>NotAvailable</EndingReason>
+          <RequesterCredentials>
+            <eBayAuthToken>" . config('app.ebay_token') . "</eBayAuthToken>
+          </RequesterCredentials>
           <ItemID>{$item->ebay_id}</ItemID>
+          <EndingReason>NotAvailable</EndingReason>
           <ErrorLanguage>en_US</ErrorLanguage>
           <WarningLevel>Low</WarningLevel>
         </EndItemRequest>";
@@ -567,9 +570,9 @@ class EbayItemController extends Controller
             "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
             "X-EBAY-API-CALL-NAME: AddFixedPriceItem",
             "X-EBAY-API-SITEID: 0",
-            "X-EBAY-API-DEV-NAME: {config('app.ebay_client_id')}",
-            "X-EBAY-API-APP-NAME: {config('app.ebay_client_id')}",
-            "X-EBAY-API-CERT-NAME: {config('app.ebay_client_id')}"
+            "X-EBAY-API-DEV-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-APP-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-CERT-NAME: " . config('app.ebay_client_id')
         );
 
 
@@ -592,12 +595,13 @@ class EbayItemController extends Controller
         $http_headers = array(
             "Content-Type: text/xml",
             "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
-            "X-EBAY-API-CALL-NAME: EndFixedPriceItem",
+            "X-EBAY-API-CALL-NAME: EndItem",
             "X-EBAY-API-SITEID: 0",
-            "X-EBAY-API-DEV-NAME: {config('app.ebay_client_id')}",
-            "X-EBAY-API-APP-NAME: {config('app.ebay_client_id')}",
-            "X-EBAY-API-CERT-NAME: {config('app.ebay_client_id')}"
+            "X-EBAY-API-DEV-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-APP-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-CERT-NAME: " . config('app.ebay_client_id')
         );
+
 
 
         $xml = $xml_data->asXML();
