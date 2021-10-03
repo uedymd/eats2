@@ -192,6 +192,18 @@ class EbayItemController extends Controller
      * @param  \App\Models\EbayItem  $ebayItem
      * @return \Illuminate\Http\Response
      */
+    public function delete(EbayItem $ebayItem, $id)
+    {
+        $ebay = EbayItem::find($id);
+
+        return view('ebay/delete', compact('ebay'));
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\EbayItem  $ebayItem
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(EbayItem $ebayItem)
     {
         //

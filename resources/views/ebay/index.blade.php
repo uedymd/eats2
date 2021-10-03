@@ -12,6 +12,7 @@
                     <table class="table-auto w-full mt-5">
                         <thead>
                             <tr class="bg-gray-100">
+                                <th class="border px-4 py-2 w-1/12"></th>
                                 <th class="border px-4 py-2 w-1/12">アイテム</th>
                                 <th class="border px-4 py-2 w-3/12">タイトル</th>
                                 <th class="border px-4 py-2 w-1/12">仕入元</th>
@@ -24,6 +25,9 @@
                         <tbody>
                             @foreach($ebay_items as $ebay_item)
                             <tr>
+                                <td class="border px-4 py-2">
+                                    {{$ebay->id}}
+                                </td>
                                 <td class="border px-4 py-2">
                                     @if($ebay_item->image!=='')
                                     <img src="{{$ebay_item->image}}" alt="" class="block" style="max-width:100%;height:auto;">
@@ -60,6 +64,9 @@
                                     ?>
                                 </td>
                                 <td class="border px-4 py-2 text-right">{{$ebay_item->tracking_at}}</td>
+                                <td class=" border px-4 py-2 text-center">
+                                    <a href="{{ route('ebay.delete',['id'=>$ebay->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">出品取り消し</a>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

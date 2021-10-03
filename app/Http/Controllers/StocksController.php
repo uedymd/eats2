@@ -117,6 +117,16 @@ class StocksController extends Controller
      * @param  \App\Models\Stocks  $stocks
      * @return \Illuminate\Http\Response
      */
+    public function delete(Stocks $stocks, $id)
+    {
+        //
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Stocks  $stocks
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Stocks $stocks)
     {
         //
