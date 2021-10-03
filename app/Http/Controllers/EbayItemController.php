@@ -103,6 +103,10 @@ class EbayItemController extends Controller
 
             $site_item = $models[$site]::find($ebay_item->supplier_id);
 
+            echo $site_item->price;
+            echo  $request['result']['price'];
+
+            return false;
 
             if ($site_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
