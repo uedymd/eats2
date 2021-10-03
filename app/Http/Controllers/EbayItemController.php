@@ -11,6 +11,7 @@ use App\Models\DigimartItems;
 use App\Models\templates;
 use App\Models\Stocks;
 use Carbon\Carbon;
+use phpDocumentor\Reflection\DocBlock\Serializer;
 
 class EbayItemController extends Controller
 {
@@ -204,9 +205,32 @@ class EbayItemController extends Controller
      * @param  \App\Models\EbayItem  $ebayItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EbayItem $ebayItem)
+    public function destroy(EbayItem $ebayItem, $id)
     {
-        //
+        $models = [
+            'rakuten' => 'App\Models\RakutenItem',
+            'digimart' => 'App\Models\DigimartItems',
+        ];
+
+        $item = $ebayItem::find($id);
+        $xml = $this->make_delete_item_xml($item);
+
+        $result = $this->ebay_delete_item($xml);
+        if ($result['Ack'] !== 'Failure' || $result['Ack'] !== 'PartialFailure') {
+
+            $target = $models[$item->site]::find($item->supplier_id)->delete();
+            $stock = Stocks::where('site', $item->site)
+                ->where('item_id', $id)->delete();
+            if ($target && $stock) {
+                $item->delete();
+            }
+        } else {
+            $item->status_code = 999;
+            $item->error = serialize([0 => '出品取消を失敗しました。']);
+            $item->save();
+        }
+
+        dd($result['Ack']);
     }
 
     // public function add_items()
@@ -489,6 +513,20 @@ class EbayItemController extends Controller
         $xml = new \SimpleXMLElement($text);
         return $xml;
     }
+    private function make_delete_item_xml($item)
+    {
+
+        $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+        <EndItemRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
+          <EndingReason>NotAvailable</EndingReason>
+          <ItemID>{$item->ebay_id}</ItemID>
+          <ErrorLanguage>en_US</ErrorLanguage>
+          <WarningLevel>Low</WarningLevel>
+        </EndItemRequest>";
+
+        $xml = new \SimpleXMLElement($text);
+        return $xml;
+    }
 
     private function make_description_html($item, $site)
     {
@@ -528,6 +566,33 @@ class EbayItemController extends Controller
             "Content-Type: text/xml",
             "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
             "X-EBAY-API-CALL-NAME: AddFixedPriceItem",
+            "X-EBAY-API-SITEID: 0",
+            "X-EBAY-API-DEV-NAME: {config('app.ebay_client_id')}",
+            "X-EBAY-API-APP-NAME: {config('app.ebay_client_id')}",
+            "X-EBAY-API-CERT-NAME: {config('app.ebay_client_id')}"
+        );
+
+
+        $xml = $xml_data->asXML();
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->api_url);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+
+        $_result = curl_exec($ch);
+        $result = simplexml_load_string($_result);
+        $result = json_encode($result);
+        $result = json_decode($result, true);
+        return $result;
+    }
+    private function ebay_delete_item($xml_data)
+    {
+        $http_headers = array(
+            "Content-Type: text/xml",
+            "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
+            "X-EBAY-API-CALL-NAME: EndFixedPriceItem",
             "X-EBAY-API-SITEID: 0",
             "X-EBAY-API-DEV-NAME: {config('app.ebay_client_id')}",
             "X-EBAY-API-APP-NAME: {config('app.ebay_client_id')}",
