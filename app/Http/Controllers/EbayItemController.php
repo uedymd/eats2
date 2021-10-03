@@ -220,7 +220,7 @@ class EbayItemController extends Controller
 
             $target = $models[$item->site]::find($item->supplier_id)->delete();
             $stock = Stocks::where('site', $item->site)
-                ->where('item_id', $id)->delete();
+                ->where('item_id', $item->supplier_id)->delete();
             if ($target && $stock) {
                 $item->delete();
             }
@@ -232,32 +232,6 @@ class EbayItemController extends Controller
 
         return redirect('ebay/trading');
     }
-
-    // public function add_items()
-    // {
-    //     $stocks = Stocks::where('status', 1)
-    //         ->limit(3)
-    //         ->get();
-
-    //     foreach ($stocks as $stock) {
-    //         $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/ebay/add/item/{$stock->site}/{$stock->item_id}";
-    //         //cURLセッションを初期化する
-    //         $ch = curl_init();
-
-    //         //URLとオプションを指定する
-    //         curl_setopt($ch, CURLOPT_URL, $url);
-    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    //         //URLの情報を取得する
-    //         $res =  curl_exec($ch);
-
-    //         //結果を表示する
-    //         var_dump($res);
-
-    //         //セッションを終了する
-    //         curl_close($ch);
-    //     }
-    // }
 
 
     /**
