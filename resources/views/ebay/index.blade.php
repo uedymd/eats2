@@ -12,7 +12,7 @@
                     <table class="table-auto w-full mt-5">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border px-4 py-2 w-1/12"></th>
+                                <th class="border px-4 py-2 w-1/12">EATS ID</th>
                                 <th class="border px-4 py-2 w-1/12">アイテム</th>
                                 <th class="border px-4 py-2 w-3/12">タイトル</th>
                                 <th class="border px-4 py-2 w-1/12">仕入元</th>
