@@ -60,7 +60,7 @@ class EbayItemController extends Controller
         $items = "";
         $items = EbayItem::leftJoin('stocks', 'ebay_items.supplier_id', '=', 'stocks.item_id')
             ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
-            ->select('ebay_items.id', 'rakuten_items.url')
+            ->select('ebay_items.id', "{$site}_items.url")
             ->where('ebay_items.site', $site)
             ->where('stocks.status', 2)
             ->orderBy('ebay_items.tracking_at')
