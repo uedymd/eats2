@@ -17,12 +17,17 @@
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('rakuten.index') }}" :active="request()->routeIs('setting.brandset.index')">
+                    <x-jet-nav-link href="{{ route('abey.index') }}" :active="request()->routeIs('ebay'.index')">
+                        出品管理
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('rakuten.index') }}" :active="request()->routeIs('rakuten.index')">
                         楽天管理
                     </x-jet-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('digimart.index') }}" :active="request()->routeIs('setting.brandset.index')">
+                    <x-jet-nav-link href="{{ route('digimart.index') }}" :active="request()->routeIs('digimart.index')">
                         デジマート管理
                     </x-jet-nav-link>
                 </div>

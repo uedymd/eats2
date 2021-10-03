@@ -24,7 +24,7 @@ use App\Http\Controllers\DigimartItemsController;
 */
 
 Route::redirect('/', '/login');
-Route::redirect('/dashboard', '/rakuten')->middleware(['auth'])->name('dashboard');
+Route::redirect('/dashboard', '/ebay/trading')->middleware(['auth'])->name('dashboard');
 
 Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     Route::get('edit/{site}', [SettingController::class, 'edit'])->name('setting.edit');
