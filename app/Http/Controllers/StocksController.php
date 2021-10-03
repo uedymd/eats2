@@ -29,7 +29,7 @@ class StocksController extends Controller
             ->where("{$site}s.status", '=', 3)
             ->get();
 
-        $result = 0;
+
 
         foreach ($items as $item) {
             $stock_count = Stocks::where('item_id', '=', $item->id)

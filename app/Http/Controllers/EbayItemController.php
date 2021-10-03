@@ -6,6 +6,8 @@ use App\Models\EbayItem;
 use Illuminate\Http\Request;
 use App\Models\Rakuten;
 use App\Models\RakutenItem;
+use App\Models\Digimarts;
+use App\Models\DigimartItems;
 use App\Models\templates;
 use App\Models\Stocks;
 use Carbon\Carbon;
@@ -234,9 +236,14 @@ class EbayItemController extends Controller
     public function add(EbayItem $ebayItem, $site, $id = null)
     {
 
+        $models = [
+            'rakuten' => 'App\Models\RakutenItem',
+            'digimart' => 'App\Models\DigimartItems',
+        ];
+
 
         if (is_null($id)) {
-            $item = RakutenItem::leftJoin('stocks', 'rakuten_items.id', '=', 'stocks.item_id')
+            $item = $models[$site]::leftJoin('stocks', $site . '_items.id', '=', 'stocks.item_id')
                 ->where('stocks.status', 1)
                 ->first();
 
@@ -246,17 +253,9 @@ class EbayItemController extends Controller
             $id = $item->item_id;
         }
 
-        switch ($site) {
-            case 'rakuten':
-                $item = RakutenItem::find($id);
-                break;
+        $item = $models[$site]::find($id);
 
-            default:
-                # code...
-                break;
-        }
-
-        $xml = $this->make_add_item_xml($item);
+        $xml = $this->make_add_item_xml($item, $site);
         $registed_item = $this->ebay_regist_item($xml);
         if ($registed_item['Ack'] !== 'Failure') {
             $ebay_item = new EbayItem();
@@ -265,15 +264,14 @@ class EbayItemController extends Controller
             $ebay_item->supplier_id = $id;
             $ebay_item->title = $item->en_title;
             $ebay_item->price = $item->doller;
-            // $ebay_item->image = $register['ProductSuggestions']['ProductSuggestion']['StockPhoto'];
             if ($ebay_item->save()) {
-                $stock = Stocks::where('site', 'rakuten')
+                $stock = Stocks::where('site', $site)
                     ->where('item_id', $id)->first();
                 $stock->status = 2;
                 $stock->save();
             }
         } else {
-            $stock = Stocks::where('site', 'rakuten')
+            $stock = Stocks::where('site', $site)
                 ->where('item_id', $id)->first();
             $stock->error = serialize($registed_item['Errors']);
             $stock->status = 3;
@@ -282,10 +280,28 @@ class EbayItemController extends Controller
     }
 
 
-    private function make_add_item_xml($item)
+    private function make_add_item_xml($item, $site)
     {
 
-        $item_settings = Rakuten::find($item->rakuten_id);
+        $models = [
+            'rakuten' => 'App\Models\RakutenItem',
+            'digimart' => 'App\Models\DigimartItems',
+        ];
+
+        switch ($site) {
+            case 'rakuten':
+                $item_settings = $models[$site]::find($item->rakuten_id);
+                break;
+
+            case 'digimart':
+                $item_settings = $models[$site]::find($item->digimart_id);
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
         if ($item_settings->condition == 2) {
             $condtionID = 3000;
         } else {
@@ -311,7 +327,7 @@ class EbayItemController extends Controller
         $text .= "<ErrorLanguage>en_US</ErrorLanguage>\n";
         $text .= "<Item>\n";
         $text .= "<Title>{$item->en_title}</Title>\n";
-        $description = $this->make_description_html($item);
+        $description = $this->make_description_html($item, $site);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
         $text .= "<StartPrice>{$item->doller}</StartPrice>\n";
@@ -465,9 +481,25 @@ class EbayItemController extends Controller
         return $xml;
     }
 
-    private function make_description_html($item)
+    private function make_description_html($item, $site)
     {
-        $item_settings = Rakuten::find($item->rakuten_id);
+        $models = [
+            'rakuten' => 'App\Models\RakutenItem',
+            'digimart' => 'App\Models\DigimartItems',
+        ];
+        switch ($site) {
+            case 'rakuten':
+                $item_settings = $models[$site]::find($item->rakuten_id);
+                break;
+
+            case 'digimart':
+                $item_settings = $models[$site]::find($item->digimart_id);
+                break;
+
+            default:
+                # code...
+                break;
+        }
         $template = templates::find($item_settings->template);
         $slider = "";
 
