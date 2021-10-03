@@ -79,26 +79,23 @@ class EbayItemController extends Controller
     {
 
         $returns = [];
+        $erros = [];
+        $ebay_item = EbayItem::find($request['id']);
 
-        switch ($site) {
-            case 'rakuten':
-                $ebay_item = EbayItem::where('ebay_items.site', $site)
-                    ->where('ebay_items.id', $request['id'])
-                    ->first();
-                break;
-
-            default:
-
-                break;
-        }
 
         if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
+            $erros[] = '商品が削除されています。削除対象です。';
+            $ebay_item->error = serialize($erros);
+            $check_time = Carbon::now();
+            $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
+            $ebay_item->status_code = $request['result']['status'];
+            $ebay_item->update();
+            $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
             return false;
         }
 
         if (isset($request['result']['check']) && $request['result']['check']) {
 
-            $erros = [];
 
             if ($ebay_item->price < $request['result']['price']) {
                 $erros[] = '仕入れ値が売値を超えています。';
@@ -109,7 +106,15 @@ class EbayItemController extends Controller
                             $rakuten_items->price = $request['result']['price'];
                             $rakuten_items->save();
                         }
-                        $returns[] = "楽天価格保存";
+                        $returns[] = "デジマート価格保存";
+                        break;
+                    case 'digimart':
+                        $digimart_items = DigimartItems::find($ebay_item->supplier_id);
+                        if (!empty($digimart_items->price) && $digimart_items->price > 0) {
+                            $digimart_items->price = $request['result']['price'];
+                            $digimart_items->save();
+                        }
+                        $returns[] = "デジマート価格保存";
                         break;
 
                     default:
@@ -118,7 +123,8 @@ class EbayItemController extends Controller
                 }
             }
             if ($request['result']['status'] >= 500) {
-                $erros[] = 'アクセスが拒否されました。現状が確認できていません。';
+                $datetime = date('Y年m月d日 H:i');
+                $erros[] = "アクセスが拒否されました。{$datetime}時点で現状が確認できていません。";
             }
             if (!empty($erros)) {
                 $ebay_item->error = serialize($erros);
