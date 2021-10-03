@@ -104,7 +104,7 @@ class EbayItemController extends Controller
             $site_item = $models[$site]::find($ebay_item->supplier_id);
             $result_price = preg_replace("/[^0-9]+/", '', $request['result']['price']);
 
-            if ($site_item->price < $request['result']['price']) {
+            if ((float)$site_item->price < (float)$request['result']['price']) {
                 $erros[] = "仕入れ値が売値を超えています。{$site_item->price}円 => {$request['result']['price']}円";
                 switch ($site) {
                     case 'rakuten':
