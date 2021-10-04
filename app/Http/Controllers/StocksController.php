@@ -29,6 +29,8 @@ class StocksController extends Controller
             ->where("{$site}s.status", '=', 3)
             ->get();
 
+        $result = '';
+
 
 
         foreach ($items as $item) {
