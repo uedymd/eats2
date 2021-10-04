@@ -268,16 +268,16 @@ class DigimartItemsController extends Controller
 
         foreach ($rates as $rate) {
             switch ($digimart_item->price) {
-                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > $digimart_item->price:
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$digimart_item->price:
                     $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
 
-                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= $digimart_item->price && $rate['max'] > $digimart_item->price:
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price && $rate['max'] > (float)$digimart_item->price:
                     $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
-                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= $digimart_item->price:
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price:
                     $return_price = (float)$digimart_item->price + (float)$rate['rate'];
                     break;
 
@@ -288,7 +288,6 @@ class DigimartItemsController extends Controller
                 break;
             }
         }
-
         $returns = [
             'id' => $digimart_item->id,
             'price' => $return_price,
