@@ -94,7 +94,7 @@ class DigimartItemsController extends Controller
 
                             $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false && $this->check_title_include_ng_keywords($item['title'], $digimarts->ng_keyword === false)) {
+                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false && $this->check_title_include_ng_keywords($item['title'], $digimarts->ng_keyword) === false) {
                                 $digimart_item = new DigimartItems();
                                 $digimart_item->digimart_id = $digimarts->digimart_id;
                                 $digimart_item->jp_title = $jp_title;
