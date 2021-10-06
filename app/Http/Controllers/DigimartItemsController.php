@@ -52,7 +52,6 @@ class DigimartItemsController extends Controller
         }
         $setting = Setting::where('site', 'digimart')->first();
 
-
         if ($digimarts) {
 
             if ($digimarts->brand_setting) {
@@ -95,7 +94,7 @@ class DigimartItemsController extends Controller
 
                             $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false) {
+                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $digimarts->ng_url) === false && $this->check_title_include_ng_keywords($item['title'], $digimarts->ng_keyword === false)) {
                                 $digimart_item = new DigimartItems();
                                 $digimart_item->digimart_id = $digimarts->digimart_id;
                                 $digimart_item->jp_title = $jp_title;
@@ -179,6 +178,23 @@ class DigimartItemsController extends Controller
                     $ng_keyword = str_replace('/', '\/', $ng_keyword);
                     $pattern = "/{$ng_keyword}/i";
                     if (preg_match($pattern, $url)) {
+                        return true;
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    private function check_title_include_ng_keywords($title, $ng_keywords)
+    {
+        if ($ng_keywords) {
+            $ng_keyword_array = preg_split("/( |　)+/", $ng_keywords);
+            if ($ng_keyword_array) {
+                foreach ((array)$ng_keyword_array as $ng_keyword) {
+                    $ng_keyword = str_replace('/', '\/', $ng_keyword);
+                    $pattern = "/{$ng_keyword}/i";
+                    if (preg_match($pattern, $title)) {
                         return true;
                         break;
                     }
