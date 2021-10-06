@@ -48,7 +48,10 @@ Route::group(['prefix' => 'digimart'], function () {
     Route::get('translate/get_price', [DigimartItemsController::class, 'get_price']);
     Route::get('translate/get_image', [DigimartItemsController::class, 'get_image']);
     Route::post('translate/set_content', [DigimartItemsController::class, 'set_content']);
+    Route::post('translate/delete_content', [DigimartItemsController::class, 'delete_content']);
     Route::get('translate/set_content', [DigimartItemsController::class, 'set_content']);
+    Route::get('translate/set_content', [DigimartItemsController::class, 'set_content']);
+    Route::get('translate/delete_content', [DigimartItemsController::class, 'delete_content']);
     Route::post('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
     Route::get('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
     Route::post('translate/set_title', [DigimartItemsController::class, 'set_title']);
