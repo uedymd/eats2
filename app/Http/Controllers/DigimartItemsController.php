@@ -367,6 +367,18 @@ class DigimartItemsController extends Controller
 
 
 
+    public function delete_content(Request $request)
+    {
+        if (!empty($request->input('id'))) {
+            DigimartItems::where('id', $request->input('id'))->delete();
+            Log::info('nodeからの日本語コンテンツ削除 : ' . $request->input('id'));
+        } else {
+            Log::error('nodeからの日本語コンテンツ書き込み : IDなし');
+        }
+    }
+
+
+
 
     private function adjust_jp_content_html($text, $ng_contents)
     {
