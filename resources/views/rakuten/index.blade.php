@@ -50,6 +50,7 @@
                                         }else{
                                             $jp_content_progress = "-";
                                             $en_title_progress = "-";
+                                            $en_brand_progress = "-";
                                             $en_content_progress = "-";
                                             $doller_progress = "-";
                                         }
