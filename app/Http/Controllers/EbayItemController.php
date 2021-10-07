@@ -36,11 +36,15 @@ class EbayItemController extends Controller
             switch ($ebay_item->site) {
                 case 'rakuten':
                     $rakuten_item = RakutenItem::find($ebay_item->supplier_id);
-                    $suppliers[$ebay_item->id] = $rakuten_item->url;
+                    if ($rakuten_item) {
+                        $suppliers[$ebay_item->id] = $rakuten_item->url;
+                    }
                     break;
                 case 'digimart':
                     $digimart_item = DigimartItems::find($ebay_item->supplier_id);
-                    $suppliers[$ebay_item->id] = $digimart_item->url;
+                    if ($digimart_item) {
+                        $suppliers[$ebay_item->id] = $digimart_item->url;
+                    }
                     break;
 
                 default:
