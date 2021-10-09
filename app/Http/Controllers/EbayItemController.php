@@ -348,7 +348,7 @@ class EbayItemController extends Controller
         $text .= "</RequesterCredentials>\n";
         $text .= "<ErrorLanguage>en_US</ErrorLanguage>\n";
         $text .= "<Item>\n";
-        $text .= "<Title>{$item->en_title}</Title>\n";
+        $text .= "<Title>" . htmlspecialchars($item->en_title) . "</Title>\n";
         $description = $this->make_description_html($item, $site);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
