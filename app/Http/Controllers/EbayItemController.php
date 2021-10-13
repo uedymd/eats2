@@ -338,7 +338,7 @@ class EbayItemController extends Controller
         $ReturnProfileName = $item_settings->return_profile;
         $ShippingProfileName = $item_settings->shipping_profile;
         $type = $item_settings->type;
-        $brand = $item->en_brand;
+        $brand = htmlspecialchars($item->en_brand);
         $sku = $item_settings->sku;
 
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
