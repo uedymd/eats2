@@ -611,7 +611,7 @@ class EbayItemController extends Controller
     public function get_items_detail()
     {
         // date_default_timezone_set('UTF');
-        $start = date("Y-m-d", strtotime("-5 day"));
+        $start = date("Y-m-d", strtotime("-1 day"));
         $end = date("Y-m-d H:i:s");
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 					<GetSellerListRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
@@ -650,7 +650,7 @@ class EbayItemController extends Controller
         $result = simplexml_load_string($_result);
         $result = json_encode($result);
         $result = json_decode($result, true);
-        return $result;
+	return $result;
     }
 
     /**
