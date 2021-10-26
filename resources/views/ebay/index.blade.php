@@ -9,6 +9,21 @@
         <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    <form method="post" action="{{ route('ebay.search') }}">
+                        @csrf
+                        <div class="flex items-center justify-start mt-4">
+                            <div>
+                                <div>
+                                    <x-label for="keyword" :value="__('検索キーワード')" />
+
+                                    <x-input id="keyword" class="block mt-1 w-5/12" type="text" name="keyword" :value="old('keyword',$keyword)" autofocus />
+                                </div>
+                            </div>
+                            <x-button class="ml-4 mt-4">
+                                {{ __('検索') }}
+                            </x-button>
+                        </div>
+                    </form>
                     <div class="mt-10">
                         {{ $ebay_items->links() }}
                     </div>
@@ -39,7 +54,7 @@
                                     @if(!is_null($ebay_item->view_url))
                                     <a href="{{$ebay_item->view_url}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
                                     @else
-                                     <small>詳細取得中</small>
+                                    <small>詳細取得中</small>
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2">

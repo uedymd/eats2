@@ -89,6 +89,7 @@ Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
 
 Route::group(['prefix' => 'ebay', 'middleware' => ['auth']], function () {
     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
+    Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
     Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
 });

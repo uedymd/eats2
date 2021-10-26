@@ -52,7 +52,44 @@ class EbayItemController extends Controller
                     break;
             }
         }
-        return view('ebay/index', compact('ebay_items', 'suppliers'));
+        $keyword = "";
+        return view('ebay/index', compact('ebay_items', 'suppliers', 'keyword'));
+    }
+
+
+
+    public function search(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $ebay_items = EbayItem::orderBy('id', 'desc')
+            ->orWhere('title', 'like', '%' . $keyword . '%')
+            ->orWhere('ebay_id', 'like', $keyword)
+            ->paginate(150);;
+
+        $suppliers = [];
+
+        foreach ($ebay_items as $ebay_item) {
+            switch ($ebay_item->site) {
+                case 'rakuten':
+                    $rakuten_item = RakutenItem::find($ebay_item->supplier_id);
+                    if ($rakuten_item) {
+                        $suppliers[$ebay_item->id] = $rakuten_item->url;
+                    }
+                    break;
+                case 'digimart':
+                    $digimart_item = DigimartItems::find($ebay_item->supplier_id);
+                    if ($digimart_item) {
+                        $suppliers[$ebay_item->id] = $digimart_item->url;
+                    }
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+        return view('ebay/index', compact('ebay_items', 'suppliers', 'keyword'));
     }
 
     /**
@@ -625,7 +662,7 @@ class EbayItemController extends Controller
 					  <GranularityLevel>Coarse</GranularityLevel> 
 					  <IncludeWatchCount>true</IncludeWatchCount> 
 					  <Pagination> 
-					    <EntriesPerPage>200</EntriesPerPage> 
+					    <EntriesPerPage>1000</EntriesPerPage> 
 					  </Pagination> 
 					</GetSellerListRequest>";
         $http_headers = array(
