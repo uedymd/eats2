@@ -316,7 +316,6 @@ class EbayItemController extends Controller
 
         $xml = $this->make_add_item_xml($item, $site);
         $registed_item = $this->ebay_regist_item($xml);
-        var_dump($registed_item);
         if ($registed_item['Ack'] !== 'Failure') {
             $ebay_item = new EbayItem();
             $ebay_item->ebay_id = $registed_item['ItemID'];
