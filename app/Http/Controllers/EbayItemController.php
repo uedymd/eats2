@@ -343,7 +343,7 @@ class EbayItemController extends Controller
     {
 
         $models = [
-            'rakuten' => 'App\Models\Rakutens',
+            'rakuten' => 'App\Models\Rakuten',
             'digimart' => 'App\Models\Digimarts',
         ];
 
@@ -560,7 +560,7 @@ class EbayItemController extends Controller
     private function make_description_html($item, $site)
     {
         $models = [
-            'rakuten' => 'App\Models\Rakutens',
+            'rakuten' => 'App\Models\Rakuten',
             'digimart' => 'App\Models\Digimarts',
         ];
         switch ($site) {
@@ -687,7 +687,7 @@ class EbayItemController extends Controller
         $result = simplexml_load_string($_result);
         $result = json_encode($result);
         $result = json_decode($result, true);
-	return $result;
+        return $result;
     }
 
     /**
