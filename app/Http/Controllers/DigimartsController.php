@@ -29,7 +29,8 @@ class DigimartsController extends Controller
     {
         $digimarts = Digimarts::leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
             ->leftJoin('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
-            ->select('digimarts.id as id', 'title', 'url', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url',  'status', 'digimarts.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name')
+            ->select('digimarts.id as id', 'title', 'url', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url',  'status', 'digimarts.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name', 'priority')
+            ->orderBy('priority')
             ->get();
         $items = [];
         foreach ($digimarts as $digimart) {
@@ -123,6 +124,7 @@ class DigimartsController extends Controller
         $digimart->shipping_profile = $request->input('shipping_profile');
         $digimart->condition = $request->input('condition');
         $digimart->template = $request->input('template');
+        $digimart->template = $request->input('priority');
         $digimart->status = 1;
         $digimart->save();
         return redirect('digimart');
@@ -199,6 +201,7 @@ class DigimartsController extends Controller
         $digimart->shipping_profile = $request->input('shipping_profile');
         $digimart->condition = $request->input('condition');
         $digimart->template = $request->input('template');
+        $digimart->priority = $request->input('priority');
         $digimart->status = $request->input('status');
         $digimart->save();
         return redirect('digimart');

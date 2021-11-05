@@ -41,6 +41,7 @@ class RakutenItemController extends Controller
                 ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
                 ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
+                ->orderBy('priority')
                 ->first();
         } else {
             $rakutens = Rakuten::whereIn('status', [1, 3])
@@ -48,6 +49,7 @@ class RakutenItemController extends Controller
                 ->leftJoin('brand_sets', 'rakutens.brand_set_id', '=', 'brand_sets.id')
                 ->select('rakutens.id as rakuten_id', 'keyword', 'genre_id', 'ng_keyword', 'ng_url', 'price_min', 'price_max', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
+                ->orderBy('priority')
                 ->first();
         }
         $setting = Setting::where('site', 'rakuten')->first();

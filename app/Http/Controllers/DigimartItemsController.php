@@ -41,6 +41,7 @@ class DigimartItemsController extends Controller
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
                 ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
+                ->orderBy('priority')
                 ->first();
         } else {
             $digimarts = Digimarts::whereIn('status', [1, 3])
@@ -48,9 +49,11 @@ class DigimartItemsController extends Controller
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
                 ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'desc')
+                ->orderBy('priority')
                 ->first();
         }
         $setting = Setting::where('site', 'digimart')->first();
+
 
         if ($digimarts) {
 
@@ -78,6 +81,7 @@ class DigimartItemsController extends Controller
                     echo $e->getMessage() . PHP_EOL;
                 }
 
+                dd($respons);
                 if (!empty($respons)) {
 
                     foreach ((array)$respons as $item) {

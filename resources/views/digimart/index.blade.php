@@ -36,34 +36,36 @@
                             @php $cnt = 1; @endphp
                             @foreach($digimarts as $digimart)
                             <tr>
-                                <td class="border px-4 py-2"><a href="{{ route('digimart.items',$digimart->id) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$cnt}}<a></td>
-                                    <td class="border px-4 py-2">
-                                        {{$digimart->title}}<br>（対象：{{$items[$digimart->id]['count']}}件）
-                                        @php 
-                                        
-                                        if($items[$digimart->id]['count']>0){
-                                            $jp_content_progress = round(100-($items[$digimart->id]['jp_content']/$items[$digimart->id]['count'])*100,1);
-                                            $en_title_progress = round(100-($items[$digimart->id]['en_title']/$items[$digimart->id]['count'])*100,1);
-                                            $en_brand_progress = round(100-($items[$digimart->id]['en_brand']/$items[$digimart->id]['count'])*100,1);
-                                            $en_content_progress = round(100-($items[$digimart->id]['en_content']/$items[$digimart->id]['count'])*100,1);
-                                            $doller_progress = round(100-($items[$digimart->id]['doller']/$items[$digimart->id]['count'])*100,1);
-                                        }else{
-                                            $jp_content_progress = "-";
-                                            $en_title_progress = "-";
-                                            $en_content_progress = "-";
-                                            $en_brand_progress = "-";
-                                            $doller_progress = "-";
-                                        }
+                                <td class="border px-4 py-2"><a href="{{ route('digimart.items',$digimart->id) }}" class="inline-flex items-center justify-center w-10 h-10 mr-2 text-indigo-100 transition-colors duration-150 bg-indigo-700 rounded-lg focus:shadow-outline hover:bg-indigo-800 mt-5">{{$cnt}}<a>
+                                            <div class="mt-3 text-sm">優先度：{{$digimart->priority}}</div>
+                                </td>
+                                <td class="border px-4 py-2">
+                                    {{$digimart->title}}<br>（対象：{{$items[$digimart->id]['count']}}件）
+                                    @php
 
-                                        @endphp
-                                        <a href="{{ route('api.digimart.search',['id'=>$digimart->id]) }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時検索</a>
-                                        <div class="mt-5">
-                                            コンテンツ取得待ち：<div class="text-right">{{$items[$digimart->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
-                                            タイトル翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
-                                            ブランド翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_brand']}}件（進捗{{$en_brand_progress}}%）</div>
-                                            コンテンツ翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_content']}}件（進捗{{$en_content_progress}}%）</div>
-                                            ドル変換待ち：<div class="text-right">{{$items[$digimart->id]['doller']}}件（進捗{{$doller_progress}}%）</div>
-                                        </div>
+                                    if($items[$digimart->id]['count']>0){
+                                    $jp_content_progress = round(100-($items[$digimart->id]['jp_content']/$items[$digimart->id]['count'])*100,1);
+                                    $en_title_progress = round(100-($items[$digimart->id]['en_title']/$items[$digimart->id]['count'])*100,1);
+                                    $en_brand_progress = round(100-($items[$digimart->id]['en_brand']/$items[$digimart->id]['count'])*100,1);
+                                    $en_content_progress = round(100-($items[$digimart->id]['en_content']/$items[$digimart->id]['count'])*100,1);
+                                    $doller_progress = round(100-($items[$digimart->id]['doller']/$items[$digimart->id]['count'])*100,1);
+                                    }else{
+                                    $jp_content_progress = "-";
+                                    $en_title_progress = "-";
+                                    $en_content_progress = "-";
+                                    $en_brand_progress = "-";
+                                    $doller_progress = "-";
+                                    }
+
+                                    @endphp
+                                    <a href="{{ route('api.digimart.search',['id'=>$digimart->id]) }}" class="block rounded bg-blue-600 p-2 text-white text-center mt-5">即時検索</a>
+                                    <div class="mt-5">
+                                        コンテンツ取得待ち：<div class="text-right">{{$items[$digimart->id]['jp_content']}}件（進捗{{$jp_content_progress}}%）</div>
+                                        タイトル翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_title']}}件（進捗{{$en_title_progress}}%）</div>
+                                        ブランド翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_brand']}}件（進捗{{$en_brand_progress}}%）</div>
+                                        コンテンツ翻訳待ち：<div class="text-right">{{$items[$digimart->id]['en_content']}}件（進捗{{$en_content_progress}}%）</div>
+                                        ドル変換待ち：<div class="text-right">{{$items[$digimart->id]['doller']}}件（進捗{{$doller_progress}}%）</div>
+                                    </div>
                                 </td>
                                 <td class="border px-4 py-2">
                                     <span class="text-gray-500">検索URL：</span><a href="{{$digimart->url}}" target="_blank">確認する</a>

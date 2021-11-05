@@ -52,7 +52,7 @@
                             </div>
                             <div class="flex-1">
                                 <x-label for="rate" :value="__('レート')" />
-    
+
                                 {{ Form::select(
                                     'rate_set_id', 
                                     $rate_selector,
@@ -74,21 +74,21 @@
                                 <x-label for="best_offer" :value="__('Best Offer')" />
                                 <div class="mt-2">
                                     @php
-                                        $best_offer = [
-                                            'best_offer_true' => false,
-                                            'best_offer_false' => false,
-                                        ];
-                                        if($digimart->best_offer==1){
-                                            $best_offer = [
-                                                'best_offer_true' => true,
-                                                'best_offer_false' => false,
-                                            ];
-                                        }elseif(!is_null($digimart->best_offer)&&$digimart->best_offer==0){
-                                            $best_offer = [
-                                                'best_offer_true' => true,
-                                                'best_offer_false' => false,
-                                            ];
-                                        }
+                                    $best_offer = [
+                                    'best_offer_true' => false,
+                                    'best_offer_false' => false,
+                                    ];
+                                    if($digimart->best_offer==1){
+                                    $best_offer = [
+                                    'best_offer_true' => true,
+                                    'best_offer_false' => false,
+                                    ];
+                                    }elseif(!is_null($digimart->best_offer)&&$digimart->best_offer==0){
+                                    $best_offer = [
+                                    'best_offer_true' => true,
+                                    'best_offer_false' => false,
+                                    ];
+                                    }
                                     @endphp
                                     {{ Form::radio('best_offer', '1',$best_offer['best_offer_true'],['id'=>'best_offer_true'] );}}
                                     {{Form::label('best_offer_true','有効',['class'=>'custom-control-label mr-10'])}}
@@ -100,21 +100,21 @@
                                 <x-label for="condition" :value="__('コンディション')" />
                                 <div class="mt-2">
                                     @php
-                                        $condition = [
-                                            'condition_new' => false,
-                                            'condition_used' => false,
-                                        ];
-                                        if($digimart->condition==1){
-                                            $condition = [
-                                                'condition_new' => true,
-                                                'condition_used' => false,
-                                            ];
-                                        }elseif(!is_null($digimart->condition)&&$digimart->condition==2){
-                                            $condition = [
-                                                'condition_new' => false,
-                                                'condition_used' => true,
-                                            ];
-                                        }
+                                    $condition = [
+                                    'condition_new' => false,
+                                    'condition_used' => false,
+                                    ];
+                                    if($digimart->condition==1){
+                                    $condition = [
+                                    'condition_new' => true,
+                                    'condition_used' => false,
+                                    ];
+                                    }elseif(!is_null($digimart->condition)&&$digimart->condition==2){
+                                    $condition = [
+                                    'condition_new' => false,
+                                    'condition_used' => true,
+                                    ];
+                                    }
                                     @endphp
                                     {{ Form::radio('condition', '1',$condition['condition_new'],['id'=>'condition_new','required'] );}}
                                     {{Form::label('condition_new','新品',['class'=>'custom-control-label mr-10'])}}
@@ -155,6 +155,10 @@
                                 <x-label for="shipping_profile" :value="__('Shipping Profile')" />
                                 <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile',$digimart->shipping_profile)" autofocus required />
                             </div>
+                            <div class="flex-1">
+                                <x-label for="priority" :value="__('優先順位')" />
+                                <x-input id="priority" class="block mt-1 w-10/12 mr-3" type="number" name="priority" :value="old('priority',$digimart->priority)" autofocus required />
+                            </div>
                         </div>
                         <div class="mt-4">
                             <div>
@@ -162,7 +166,7 @@
                                 {{ Form::select('status',$status_array,$digimart->status) }}
                             </div>
                         </div>
-                        
+
                         <div class="flex items-center justify-end mt-4">
                             <x-button class="ml-4">
                                 {{ __('登録') }}
