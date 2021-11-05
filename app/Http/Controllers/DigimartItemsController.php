@@ -81,7 +81,6 @@ class DigimartItemsController extends Controller
                     echo $e->getMessage() . PHP_EOL;
                 }
 
-                dd($respons);
                 if (!empty($respons)) {
 
                     foreach ((array)$respons as $item) {
