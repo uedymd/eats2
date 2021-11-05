@@ -52,7 +52,7 @@
                             </div>
                             <div class="flex-1">
                                 <x-label for="rate" :value="__('レート')" />
-    
+
                                 {{ Form::select(
                                     'rate_set_id', 
                                     $rate_selector,
@@ -121,8 +121,12 @@
                                 <x-label for="shipping_profile" :value="__('Shipping Profile')" />
                                 <x-input id="shipping_profile" class="block mt-1 w-10/12 mr-3" type="text" name="shipping_profile" :value="old('shipping_profile')" autofocus required />
                             </div>
+                            <div class="flex-1">
+                                <x-label for="priority" :value="__('優先順位')" />
+                                <x-input id="priority" class="block mt-1 w-10/12 mr-3" type="number" name="priority" :value="old('priority',2)" autofocus required />
+                            </div>
                         </div>
-                        
+
                         <div class="flex items-center justify-end mt-4">
                             <x-button class="ml-4">
                                 {{ __('登録') }}

@@ -124,7 +124,7 @@ class DigimartsController extends Controller
         $digimart->shipping_profile = $request->input('shipping_profile');
         $digimart->condition = $request->input('condition');
         $digimart->template = $request->input('template');
-        $digimart->template = $request->input('priority');
+        $digimart->priority = $request->input('priority');
         $digimart->status = 1;
         $digimart->save();
         return redirect('digimart');
