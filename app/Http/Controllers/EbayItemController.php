@@ -186,10 +186,12 @@ class EbayItemController extends Controller
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
         } else {
 
+            if ($ebay_item->status_code < 500) {
 
-            $this->destroy(new EbayItem, $ebay_item->id);
+                $this->destroy(new EbayItem, $ebay_item->id);
 
-            $returns[] = "ebay_item削除：ID {$ebay_item->id}";
+                $returns[] = "ebay_item削除：ID {$ebay_item->id}";
+            }
         }
         return $returns;
     }
