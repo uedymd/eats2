@@ -283,6 +283,7 @@ class EbayItemController extends Controller
         } else {
             $item->status_code = 999;
             $item->error = serialize([0 => '出品取消を失敗しました。']);
+            Log::info($result);
             Log::info('ebayアイテム削除 ebayリターン失敗');
             $item->save();
         }
