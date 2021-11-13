@@ -133,14 +133,8 @@ class EbayItemController extends Controller
 
 
         if ($request['result']['status'] >= 400 && $request['result']['status'] < 500) {
-            $erros[] = '商品が削除されています。削除対象です。';
-            $ebay_item->error = serialize($erros);
-            $check_time = Carbon::now();
-            $ebay_item->tracking_at = $check_time->format('Y-m-d H:i:s');
-            $ebay_item->status_code = $request['result']['status'];
-            $ebay_item->update();
-            $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
-            Log::info('ebay_item保存： ID = ' . $ebay_item->id);
+            $this->destroy(new EbayItem, $ebay_item->id);
+            Log::info('ebay_item削除： = ' . $ebay_item->id);
             return false;
         }
 
