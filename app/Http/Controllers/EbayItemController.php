@@ -277,7 +277,7 @@ class EbayItemController extends Controller
 
         $result = $this->ebay_delete_item($xml);
         if ($result['Ack'] !== 'Failure' && $result['Ack'] !== 'PartialFailure') {
-
+            Log::info('ebayアイテム削除 ebayリターン成功');
             $target = $models[$item->site]::find($item->supplier_id)->delete();
             $stock = Stocks::where('site', $item->site)
                 ->where('item_id', $item->supplier_id)->delete();
@@ -287,6 +287,7 @@ class EbayItemController extends Controller
         } else {
             $item->status_code = 999;
             $item->error = serialize([0 => '出品取消を失敗しました。']);
+            Log::info('ebayアイテム削除 ebayリターン失敗');
             $item->save();
         }
 
