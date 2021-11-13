@@ -12,6 +12,7 @@ use App\Models\templates;
 use App\Models\Stocks;
 use Carbon\Carbon;
 use phpDocumentor\Reflection\DocBlock\Serializer;
+use Illuminate\Support\Facades\Log;
 
 class EbayItemController extends Controller
 {
@@ -137,6 +138,7 @@ class EbayItemController extends Controller
             $ebay_item->status_code = $request['result']['status'];
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
+            Log::info('ebay_item保存： ID = ' . $ebay_item->id);
             return false;
         }
 
@@ -155,6 +157,7 @@ class EbayItemController extends Controller
                             $rakuten_items->save();
                         }
                         $returns[] = "楽天価格保存";
+                        Log::info('楽天価格保存 ID = ' . $ebay_item->id);
                         break;
                     case 'digimart':
                         $digimart_items = DigimartItems::find($ebay_item->supplier_id);
@@ -163,6 +166,7 @@ class EbayItemController extends Controller
                             $digimart_items->save();
                         }
                         $returns[] = "デジマート価格保存";
+                        Log::info('デジマート価格保存 ID = ' . $ebay_item->id);
                         break;
 
                     default:
@@ -173,6 +177,7 @@ class EbayItemController extends Controller
             if ($request['result']['status'] >= 500) {
                 $datetime = date('Y年m月d日 H:i');
                 $erros[] = "アクセスが拒否されました。{$datetime}時点で現状が確認できていません。";
+                Log::info('アクセスが拒否されました。 ID = ' . $ebay_item->id);
             }
             if (!empty($erros)) {
                 $ebay_item->error = serialize($erros);
@@ -184,13 +189,14 @@ class EbayItemController extends Controller
             $ebay_item->status_code = $request['result']['status'];
             $ebay_item->update();
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
+            Log::info('ebay_item保存： ID = ' . $ebay_item->id);
         } else {
 
             if ($ebay_item->status_code < 500) {
 
                 $this->destroy(new EbayItem, $ebay_item->id);
-
                 $returns[] = "ebay_item削除：ID {$ebay_item->id}";
+                Log::info('ebayアイテム削除 ID = ' . $ebay_item->id);
             }
         }
         return $returns;
