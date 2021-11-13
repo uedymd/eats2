@@ -191,7 +191,7 @@ class EbayItemController extends Controller
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
             Log::info('ebay_item保存： ID = ' . $ebay_item->id);
         } else {
-            Log::info('ebayアイテム削除 ステータス = ' . $ebay_item->status_code);
+            Log::info('ebayアイテム削除 ステータス = {$site}：' . $ebay_item->status_code);
             if ($ebay_item->status_code < 500) {
 
                 $this->destroy(new EbayItem, $ebay_item->id);
