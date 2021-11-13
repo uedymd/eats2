@@ -281,37 +281,40 @@ class DigimartItemsController extends Controller
             ->where('digimart_items.price', '>', 0)
             ->orderBy('digimart_items.updated_at')->first();
 
-        $rates = unserialize($digimart_item->set);
+        if ($digimart_item) {
 
-        $return_price = 0;
+            $rates = unserialize($digimart_item->set);
 
-        foreach ($rates as $rate) {
-            switch ($digimart_item->price) {
-                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$digimart_item->price:
-                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
+            $return_price = 0;
+
+            foreach ($rates as $rate) {
+                switch ($digimart_item->price) {
+                    case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$digimart_item->price:
+                        $return_price = (float)$digimart_item->price + (float)$rate['rate'];
+                        break;
+
+
+                    case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price && $rate['max'] > (float)$digimart_item->price:
+                        $return_price = (float)$digimart_item->price + (float)$rate['rate'];
+                        break;
+
+                    case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price:
+                        $return_price = (float)$digimart_item->price + (float)$rate['rate'];
+                        break;
+
+                    default:
+                        break;
+                }
+                if ($return_price > 0) {
                     break;
-
-
-                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price && $rate['max'] > (float)$digimart_item->price:
-                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
-                    break;
-
-                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$digimart_item->price:
-                    $return_price = (float)$digimart_item->price + (float)$rate['rate'];
-                    break;
-
-                default:
-                    break;
+                }
             }
-            if ($return_price > 0) {
-                break;
-            }
+            $returns = [
+                'id' => $digimart_item->id,
+                'price' => $return_price,
+            ];
+            return $returns;
         }
-        $returns = [
-            'id' => $digimart_item->id,
-            'price' => $return_price,
-        ];
-        return $returns;
     }
 
     public function get_image()
