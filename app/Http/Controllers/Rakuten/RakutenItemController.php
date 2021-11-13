@@ -278,37 +278,39 @@ class RakutenItemController extends Controller
             ->where('rakutens.status', '!=', 2)
             ->orderBy('rakuten_items.updated_at', 'asc')->first();
 
-        $rates = unserialize($rakuten_item->set);
+        if ($rakuten_item) {
+            $rates = unserialize($rakuten_item->set);
 
-        $return_price = 0;
+            $return_price = 0;
 
-        foreach ($rates as $rate) {
-            switch ($rakuten_item->price) {
-                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > $rakuten_item->price:
-                    $return_price = $rakuten_item->price + $rate['rate'];
+            foreach ($rates as $rate) {
+                switch ($rakuten_item->price) {
+                    case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > $rakuten_item->price:
+                        $return_price = $rakuten_item->price + $rate['rate'];
+                        break;
+
+                    case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= $rakuten_item->price && $rate['max'] > $rakuten_item->price:
+                        $return_price = $rakuten_item->price + $rate['rate'];
+                        break;
+
+                    case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= $rakuten_item->price:
+                        $return_price = $rakuten_item->price + $rate['rate'];
+                        break;
+
+                    default:
+                        break;
+                }
+                if ($return_price > 0) {
                     break;
-
-                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= $rakuten_item->price && $rate['max'] > $rakuten_item->price:
-                    $return_price = $rakuten_item->price + $rate['rate'];
-                    break;
-
-                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= $rakuten_item->price:
-                    $return_price = $rakuten_item->price + $rate['rate'];
-                    break;
-
-                default:
-                    break;
+                }
             }
-            if ($return_price > 0) {
-                break;
-            }
+
+            $returns = [
+                'id' => $rakuten_item->id,
+                'price' => $return_price,
+            ];
+            return $returns;
         }
-
-        $returns = [
-            'id' => $rakuten_item->id,
-            'price' => $return_price,
-        ];
-        return $returns;
     }
 
     public function get_image()
