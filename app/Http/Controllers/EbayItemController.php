@@ -129,6 +129,8 @@ class EbayItemController extends Controller
             'digimart' => 'App\Models\DigimartItems',
         ];
 
+        Log::info($request);
+
 
         if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
             $erros[] = '商品が削除されています。削除対象です。';
@@ -191,7 +193,7 @@ class EbayItemController extends Controller
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
             Log::info('ebay_item保存： ID = ' . $ebay_item->id);
         } else {
-            Log::info('ebayアイテム削除 ステータス = {$site}：' . $ebay_item->status_code);
+            Log::info("ebayアイテム削除 ステータス = {$site}：" . $ebay_item->status_code);
             if ($ebay_item->status_code < 500) {
 
                 $this->destroy(new EbayItem, $ebay_item->id);
