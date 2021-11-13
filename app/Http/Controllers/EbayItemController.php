@@ -280,6 +280,14 @@ class EbayItemController extends Controller
             if ($target && $stock) {
                 $item->delete();
             }
+        } elseif ($result['Errors']['ErrorCode'] == 1047) {
+            Log::info('ebayアイテム削除 すでに終了済み');
+            $target = $models[$item->site]::find($item->supplier_id)->delete();
+            $stock = Stocks::where('site', $item->site)
+                ->where('item_id', $item->supplier_id)->delete();
+            if ($target && $stock) {
+                $item->delete();
+            }
         } else {
             $item->status_code = 999;
             $item->error = serialize([0 => '出品取消を失敗しました。']);
