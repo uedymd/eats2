@@ -132,7 +132,7 @@ class EbayItemController extends Controller
         Log::info($request['result']['status']);
 
 
-        if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
+        if ($request['result']['status'] >= 400 && $request['result']['status'] < 500) {
             $erros[] = '商品が削除されています。削除対象です。';
             $ebay_item->error = serialize($erros);
             $check_time = Carbon::now();
@@ -193,8 +193,8 @@ class EbayItemController extends Controller
             $returns[] = "ebay_item保存：{$check_time->format('Y-m-d H:i:s')}";
             Log::info('ebay_item保存： ID = ' . $ebay_item->id);
         } else {
-            Log::info("ebayアイテム削除 ステータス = {$site}：" . $ebay_item->status_code);
-            if ($ebay_item->status_code < 500) {
+            Log::info("ebayアイテム削除 ステータス = {$site}：" . $request['result']['status']);
+            if ($request['result']['status'] < 500) {
 
                 $this->destroy(new EbayItem, $ebay_item->id);
                 $returns[] = "ebay_item削除：ID {$ebay_item->id}";
