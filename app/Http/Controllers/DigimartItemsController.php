@@ -276,7 +276,7 @@ class DigimartItemsController extends Controller
             ->whereNotNull('price')
             ->join('digimarts', 'digimart_items.digimart_id', '=', 'digimarts.id')
             ->join('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
-            ->select('digimart_items.id as id', 'digimart_items.price', 'digimart_items.digimart_id', 'rate_sets.set')
+            ->select('digimart_items.id as id', 'digimart_items.price', 'digimart_items.digimart_id', 'rate_sets.set as set')
             ->where('digimarts.status', '!=', 2)
             ->where('digimart_items.price', '>', 0)
             ->orderBy('digimart_items.updated_at')->first();
