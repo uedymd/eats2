@@ -133,8 +133,8 @@ class EbayItemController extends Controller
 
 
         if ($request['result']['status'] >= 400 && $request['result']['status'] < 500) {
+            Log::info("ebayアイテム削除 ステータス = {$site}：" . $request['result']['status']);
             $this->destroy(new EbayItem, $ebay_item->id);
-            Log::info('ebay_item削除： = ' . $ebay_item->id);
             return false;
         }
 
@@ -188,7 +188,7 @@ class EbayItemController extends Controller
             Log::info('ebay_item保存： ID = ' . $ebay_item->id);
         } else {
             Log::info("ebayアイテム削除 ステータス = {$site}：" . $request['result']['status']);
-            if ($request['result']['status'] < 500) {
+            if ($request['result']['status'] >= 400 && $request['result']['status'] < 500) {
 
                 $this->destroy(new EbayItem, $ebay_item->id);
                 $returns[] = "ebay_item削除：ID {$ebay_item->id}";
