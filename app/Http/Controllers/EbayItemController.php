@@ -129,7 +129,7 @@ class EbayItemController extends Controller
             'digimart' => 'App\Models\DigimartItems',
         ];
 
-        Log::info($request);
+        Log::info($request['result']['status']);
 
 
         if ($ebay_item->status_code >= 400 && $ebay_item->status_code < 500) {
