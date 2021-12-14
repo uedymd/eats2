@@ -101,10 +101,11 @@ class EbayItemController extends Controller
     public function tracking($site)
     {
         $items = "";
-        $items = EbayItem::join("{$site}_items", function ($join) use ($site) {
-            $join->on('ebay_items.supplier_id', '=', "{$site}_items.id")
-                ->where('ebay_items.status_code', 200);
-        })
+        $items = EbayItem::select('ebay_items.id', "{$site}_items.url")
+            ->join("{$site}_items", function ($join) use ($site) {
+                $join->on('ebay_items.supplier_id', '=', "{$site}_items.id")
+                    ->where('ebay_items.status_code', 200);
+            })
             // ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
             // ->orderBy('ebay_items.tracking_at')
             // ->orderBy('ebay_items.created_at')
@@ -112,7 +113,7 @@ class EbayItemController extends Controller
 
         dd($items);
 
-        // return $items;
+        return $items;
     }
 
     /**
