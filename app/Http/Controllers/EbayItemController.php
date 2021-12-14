@@ -105,12 +105,15 @@ class EbayItemController extends Controller
             $join->on('ebay_items.supplier_id', '=', 'stocks.item_id')
                 ->where('ebay_items.site', $site)
                 ->where('stocks.status', 2);
-        })->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
+        })
+            // ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
             ->orderBy('ebay_items.tracking_at')
             ->orderBy('ebay_items.created_at')
             ->first();
 
-        return $items;
+        dd($items);
+
+        // return $items;
     }
 
     /**
