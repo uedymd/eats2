@@ -104,7 +104,8 @@ class EbayItemController extends Controller
         $items = EbayItem::select('ebay_items.id', "{$site}_items.url")
             ->join("{$site}_items", function ($join) use ($site) {
                 $join->on('ebay_items.supplier_id', '=', "{$site}_items.id")
-                    ->where('ebay_items.status_code', 200);
+                    ->where('ebay_items.status_code', 200)
+                    ->orWhere('ebay_items.status_code', '');
             })
             // ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
             ->orderBy('ebay_items.tracking_at')
