@@ -100,7 +100,6 @@ class EbayItemController extends Controller
      */
     public function tracking($site)
     {
-        global $site;
         $items = "";
         $items = EbayItem::join('stocks', function ($join) use ($site) {
             $join->on('ebay_items.supplier_id', '=', 'stocks.item_id')
