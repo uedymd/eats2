@@ -102,7 +102,7 @@ class EbayItemController extends Controller
     {
         global $site;
         $items = "";
-        $items = EbayItem::join('ebay_items', function ($join) use ($site) {
+        $items = EbayItem::join('stocks', function ($join) use ($site) {
             $join->on('ebay_items.supplier_id', '=', 'stocks.item_id')
                 ->where('ebay_items.site', $site)
                 ->where('stocks.status', 2);
