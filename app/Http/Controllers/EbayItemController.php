@@ -101,10 +101,9 @@ class EbayItemController extends Controller
     public function tracking($site)
     {
         $items = "";
-        $items = EbayItem::join('stocks', function ($join) use ($site) {
-            $join->on('ebay_items.supplier_id', '=', 'stocks.item_id')
-                ->where('ebay_items.site', $site)
-                ->where('stocks.status', 2);
+        $items = EbayItem::join("{$site}_items", function ($join) use ($site) {
+            $join->on('ebay_items.supplier_id', '=', "{$site}_items.id")
+                ->where('ebay_items.status_code', 200);
         })
             // ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
             // ->orderBy('ebay_items.tracking_at')
