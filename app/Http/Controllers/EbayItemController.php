@@ -107,8 +107,8 @@ class EbayItemController extends Controller
                 ->where('stocks.status', 2);
         })
             // ->leftJoin("{$site}_items", 'ebay_items.supplier_id', '=', "{$site}_items.id")
-            ->orderBy('ebay_items.tracking_at')
-            ->orderBy('ebay_items.created_at')
+            // ->orderBy('ebay_items.tracking_at')
+            // ->orderBy('ebay_items.created_at')
             ->first();
 
         dd($items);
