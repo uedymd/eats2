@@ -111,8 +111,6 @@ class EbayItemController extends Controller
             ->orderBy('ebay_items.created_at')
             ->first();
 
-        dd($items);
-
         return $items;
     }
 
