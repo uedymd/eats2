@@ -80,13 +80,13 @@ class DigimartItemsController extends Controller
                     echo $e->getMessage() . PHP_EOL;
                 }
 
-                dd($respons);
-
                 if (!empty($respons)) {
 
                     foreach ((array)$respons as $item) {
                         $digimart_item_count = DigimartItems::where('url', $item['href'])
                             ->count();
+
+                        dd($digimart_item_count);
                         if ($digimart_item_count == 0) {
 
                             if ($setting) {
