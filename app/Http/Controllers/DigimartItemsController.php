@@ -113,7 +113,7 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
-                                $digimart_item->save();
+                                dd($digimart_item->save());
                             }
                         }
                     }
