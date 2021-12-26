@@ -347,7 +347,7 @@ class EbayItemController extends Controller
             }
         } else {
             $stock = Stocks::where('site', $site)
-                ->where('item_id', $id)->all();
+                ->where('item_id', $id)->get();
             $stock->error = serialize($registed_item['Errors']);
             $stock->status = 3;
             $stock->save();
