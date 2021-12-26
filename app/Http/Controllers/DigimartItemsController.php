@@ -124,6 +124,7 @@ class DigimartItemsController extends Controller
 
                 $check_time = Carbon::now();
                 $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
+                $current_digimart->update();
                 return redirect('digimart');
             }
         }
