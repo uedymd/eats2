@@ -683,7 +683,7 @@ class EbayItemController extends Controller
 					  <GranularityLevel>Coarse</GranularityLevel> 
 					  <IncludeWatchCount>true</IncludeWatchCount> 
 					  <Pagination> 
-					    <EntriesPerPage>1000</EntriesPerPage> 
+					    <EntriesPerPage>200</EntriesPerPage> 
 					  </Pagination> 
 					</GetSellerListRequest>";
         $http_headers = array(
