@@ -722,21 +722,17 @@ class EbayItemController extends Controller
     {
         $data = [];
         for ($i = 1; $i <= 10; $i++) {
-            $_data = $this->get_items_detail($i);
+            $data = $this->get_items_detail($i);
 
-            if (isset($_data['ItemArray']['Item'])) {
-                $data = array_merge($data, $_data['ItemArray']['Item']);
-            }
-        }
-
-        dd($data);
-
-        foreach ((array)$data as $value) {
-            $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
-            if ($ebay_item) {
-                $ebay_item->image = $value['PictureDetails']['PictureURL'][0];
-                $ebay_item->view_url = $value['ListingDetails']['ViewItemURL'];
-                $ebay_item->save();
+            if (isset($data['ItemArray']['Item'])) {
+                foreach ((array)$data['ItemArray']['Item'] as $value) {
+                    $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
+                    if ($ebay_item) {
+                        $ebay_item->image = $value['PictureDetails']['PictureURL'][0];
+                        $ebay_item->view_url = $value['ListingDetails']['ViewItemURL'];
+                        $ebay_item->save();
+                    }
+                }
             }
         }
     }
