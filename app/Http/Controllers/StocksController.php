@@ -31,6 +31,8 @@ class StocksController extends Controller
 
         $result = '';
 
+        dd($items);
+
 
 
         foreach ($items as $item) {
