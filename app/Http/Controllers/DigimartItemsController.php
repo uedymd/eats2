@@ -54,6 +54,8 @@ class DigimartItemsController extends Controller
         }
         $setting = Setting::where('site', 'digimart')->first();
 
+        dd($digimarts);
+        return false;
 
         if ($digimarts) {
 
