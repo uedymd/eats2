@@ -337,7 +337,7 @@ class EbayItemController extends Controller
             $ebay_item->ebay_id = $registed_item['ItemID'];
             $ebay_item->site = $site;
             $ebay_item->supplier_id = $id;
-            $ebay_item->title = $item->en_title;
+            $ebay_item->title = mb_strimwidth($item->en_title, 0, 80);
             $ebay_item->price = $item->doller;
             if ($ebay_item->save()) {
                 $stock = Stocks::where('site', $site)
