@@ -726,7 +726,7 @@ class EbayItemController extends Controller
 
             if (isset($_data['ItemArray']['Item'])) {
                 array_merge($data, $_data['ItemArray']['Item']);
-                dd($_data);
+                dd($data);
             }
         }
 
