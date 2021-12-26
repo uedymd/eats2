@@ -557,6 +557,7 @@ class EbayItemController extends Controller
 
         $text .= "</Item>\n";
         $text .= "</AddFixedPriceItemRequest>";
+        dd($text);
         $xml = new \SimpleXMLElement($text);
         return $xml;
     }
