@@ -352,6 +352,7 @@ class EbayItemController extends Controller
             $stock->status = 3;
             $stock->save();
         }
+        dd($registed_item);
     }
 
 

@@ -31,10 +31,6 @@ class StocksController extends Controller
 
         $result = '';
 
-        dd($items);
-
-
-
         foreach ($items as $item) {
             $stock_count = Stocks::where('item_id', '=', $item->id)
                 ->where('site', $site)->count();
