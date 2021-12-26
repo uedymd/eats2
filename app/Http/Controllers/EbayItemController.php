@@ -669,7 +669,7 @@ class EbayItemController extends Controller
     public function get_items_detail($page)
     {
         // date_default_timezone_set('UTF');
-        $start = date("Y-m-d", strtotime("-14 day"));
+        $start = date("Y-m-d", strtotime("-30 day"));
         $end = date("Y-m-d H:i:s");
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 					<GetSellerListRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
@@ -721,7 +721,7 @@ class EbayItemController extends Controller
     public function set_items_detail(EbayItem $ebayItem)
     {
         $data = [];
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $data = $this->get_items_detail($i);
             if (isset($data['ItemArray']['Item'])) {
                 var_dump($data['ItemArray']['Item']);
@@ -733,6 +733,8 @@ class EbayItemController extends Controller
                         $ebay_item->save();
                     }
                 }
+            } else {
+                break;
             }
         }
     }
