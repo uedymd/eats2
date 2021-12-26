@@ -80,6 +80,8 @@ class DigimartItemsController extends Controller
                     echo $e->getMessage() . PHP_EOL;
                 }
 
+                dd($respons);
+
                 if (!empty($respons)) {
 
                     foreach ((array)$respons as $item) {
@@ -113,7 +115,7 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
-                                dd($digimart_item->save());
+                                $digimart_item->save();
                             }
                         }
                     }
