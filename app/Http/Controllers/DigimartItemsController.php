@@ -86,7 +86,6 @@ class DigimartItemsController extends Controller
                         $digimart_item_count = DigimartItems::where('url', $item['href'])
                             ->count();
 
-                        dd($digimart_item_count);
                         if ($digimart_item_count == 0) {
 
                             if ($setting) {
@@ -125,7 +124,7 @@ class DigimartItemsController extends Controller
 
                 $check_time = Carbon::now();
                 $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
-                $current_digimart->update();
+                dd($current_digimart->update());
                 return redirect('digimart');
             }
         }
