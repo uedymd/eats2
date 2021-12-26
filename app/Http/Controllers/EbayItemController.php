@@ -723,10 +723,10 @@ class EbayItemController extends Controller
         $data = [];
         for ($i = 1; $i <= 10; $i++) {
             $_data = $this->get_items_detail($i);
-            dd($_data);
 
             if (isset($_data['ItemArray']['Item'])) {
                 array_merge($data, $_data['ItemArray']['Item']);
+                dd($_data);
             }
         }
 
