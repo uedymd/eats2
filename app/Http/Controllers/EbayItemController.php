@@ -669,7 +669,7 @@ class EbayItemController extends Controller
     public function get_items_detail($page)
     {
         // date_default_timezone_set('UTF');
-        $start = date("Y-m-d", strtotime("-7 day"));
+        $start = date("Y-m-d", strtotime("-14 day"));
         $end = date("Y-m-d H:i:s");
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 					<GetSellerListRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
