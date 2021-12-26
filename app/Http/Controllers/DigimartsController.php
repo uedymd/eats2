@@ -29,7 +29,7 @@ class DigimartsController extends Controller
     {
         $digimarts = Digimarts::leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
             ->leftJoin('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
-            ->select('digimarts.id as id', 'title', 'url', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url',  'status', 'digimarts.updated_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name', 'priority')
+            ->select('digimarts.id as id', 'title', 'url', 'ng_keyword', 'brand_set_id', 'rate_set_id', 'ng_url',  'status', 'digimarts.checked_at', 'brand_sets.name as brand_set_name', 'rate_sets.name as rate_set_name', 'priority')
             ->orderBy('priority')
             ->get();
         $items = [];
