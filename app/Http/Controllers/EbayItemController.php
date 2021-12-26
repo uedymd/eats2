@@ -346,13 +346,17 @@ class EbayItemController extends Controller
                 $stock->save();
             }
         } else {
+            $update = [
+                'error' => serialize($registed_item['Errors']),
+                'status' => 3
+            ];
             $stock = Stocks::where('site', $site)
-                ->where('item_id', $id)->get();
-            $stock->error = serialize($registed_item['Errors']);
-            $stock->status = 3;
-            $stock->save();
+                ->where('item_id', $id)->update($update);
+            // $stock->error = serialize($registed_item['Errors']);
+            // $stock->status = 3;
+            // $stock->save();
         }
-        dd($id);
+        dd($registed_item);
     }
 
 
