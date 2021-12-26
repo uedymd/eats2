@@ -723,7 +723,7 @@ class EbayItemController extends Controller
         $data = [];
         for ($i = 1; $i <= 10; $i++) {
             $data = $this->get_items_detail($i);
-
+            var_dump($data['ItemArray']['Item']);
             if (isset($data['ItemArray']['Item'])) {
                 foreach ((array)$data['ItemArray']['Item'] as $value) {
                     $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
