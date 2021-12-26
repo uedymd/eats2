@@ -116,18 +116,24 @@ class DigimartItemsController extends Controller
                                 $digimart_item->price = $price;
                                 $digimart_item->save();
                             }
-                            //デジマートのcheck_at更新
-                            $current_digimart = Digimarts::find($digimarts->digimart_id);
-
-                            $check_time = Carbon::now();
-                            $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
-                            $current_digimart->update();
                         }
+                        $this->update_chekced_at($digimarts->digimart_id);
                     }
+                } else {
+                    $this->update_chekced_at($digimarts->digimart_id);
                 }
             }
         }
         return redirect('digimart');
+    }
+
+    private function update_chekced_at($id)
+    {
+        //デジマートのcheck_at更新
+        $current_digimart = Digimarts::find($id);
+        $check_time = Carbon::now();
+        $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
+        $current_digimart->update();
     }
 
     public function format_jp_title($title, $ng_title)
