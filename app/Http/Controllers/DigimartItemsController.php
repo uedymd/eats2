@@ -40,7 +40,7 @@ class DigimartItemsController extends Controller
             $digimarts = Digimarts::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
                 ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
-                ->orderBy('checked_at', 'desc')
+                ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
         } else {
@@ -48,7 +48,7 @@ class DigimartItemsController extends Controller
                 ->where('digimarts.id', $id)
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
                 ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
-                ->orderBy('checked_at', 'desc')
+                ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
         }
