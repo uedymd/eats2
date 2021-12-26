@@ -606,6 +606,7 @@ class EbayItemController extends Controller
         $description = nl2br($item->en_content);
 
         $html = str_replace(['##TITLE##', '##DESCRIPTION##'], [$title, $description], $html);
+        $html = preg_replace('/&(?=[a-z_0-9]+=)/m', '&amp;', $html);
         $html = preg_replace('/\n/', '', $html);
 
         return $html;
