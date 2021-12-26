@@ -115,17 +115,16 @@ class DigimartItemsController extends Controller
 
                                 $digimart_item->price = $price;
                                 $digimart_item->save();
+                                $current_digimart = Digimarts::find($digimarts->digimart_id);
+
+                                $check_time = Carbon::now();
+                                $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
+                                $current_digimart->update();
+                                return redirect('digimart');
                             }
                         }
                     }
                 }
-
-                $current_digimart = Digimarts::find($digimarts->digimart_id);
-
-                $check_time = Carbon::now();
-                $current_digimart->checked_at = $check_time->format('Y-m-d H:i:s');
-                $current_digimart->update();
-                return redirect('digimart');
             }
         }
     }
