@@ -666,7 +666,7 @@ class EbayItemController extends Controller
         return $result;
     }
 
-    public function get_items_detail()
+    public function get_items_detail($page)
     {
         // date_default_timezone_set('UTF');
         $start = date("Y-m-d", strtotime("-1 day"));
@@ -683,6 +683,7 @@ class EbayItemController extends Controller
 					  <GranularityLevel>Coarse</GranularityLevel> 
 					  <IncludeWatchCount>true</IncludeWatchCount> 
 					  <Pagination> 
+                        <PageNumber>{$page}</PageNumber>
 					    <EntriesPerPage>200</EntriesPerPage> 
 					  </Pagination> 
 					</GetSellerListRequest>";
@@ -719,9 +720,17 @@ class EbayItemController extends Controller
      */
     public function set_items_detail(EbayItem $ebayItem)
     {
-        $data = $this->get_items_detail();
+        $data = [];
+        for ($i = 1; $i <= 10; $i++) {
+            $_data = $this->get_items_detail($i);
+            if (isset($_data['ItemArray']['Item'])) {
+                array_merge($data, $_data['ItemArray']['Item']);
+            }
+        }
 
-        foreach ((array)$data['ItemArray']['Item'] as $value) {
+        dd($data);
+
+        foreach ((array)$data as $value) {
             $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
             if ($ebay_item) {
                 $ebay_item->image = $value['PictureDetails']['PictureURL'][0];
