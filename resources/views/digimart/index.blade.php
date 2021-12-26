@@ -86,7 +86,7 @@
                                     @endif
                                 </td>
                                 <td class="border px-4 py-2 text-right @if($digimart->status==2){{ 'text-red-700' }} @endif">{{$status_array[$digimart->status]}}</td>
-                                <td class="border px-4 py-2 text-right">{{$digimart->updated_at}}</td>
+                                <td class="border px-4 py-2 text-right">{{$digimart->checked_at}}</td>
                                 <td class=" border px-4 py-2 text-center">
                                     <a href="{{ route('digimart.edit',['id'=>$digimart->id]) }}" class="block rounded bg-blue-600 p-2 text-white">編集</a>
                                     <a href="{{ route('digimart.delete',['id'=>$digimart->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">削除</a>
