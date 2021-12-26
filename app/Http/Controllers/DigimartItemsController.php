@@ -234,7 +234,6 @@ class DigimartItemsController extends Controller
             ->select('digimart_items.id as id', 'digimart_items.url')
             ->where('digimarts.status', '!=', 2)
             ->first();
-        dd($digimart_item);
         return $digimart_item;
     }
 
