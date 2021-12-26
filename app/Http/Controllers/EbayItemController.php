@@ -337,7 +337,7 @@ class EbayItemController extends Controller
             $ebay_item->ebay_id = $registed_item['ItemID'];
             $ebay_item->site = $site;
             $ebay_item->supplier_id = $id;
-            $ebay_item->title = mb_strimwidth($item->en_title, 0, 80);
+            $ebay_item->title = $item->en_title;
             $ebay_item->price = $item->doller;
             if ($ebay_item->save()) {
                 $stock = Stocks::where('site', $site)
@@ -402,7 +402,7 @@ class EbayItemController extends Controller
         $text .= "</RequesterCredentials>\n";
         $text .= "<ErrorLanguage>en_US</ErrorLanguage>\n";
         $text .= "<Item>\n";
-        $text .= "<Title>" . htmlspecialchars($item->en_title) . "</Title>\n";
+        $text .= "<Title>" . mb_strimwidth(htmlspecialchars($item->en_title), 0, 80) . "</Title>\n";
         $description = $this->make_description_html($item, $site);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
