@@ -725,11 +725,11 @@ class EbayItemController extends Controller
             $_data = $this->get_items_detail($i);
 
             if (isset($_data['ItemArray']['Item'])) {
-                array_merge($data, $_data['ItemArray']['Item']);
-                dd($data);
+                $data = array_merge($data, $_data['ItemArray']['Item']);
             }
         }
 
+        dd($data);
 
         foreach ((array)$data as $value) {
             $ebay_item = EbayItem::where('ebay_id', $value['ItemID'])->first();
