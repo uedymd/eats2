@@ -114,7 +114,9 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
-                                $digimart_item->save();
+                                dd($digimart_item->save());
+
+                                //デジマートのcheck_at更新
                                 $current_digimart = Digimarts::find($digimarts->digimart_id);
 
                                 $check_time = Carbon::now();
