@@ -331,7 +331,7 @@ class EbayItemController extends Controller
         $item = $models[$site]::find($id);
         try {
             $xml = $this->make_add_item_xml($item, $site);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $update = [
                 'error' => "XMLエラー：{$e->getMessage()}",
                 'status' => 3
