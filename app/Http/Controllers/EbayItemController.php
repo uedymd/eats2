@@ -329,8 +329,16 @@ class EbayItemController extends Controller
         }
 
         $item = $models[$site]::find($id);
-
-        $xml = $this->make_add_item_xml($item, $site);
+        try {
+            $xml = $this->make_add_item_xml($item, $site);
+        } catch (Exception $e) {
+            $update = [
+                'error' => "XMLエラー：{$e->getMessage()}",
+                'status' => 3
+            ];
+            $stock = Stocks::where('site', $site)
+                ->where('item_id', $id)->update($update);
+        }
         $registed_item = $this->ebay_regist_item($xml);
         if ($registed_item['Ack'] !== 'Failure') {
             $ebay_item = new EbayItem();
