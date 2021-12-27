@@ -406,7 +406,7 @@ class EbayItemController extends Controller
         $text .= "</RequesterCredentials>\n";
         $text .= "<ErrorLanguage>en_US</ErrorLanguage>\n";
         $text .= "<Item>\n";
-        $text .= "<Title>" . mb_strimwidth(htmlspecialchars($item->en_title), 0, 80) . "</Title>\n";
+        $text .= "<Title>" . htmlspecialchars(mb_strimwidth($item->en_title, 0, 80)) . "</Title>\n";
         $description = $this->make_description_html($item, $site);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
@@ -608,7 +608,7 @@ class EbayItemController extends Controller
         $html = str_replace(['##TITLE##', '##DESCRIPTION##'], [$title, $description], $html);
         $html = preg_replace('/\n/', '', $html);
 
-        return htmlspecialchars($html);
+        return $html;
     }
 
     private function ebay_regist_item($xml_data)
