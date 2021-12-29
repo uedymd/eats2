@@ -11,6 +11,8 @@ use App\Http\Controllers\TemplatesController;
 use App\Http\Controllers\StocksController;
 use App\Http\Controllers\DigimartsController;
 use App\Http\Controllers\DigimartItemsController;
+use App\Http\Controllers\HardoffController;
+use App\Http\Controllers\HardoffItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +86,22 @@ Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [DigimartItemsController::class, 'items'])->name('digimart.items')->where('id', '[0-9]+');
+    });
+});
+
+Route::group(['prefix' => 'hardoff', 'middleware' => ['auth']], function () {
+    Route::get('/', [HardoffController::class, 'index'])->name('hardoff.index');
+    Route::group(['prefix' => 'reserve'], function () {
+        Route::get('create', [HardoffController::class, 'create'])->name('hardoff.create');
+        Route::post('store', [HardoffController::class, 'store'])->name('hardoff.store');
+        Route::get('edit/{id}', [HardoffController::class, 'edit'])->name('hardoff.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [HardoffController::class, 'update'])->name('hardoff.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [HardoffController::class, 'delete'])->name('hardoff.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [HardoffController::class, 'destroy'])->name('hardoff.destroy')->where('id', '[0-9]+');
+        Route::get('recheck', [hardoffItemsController::class, 'recheck'])->name('hardoff.recheck');
+    });
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/{id}', [hardoffItemsController::class, 'items'])->name('hardoff.items')->where('id', '[0-9]+');
     });
 });
 
