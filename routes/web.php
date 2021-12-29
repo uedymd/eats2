@@ -13,6 +13,8 @@ use App\Http\Controllers\DigimartsController;
 use App\Http\Controllers\DigimartItemsController;
 use App\Http\Controllers\HardoffController;
 use App\Http\Controllers\HardoffItemsController;
+use App\Http\Controllers\SecoundstreetController;
+use App\Http\Controllers\SecoundstreetItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +104,22 @@ Route::group(['prefix' => 'hardoff', 'middleware' => ['auth']], function () {
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [hardoffItemsController::class, 'items'])->name('hardoff.items')->where('id', '[0-9]+');
+    });
+});
+
+Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth']], function () {
+    Route::get('/', [SecoundstreetController::class, 'index'])->name('secoundstreet.index');
+    Route::group(['prefix' => 'reserve'], function () {
+        Route::get('create', [SecoundstreetController::class, 'create'])->name('secoundstreet.create');
+        Route::post('store', [SecoundstreetController::class, 'store'])->name('secoundstreet.store');
+        Route::get('edit/{id}', [SecoundstreetController::class, 'edit'])->name('secoundstreet.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [SecoundstreetController::class, 'update'])->name('secoundstreet.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [SecoundstreetController::class, 'delete'])->name('secoundstreet.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [SecoundstreetController::class, 'destroy'])->name('secoundstreet.destroy')->where('id', '[0-9]+');
+        Route::get('recheck', [SecoundstreetItemsController::class, 'recheck'])->name('secoundstreet.recheck');
+    });
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/{id}', [SecoundstreetItemsController::class, 'items'])->name('secoundstreet.items')->where('id', '[0-9]+');
     });
 });
 

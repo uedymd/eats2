@@ -47,6 +47,9 @@
                             <x-jet-responsive-nav-link href="{{ route('hardoff.index') }}" :active="request()->routeIs('api-tokens.index')">
                                 Hardoff管理
                             </x-jet-responsive-nav-link>
+                            <x-jet-responsive-nav-link href="{{ route('secoundstreet.index') }}" :active="request()->routeIs('api-tokens.index')">
+                                2ndstreet管理
+                            </x-jet-responsive-nav-link>
                             <div class="border-t border-gray-100"></div>
 
                         </x-slot>

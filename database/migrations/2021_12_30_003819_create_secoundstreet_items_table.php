@@ -15,7 +15,7 @@ class CreateSecoundstreetItemsTable extends Migration
     {
         Schema::create('secoundstreet_items', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hardoff_id');
+            $table->bigInteger('scoundstreet_id');
             $table->string('url', 255);
             $table->string('jp_title', 255);
             $table->longText('origin_title')->nullable();
