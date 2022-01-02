@@ -144,6 +144,8 @@ class EbayItemController extends Controller
 
             $site_item = $models[$site]::find($ebay_item->supplier_id);
             $result_price = preg_replace("/[^0-9]+/", '', $request['result']['price']);
+            $result_price = preg_replace('/\s/', '', $result_price);
+            $result_price = trim(str_replace(['円', '¥', ',', '税込'], '', $result_price));
 
             if ((float)$site_item->price < (float)$request['result']['price']) {
                 $erros[] = "仕入れ値が売値を超えています。{$site_item->price}円 => {$request['result']['price']}円";
@@ -165,6 +167,15 @@ class EbayItemController extends Controller
                         }
                         $returns[] = "デジマート価格保存";
                         Log::info('デジマート価格保存 ID = ' . $ebay_item->id);
+                        break;
+                    case 'hardoff':
+                        $digimart_items = DigimartItems::find($ebay_item->supplier_id);
+                        if (!empty($digimart_items->price) && $digimart_items->price > 0) {
+                            $digimart_items->price = $result_price;
+                            $digimart_items->save();
+                        }
+                        $returns[] = "Hardoff価格保存";
+                        Log::info('Hardoff価格保存 ID = ' . $ebay_item->id);
                         break;
 
                     default:

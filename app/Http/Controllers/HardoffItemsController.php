@@ -73,6 +73,7 @@ class HardoffItemsController extends Controller
                 $respons = [];
                 $url = $this->hardoffSearchApi . "?" . $request;
 
+                dd($url);
 
                 try {
                     $respons = $this->getApiDataCurl($url);
