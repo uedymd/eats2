@@ -15,11 +15,13 @@
         "alpinejs": "^3.0.6",
         "autoprefixer": "^10.1.0",
         "axios": "^0.21",
-        "laravel-mix": "^6.0.6",
+        "laravel-mix": "^6.0.41",
         "lodash": "^4.17.19",
-        "postcss": "^8.2.1",
+        "postcss": "^8.4.6",
         "postcss-import": "^14.0.1",
-        "tailwindcss": "^2.2.2"
+        "sass-loader": "^12.4.0",
+        "tailwindcss": "^2.2.2",
+        "webpack": "^5.68.0"
     },
     "dependencies": {
         "jquery": "^3.6.0"
