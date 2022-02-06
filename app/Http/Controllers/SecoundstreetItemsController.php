@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class SecoundstreetItemsController extends Controller
 {
 
-    private $secoundstreetSearchApi = 'http://18.182.210.131:3000/search-2ndstreet/';
+    private $secoundstreetSearchApi = 'http://15.152.55.85:3000/search/';
 
     /**
      * Store a newly created resource in storage.

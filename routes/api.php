@@ -7,6 +7,7 @@ use App\Http\Controllers\EbayItemController;
 use App\Http\Controllers\StocksController;
 use App\Http\Controllers\DigimartItemsController;
 use App\Http\Controllers\HardoffItemsController;
+use App\Http\Controllers\SecoundstreetItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +78,26 @@ Route::group(['prefix' => 'hardoff'], function () {
     Route::post('translate/set_title', [HardoffItemsController::class, 'set_title']);
     Route::post('translate/set_brand', [HardoffItemsController::class, 'set_brand']);
     Route::post('translate/set_en_content', [HardoffItemsController::class, 'set_en_content']);
+});
+
+Route::group(['prefix' => 'secoundstreet'], function () {
+    Route::get('search/{id?}', [SecoundstreetItemsController::class, 'search'])->name('api.secoundstreet.search')->where('id', '[0-9]+');
+    Route::get('translate/get_url', [SecoundstreetItemsController::class, 'get_url']);
+    Route::get('translate/get_title', [SecoundstreetItemsController::class, 'get_title']);
+    Route::get('translate/get_brand', [SecoundstreetItemsController::class, 'get_brand']);
+    Route::get('translate/get_content', [SecoundstreetItemsController::class, 'get_content']);
+    Route::get('translate/get_price', [SecoundstreetItemsController::class, 'get_price']);
+    Route::get('translate/get_image', [SecoundstreetItemsController::class, 'get_image']);
+    Route::post('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
+    Route::post('translate/delete_content', [SecoundstreetItemsController::class, 'delete_content']);
+    Route::get('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
+    Route::get('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
+    Route::get('translate/delete_content', [SecoundstreetItemsController::class, 'delete_content']);
+    Route::post('translate/set_doller', [SecoundstreetItemsController::class, 'set_doller']);
+    Route::get('translate/set_doller', [SecoundstreetItemsController::class, 'set_doller']);
+    Route::post('translate/set_title', [SecoundstreetItemsController::class, 'set_title']);
+    Route::post('translate/set_brand', [SecoundstreetItemsController::class, 'set_brand']);
+    Route::post('translate/set_en_content', [SecoundstreetItemsController::class, 'set_en_content']);
 });
 
 Route::group(['prefix' => 'ebay'], function () {
