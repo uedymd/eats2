@@ -16,7 +16,7 @@
                                 <div>
                                     <x-label for="keyword" :value="__('検索キーワード')" />
 
-                                    <x-input id="keyword" class="block mt-1 w-5/12" type="text" name="keyword" :value="old('keyword',$keyword)" autofocus />
+                                    <x-input id="keyword" class="block mt-1 w-12/12" type="text" name="keyword" :value="old('keyword',$keyword)" autofocus />
                                 </div>
                             </div>
                             <x-button class="ml-4 mt-4">
