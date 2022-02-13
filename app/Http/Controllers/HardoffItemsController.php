@@ -95,7 +95,7 @@ class HardoffItemsController extends Controller
 
                             $brand_check = $this->check_title_include_brand($jp_title, $target_brands);
 
-                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $hardoffs->ng_url) === false && $this->check_title_include_ng_keywords($item['title'], $hardoffs->ng_keyword) === false) {
+                            if (!empty($jp_title) && $brand_check['result'] && $this->check_url_include_ng_url($item['href'], $hardoffs->ng_url) === false && $this->check_word_include_ng_keywords($item['title'], $hardoffs->ng_keyword) === false) {
                                 $hardoff_item = new hardoffItems();
                                 $hardoff_item->hardoff_id = $hardoffs->hardoff_id;
                                 $hardoff_item->jp_title = $jp_title;
@@ -195,7 +195,7 @@ class HardoffItemsController extends Controller
         }
         return false;
     }
-    private function check_title_include_ng_keywords($title, $ng_keywords)
+    private function check_word_include_ng_keywords($title, $ng_keywords)
     {
         if ($ng_keywords) {
             $ng_keyword_array = preg_split("/( |　)+/", $ng_keywords);
@@ -335,9 +335,17 @@ class HardoffItemsController extends Controller
     {
         if (!empty($request->input('id'))) {
             $hardoff_item = HardoffItems::where('id', $request->input('id'))->first();
+            $hardoff = Hardoff::where('id', $hardoff_item->hardoff_id)->first();
             $setting = Setting::where('site', 'hardoff')->first();
+
+
             if (!empty($request->input('content'))) {
 
+                if ($this->check_word_include_ng_keywords($request->input('content'), $hardoff->ng_keyword)) {
+                    $hardoff_item->delete();
+                    Log::info('日本語コンテンツの除外キーワード対象 ID = ' . $request->input('id'));
+                    return false;
+                }
 
                 if ($setting) {
                     //除外キーワードを除去（共通設定）
