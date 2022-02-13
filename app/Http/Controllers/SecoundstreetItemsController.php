@@ -338,8 +338,6 @@ class SecoundstreetItemsController extends Controller
             $secoundstreet_item = SecoundstreetItems::where('id', $request->input('id'))->first();
             $setting = Setting::where('site', 'secoundstreet')->first();
             if (!empty($request->input('content'))) {
-
-
                 if ($setting) {
                     //除外キーワードを除去（共通設定）
                     $ng_content = $setting->ng_content;
@@ -351,14 +349,25 @@ class SecoundstreetItemsController extends Controller
 
                 $jp_content = $this->adjust_jp_content_html($request->input('content'), $ng_contents);
 
+                if (!empty($request->input('title'))) {
+                    if (isset($setting->ng_title)) {
+                        $ng_title = $setting->ng_title;
+                    } else {
+                        $ng_title = "";
+                    }
+                    $title = str_replace(["\r\n", "\r", "\n"], "", $request->input('title'));
+                    $jp_title = $this->format_jp_title($title, $ng_title);
+                    $secoundstreet_item->jp_title = $jp_title;
+                    $secoundstreet_item->en_title = NULL;
+                }
 
                 $secoundstreet_item->jp_content = $jp_content;
                 $secoundstreet_item->origin_content = $request->input('content');
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 if ($secoundstreet_item->save() && !empty($jp_content)) {
-                    Log::info('nodeからの日本語コンテンツ登録 ID = ' . $request->input('id'));
+                    Log::info('nodeからの日本語コンテンツ登録： ID = ' . $request->input('id'));
                 } else {
-                    Log::info('nodeからの日本語コンテンツ登録スキップ ID = ' . $request->input('id'));
+                    Log::info('nodeからの日本語コンテンツ登録スキップ： ID = ' . $request->input('id'));
                 }
             } else {
                 $created =  new \DateTime($secoundstreet_item->created_at);
@@ -367,11 +376,11 @@ class SecoundstreetItemsController extends Controller
                 $diff_days = (int)$diff->format('%a');
                 if ($diff_days > 0) {
                     $secoundstreet_item->delete();
-                    Log::info('nodeからの日本語コンテンツ削除 ID = ' . $request->input('id'));
+                    Log::info('nodeからの日本語コンテンツ削除： ID = ' . $request->input('id'));
                 } else {
                     $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                     $secoundstreet_item->save();
-                    Log::info('nodeからの日本語コンテンツなし ID = ' . $request->input('id'));
+                    Log::info('nodeからの日本語コンテンツなし： ID = ' . $request->input('id'));
                 }
             }
 
@@ -390,7 +399,7 @@ class SecoundstreetItemsController extends Controller
                 }
             }
         } else {
-            Log::error('nodeからの日本語コンテンツ書き込み : IDなし');
+            Log::error('nodeからの日本語コンテンツ書き込み： : IDなし');
         }
     }
 
@@ -402,7 +411,7 @@ class SecoundstreetItemsController extends Controller
             SecoundstreetItems::where('id', $request->input('id'))->delete();
             Log::info('nodeからの日本語コンテンツ削除 : ' . $request->input('id'));
         } else {
-            Log::error('nodeからの日本語コンテンツ書き込み : IDなし');
+            Log::error('nodeからの日本語コンテンツ書き込み： : IDなし');
         }
     }
 
@@ -496,14 +505,14 @@ class SecoundstreetItemsController extends Controller
                 $secoundstreet_item->en_title = $request->input('content');
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳タイトル登録 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳タイトル登録： ID = ' . $request->input('id'));
             } else {
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳タイトル失敗 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳タイトル失敗： ID = ' . $request->input('id'));
             }
         } else {
-            Log::error('nodeからの翻訳タイトル書き込み : IDなし');
+            Log::error('nodeからの翻訳タイトル書き込み： : IDなし');
         }
     }
 
@@ -515,14 +524,14 @@ class SecoundstreetItemsController extends Controller
                 $secoundstreet_item->en_brand = $request->input('content');
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳ブランド登録 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳ブランド登録： ID = ' . $request->input('id'));
             } else {
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳ブランド失敗 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳ブランド失敗： ID = ' . $request->input('id'));
             }
         } else {
-            Log::error('nodeからの翻訳ブランド書き込み : IDなし');
+            Log::error('nodeからの翻訳ブランド書き込み： : IDなし');
         }
     }
 
@@ -534,14 +543,14 @@ class SecoundstreetItemsController extends Controller
                 $secoundstreet_item->en_content = $request->input('content');
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳コンテンツ登録 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳コンテンツ登録： ID = ' . $request->input('id'));
             } else {
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからの翻訳コンテンツ失敗 ID = ' . $request->input('id'));
+                Log::info('nodeからの翻訳コンテンツ失敗： ID = ' . $request->input('id'));
             }
         } else {
-            Log::error('nodeからの翻訳タイトル書き込み : IDなし');
+            Log::error('nodeからの翻訳タイトル書き込み： : IDなし');
         }
     }
 
@@ -557,7 +566,7 @@ class SecoundstreetItemsController extends Controller
             } else {
                 $secoundstreet_item->updated_at = date('Y-m-d H:i:s');
                 $secoundstreet_item->save();
-                Log::info('nodeからのドル変換失敗 ID = ' . $request->input('id'));
+                Log::info('nodeからのドル変換失敗： ID = ' . $request->input('id'));
             }
         } else {
             Log::error('nodeからのドル変換 : IDなし');
