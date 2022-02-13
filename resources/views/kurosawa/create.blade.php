@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            2nd STREET設定
+            クロサワ楽器設定
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                    <form method="POST" action="{{ route('secoundstreet.store') }}">
+                    <form method="POST" action="{{ route('kurosawa.store') }}">
                         @csrf
 
                         <div class="mt-4">

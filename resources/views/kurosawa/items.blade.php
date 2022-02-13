@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            2nd STREET設定
+            クロサワ楽器設定
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200 overflow-hidden">
                     <table class="table-auto break-all w-full mt-5 bg-white">
                         <caption class="bg-gray-100">
-                            <div class="border px-4 py-2">{{$secoundstreet_data->title}}</div>
+                            <div class="border px-4 py-2">{{$kurosawa_data->title}}</div>
                         </caption>
                         <thead>
                             <tr class="bg-gray-100">

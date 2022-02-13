@@ -15,6 +15,8 @@ use App\Http\Controllers\HardoffController;
 use App\Http\Controllers\HardoffItemsController;
 use App\Http\Controllers\SecoundstreetController;
 use App\Http\Controllers\SecoundstreetItemsController;
+use App\Http\Controllers\KurosawaController;
+use App\Http\Controllers\KurosawaItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +122,22 @@ Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth']], function (
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [SecoundstreetItemsController::class, 'items'])->name('secoundstreet.items')->where('id', '[0-9]+');
+    });
+});
+
+Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth']], function () {
+    Route::get('/', [KurosawaController::class, 'index'])->name('kurosawa.index');
+    Route::group(['prefix' => 'reserve'], function () {
+        Route::get('create', [KurosawaController::class, 'create'])->name('kurosawa.create');
+        Route::post('store', [KurosawaController::class, 'store'])->name('kurosawa.store');
+        Route::get('edit/{id}', [KurosawaController::class, 'edit'])->name('kurosawa.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [KurosawaController::class, 'update'])->name('kurosawa.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [KurosawaController::class, 'delete'])->name('kurosawa.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [KurosawaController::class, 'destroy'])->name('kurosawa.destroy')->where('id', '[0-9]+');
+        Route::get('recheck', [KurosawaItemController::class, 'recheck'])->name('kurosawa.recheck');
+    });
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/{id}', [KurosawaItemController::class, 'items'])->name('kurosawa.items')->where('id', '[0-9]+');
     });
 });
 

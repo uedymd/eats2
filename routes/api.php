@@ -8,6 +8,7 @@ use App\Http\Controllers\StocksController;
 use App\Http\Controllers\DigimartItemsController;
 use App\Http\Controllers\HardoffItemsController;
 use App\Http\Controllers\SecoundstreetItemsController;
+use App\Http\Controllers\KurosawaItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,6 @@ Route::group(['prefix' => 'digimart'], function () {
     Route::post('translate/set_content', [DigimartItemsController::class, 'set_content']);
     Route::post('translate/delete_content', [DigimartItemsController::class, 'delete_content']);
     Route::get('translate/set_content', [DigimartItemsController::class, 'set_content']);
-    Route::get('translate/set_content', [DigimartItemsController::class, 'set_content']);
     Route::get('translate/delete_content', [DigimartItemsController::class, 'delete_content']);
     Route::post('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
     Route::get('translate/set_doller', [DigimartItemsController::class, 'set_doller']);
@@ -70,7 +70,6 @@ Route::group(['prefix' => 'hardoff'], function () {
     Route::get('translate/get_image', [HardoffItemsController::class, 'get_image']);
     Route::post('translate/set_content', [HardoffItemsController::class, 'set_content']);
     Route::post('translate/delete_content', [HardoffItemsController::class, 'delete_content']);
-    Route::get('translate/set_content', [HardoffItemsController::class, 'set_content']);
     Route::get('translate/set_content', [HardoffItemsController::class, 'set_content']);
     Route::get('translate/delete_content', [HardoffItemsController::class, 'delete_content']);
     Route::post('translate/set_doller', [HardoffItemsController::class, 'set_doller']);
@@ -91,13 +90,31 @@ Route::group(['prefix' => 'secoundstreet'], function () {
     Route::post('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
     Route::post('translate/delete_content', [SecoundstreetItemsController::class, 'delete_content']);
     Route::get('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
-    Route::get('translate/set_content', [SecoundstreetItemsController::class, 'set_content']);
     Route::get('translate/delete_content', [SecoundstreetItemsController::class, 'delete_content']);
     Route::post('translate/set_doller', [SecoundstreetItemsController::class, 'set_doller']);
     Route::get('translate/set_doller', [SecoundstreetItemsController::class, 'set_doller']);
     Route::post('translate/set_title', [SecoundstreetItemsController::class, 'set_title']);
     Route::post('translate/set_brand', [SecoundstreetItemsController::class, 'set_brand']);
     Route::post('translate/set_en_content', [SecoundstreetItemsController::class, 'set_en_content']);
+});
+
+Route::group(['prefix' => 'kurosawa'], function () {
+    Route::get('search/{id?}', [KurosawaItemController::class, 'search'])->name('api.kurosawa.search')->where('id', '[0-9]+');
+    Route::get('translate/get_url', [KurosawaItemController::class, 'get_url']);
+    Route::get('translate/get_title', [KurosawaItemController::class, 'get_title']);
+    Route::get('translate/get_brand', [KurosawaItemController::class, 'get_brand']);
+    Route::get('translate/get_content', [KurosawaItemController::class, 'get_content']);
+    Route::get('translate/get_price', [KurosawaItemController::class, 'get_price']);
+    Route::get('translate/get_image', [KurosawaItemController::class, 'get_image']);
+    Route::post('translate/set_content', [KurosawaItemController::class, 'set_content']);
+    Route::post('translate/delete_content', [KurosawaItemController::class, 'delete_content']);
+    Route::get('translate/set_content', [KurosawaItemController::class, 'set_content']);
+    Route::get('translate/delete_content', [KurosawaItemController::class, 'delete_content']);
+    Route::post('translate/set_doller', [KurosawaItemController::class, 'set_doller']);
+    Route::get('translate/set_doller', [KurosawaItemController::class, 'set_doller']);
+    Route::post('translate/set_title', [KurosawaItemController::class, 'set_title']);
+    Route::post('translate/set_brand', [KurosawaItemController::class, 'set_brand']);
+    Route::post('translate/set_en_content', [KurosawaItemController::class, 'set_en_content']);
 });
 
 Route::group(['prefix' => 'ebay'], function () {
