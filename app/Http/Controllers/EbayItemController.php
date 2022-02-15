@@ -397,6 +397,10 @@ class EbayItemController extends Controller
                 $item_settings = $models[$site]::find($item->digimart_id);
                 break;
 
+            case 'hardoff':
+                $item_settings = $models[$site]::find($item->hardoff_id);
+                break;
+
             default:
                 # code...
                 break;
