@@ -19,6 +19,7 @@ class StocksController extends Controller
         $models = [
             'rakuten' => 'App\Models\RakutenItem',
             'digimart' => 'App\Models\DigimartItems',
+            'hardoff' => 'App\Models\HardoffItems',
         ];
 
         $items = $models[$site]::where('en_title', '!=', '')

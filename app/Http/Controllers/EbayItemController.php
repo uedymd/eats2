@@ -325,6 +325,7 @@ class EbayItemController extends Controller
         $models = [
             'rakuten' => 'App\Models\RakutenItem',
             'digimart' => 'App\Models\DigimartItems',
+            'hardoff' => 'App\Models\HardoffItems',
         ];
 
 
