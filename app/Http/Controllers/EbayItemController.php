@@ -8,6 +8,8 @@ use App\Models\Rakuten;
 use App\Models\RakutenItem;
 use App\Models\Digimarts;
 use App\Models\DigimartItems;
+use App\Models\Hardoff;
+use App\Models\HardoffItems;
 use App\Models\templates;
 use App\Models\Stocks;
 use Carbon\Carbon;
@@ -48,6 +50,13 @@ class EbayItemController extends Controller
                     }
                     break;
 
+                case 'hardoff':
+                    $hardoff_item = HardoffItems::find($ebay_item->supplier_id);
+                    if ($hardoff_item) {
+                        $suppliers[$ebay_item->id] = $hardoff_item->url;
+                    }
+                    break;
+
                 default:
                     # code...
                     break;
@@ -82,6 +91,13 @@ class EbayItemController extends Controller
                     $digimart_item = DigimartItems::find($ebay_item->supplier_id);
                     if ($digimart_item) {
                         $suppliers[$ebay_item->id] = $digimart_item->url;
+                    }
+                    break;
+
+                case 'hardoff':
+                    $hardoff_item = HardoffItems::find($ebay_item->supplier_id);
+                    if ($hardoff_item) {
+                        $suppliers[$ebay_item->id] = $hardoff_item->url;
                     }
                     break;
 
@@ -129,6 +145,7 @@ class EbayItemController extends Controller
         $models = [
             'rakuten' => 'App\Models\RakutenItem',
             'digimart' => 'App\Models\DigimartItems',
+            'hardoff' => 'App\Models\HardoffItems',
         ];
 
         Log::info($request['result']['status']);
@@ -169,10 +186,10 @@ class EbayItemController extends Controller
                         Log::info('デジマート価格保存 ID = ' . $ebay_item->id);
                         break;
                     case 'hardoff':
-                        $digimart_items = DigimartItems::find($ebay_item->supplier_id);
-                        if (!empty($digimart_items->price) && $digimart_items->price > 0) {
-                            $digimart_items->price = $result_price;
-                            $digimart_items->save();
+                        $hardoff_items = HardoffItems::find($ebay_item->supplier_id);
+                        if (!empty($hardoff_items->price) && $hardoff_items->price > 0) {
+                            $hardoff_items->price = $result_price;
+                            $hardoff_items->save();
                         }
                         $returns[] = "Hardoff価格保存";
                         Log::info('Hardoff価格保存 ID = ' . $ebay_item->id);
@@ -279,6 +296,7 @@ class EbayItemController extends Controller
         $models = [
             'rakuten' => 'App\Models\RakutenItem',
             'digimart' => 'App\Models\DigimartItems',
+            'hardoff' => 'App\Models\HardoffItems',
         ];
 
         $item = $ebayItem::find($id);
@@ -608,6 +626,7 @@ class EbayItemController extends Controller
         $models = [
             'rakuten' => 'App\Models\Rakuten',
             'digimart' => 'App\Models\Digimarts',
+            'hardoff' => 'App\Models\Hardoff',
         ];
         switch ($site) {
             case 'rakuten':
@@ -616,6 +635,10 @@ class EbayItemController extends Controller
 
             case 'digimart':
                 $item_settings = $models[$site]::find($item->digimart_id);
+                break;
+
+            case 'hardoff':
+                $item_settings = $models[$site]::find($item->hardoff_id);
                 break;
 
             default:
