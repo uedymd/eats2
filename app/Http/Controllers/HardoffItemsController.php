@@ -272,6 +272,7 @@ class HardoffItemsController extends Controller
             ->leftJoin('hardoffs', 'hardoff_items.hardoff_id', '=', 'hardoffs.id')
             ->select('hardoff_items.id as id', 'jp_content')
             ->where('hardoffs.status', '!=', 2)
+            ->where('hardoff_items.jp_content', '!=', "")
             ->orderBy('hardoff_items.updated_at')->first();
         return $hardoff_item;
     }
