@@ -358,6 +358,7 @@ class SecoundstreetItemsController extends Controller
                     $title = str_replace(["\r\n", "\r", "\n"], "", $request->input('title'));
                     $jp_title = $this->format_jp_title($title, $ng_title);
                     $secoundstreet_item->jp_title = $jp_title;
+                    $secoundstreet_item->origin_title = $request->input('title');
                     $secoundstreet_item->en_title = NULL;
                 }
 
