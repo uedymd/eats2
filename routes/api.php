@@ -9,6 +9,7 @@ use App\Http\Controllers\DigimartItemsController;
 use App\Http\Controllers\HardoffItemsController;
 use App\Http\Controllers\SecoundstreetItemsController;
 use App\Http\Controllers\KurosawaItemController;
+use App\Http\Controllers\MikigakkiItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,25 @@ Route::group(['prefix' => 'kurosawa'], function () {
     Route::post('translate/set_title', [KurosawaItemController::class, 'set_title']);
     Route::post('translate/set_brand', [KurosawaItemController::class, 'set_brand']);
     Route::post('translate/set_en_content', [KurosawaItemController::class, 'set_en_content']);
+});
+
+Route::group(['prefix' => 'mikigakki'], function () {
+    Route::get('search/{id?}', [MikigakkiItemController::class, 'search'])->name('api.mikigakki.search')->where('id', '[0-9]+');
+    Route::get('translate/get_url', [MikigakkiItemController::class, 'get_url']);
+    Route::get('translate/get_title', [MikigakkiItemController::class, 'get_title']);
+    Route::get('translate/get_brand', [MikigakkiItemController::class, 'get_brand']);
+    Route::get('translate/get_content', [MikigakkiItemController::class, 'get_content']);
+    Route::get('translate/get_price', [MikigakkiItemController::class, 'get_price']);
+    Route::get('translate/get_image', [MikigakkiItemController::class, 'get_image']);
+    Route::post('translate/set_content', [MikigakkiItemController::class, 'set_content']);
+    Route::post('translate/delete_content', [MikigakkiItemController::class, 'delete_content']);
+    Route::get('translate/set_content', [MikigakkiItemController::class, 'set_content']);
+    Route::get('translate/delete_content', [MikigakkiItemController::class, 'delete_content']);
+    Route::post('translate/set_doller', [MikigakkiItemController::class, 'set_doller']);
+    Route::get('translate/set_doller', [MikigakkiItemController::class, 'set_doller']);
+    Route::post('translate/set_title', [MikigakkiItemController::class, 'set_title']);
+    Route::post('translate/set_brand', [MikigakkiItemController::class, 'set_brand']);
+    Route::post('translate/set_en_content', [MikigakkiItemController::class, 'set_en_content']);
 });
 
 Route::group(['prefix' => 'ebay'], function () {

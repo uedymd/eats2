@@ -17,6 +17,8 @@ use App\Http\Controllers\SecoundstreetController;
 use App\Http\Controllers\SecoundstreetItemsController;
 use App\Http\Controllers\KurosawaController;
 use App\Http\Controllers\KurosawaItemController;
+use App\Http\Controllers\MikigakkiController;
+use App\Http\Controllers\MikigakkiItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,6 +140,21 @@ Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth']], function () {
     });
     Route::group(['prefix' => 'items'], function () {
         Route::get('/{id}', [KurosawaItemController::class, 'items'])->name('kurosawa.items')->where('id', '[0-9]+');
+    });
+});
+Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth']], function () {
+    Route::get('/', [MikigakkiController::class, 'index'])->name('mikigakki.index');
+    Route::group(['prefix' => 'reserve'], function () {
+        Route::get('create', [MikigakkiController::class, 'create'])->name('mikigakki.create');
+        Route::post('store', [MikigakkiController::class, 'store'])->name('mikigakki.store');
+        Route::get('edit/{id}', [MikigakkiController::class, 'edit'])->name('mikigakki.edit')->where('id', '[0-9]+');
+        Route::post('update/{id}', [MikigakkiController::class, 'update'])->name('mikigakki.update')->where('id', '[0-9]+');
+        Route::get('delete/{id}', [MikigakkiController::class, 'delete'])->name('mikigakki.delete')->where('id', '[0-9]+');
+        Route::get('destroy/{id}', [MikigakkiController::class, 'destroy'])->name('mikigakki.destroy')->where('id', '[0-9]+');
+        Route::get('recheck', [MikigakkiItemController::class, 'recheck'])->name('mikigakki.recheck');
+    });
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/{id}', [MikigakkiItemController::class, 'items'])->name('mikigakki.items')->where('id', '[0-9]+');
     });
 });
 
