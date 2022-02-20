@@ -9,6 +9,9 @@
         <div class="max-w-10xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200 overflow-hidden">
+                    <div class="mt-10">
+                        {{ $items->links() }}
+                    </div>
                     <table class="table-auto break-all w-full mt-5 bg-white">
                         <caption class="bg-gray-100">
                             <div class="border px-4 py-2">{{$hardoff_data->title}}</div>
