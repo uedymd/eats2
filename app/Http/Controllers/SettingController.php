@@ -76,14 +76,15 @@ class SettingController extends Controller
         $errors = [];
 
 
-        if (!empty($request->input('ng_title_word'))) {
+        if (!empty($request->input('ng_titles_word'))) {
+
             $titles = $settings->ng_title;
             $titles = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_title);
             $titles = explode("\n", $titles);
-            if (array_search($request->input('ng_title_word'), $titles)) {
-                $errors['title'] = $request->input('ng_title_word') . "は重複しています";
+            if (array_search($request->input('ng_titles_word'), $titles)) {
+                $errors['title'] = "「タイトル：" . $request->input('ng_titles_word') . "」";
             } else {
-                $titles[] = $request->input('ng_title_word');
+                $titles[] = $request->input('ng_titles_word');
                 $titles = array_unique($titles);
                 array_multisort(array_map("mb_strlen", $titles), SORT_DESC, $titles);
                 $title = "";
@@ -101,10 +102,10 @@ class SettingController extends Controller
         if (!empty($request->input('ng_contents_word'))) {
             $contents = $settings->ng_content;
             // $contents .= "\n" . $request->input('ng_contents_word');
-            $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $request->input('ng_content'));
+            $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_content);
             $contents = explode("\n", $contents);
             if (array_search($request->input('ng_contents_word'), $contents)) {
-                $errors['content'] = $request->input('ng_contents_word') . "は重複しています";
+                $errors['content'] = "「コンテンツ：" . $request->input('ng_contents_word') . "」";
             } else {
                 $contents[] = $request->input('ng_contents_word');
                 $contents = array_unique($contents);
@@ -138,7 +139,11 @@ class SettingController extends Controller
                 return redirect($site);
             }
         } else {
-            return redirect("setting/edit/{$site}");
+            $error = "";
+            foreach ($errors as $key => $message) {
+                $error .= $message;
+            }
+            return back()->with('error', $error . "は重複しています。");
         }
     }
 

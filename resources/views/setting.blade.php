@@ -25,6 +25,12 @@
                         ?>
 
                         <div class="mt-4">
+                            @if (session('error'))
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-10 rounded relative" role="alert">
+                                <strong class="font-bold">エラー</strong>
+                                <span class="block sm:inline">{{ session('error') }}</span>
+                            </div>
+                            @endif
                             <div class="flex">
                                 <div class="flex-grow ml-5">
                                     {{Form::label('ng_titles', 'タイトル除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
