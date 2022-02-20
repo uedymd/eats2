@@ -450,8 +450,8 @@ class SecoundstreetItemsController extends Controller
         $jp_content = preg_replace("/\s/", "", $jp_content);
         //<tr>タグの開始タグを除去
         $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
-        //<dl>タグの開始タグを除去
-        $jp_content = preg_replace("/<dl.*?>/i", "", $jp_content);
+        //<dl>タグの開始タグを改行に変換
+        $jp_content = preg_replace("/<dl.*?>/i", "<br>", $jp_content);
         //thまたはtdに続くth ,tdタグの開始タグをスペースに
         $jp_content = preg_replace("/(<\/th>|<\/td>)+(<td.*?>|<th.*?>)/i", " ", $jp_content);
         //dtに続くddタグの開始タグをスペースに
