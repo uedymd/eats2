@@ -34,6 +34,7 @@
                                                 slidesToScroll: 1,
                                                 arrows: true,
                                                 fade: false,
+                                                adaptiveHeight: true,
                                                 asNavFor: '.thumbs'
                                             });
                                             $('.thumbs').slick({
