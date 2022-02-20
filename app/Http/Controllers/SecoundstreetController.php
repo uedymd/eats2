@@ -236,4 +236,18 @@ class SecoundstreetController extends Controller
         Secoundstreets::find($id)->delete();
         return redirect('secoundstreet');
     }
+
+    /**
+     * Clone the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clone($id)
+    {
+        $secoundstreet = Secoundstreets::find($id);
+        $new_secoundstreet = $secoundstreet->replicate();
+        $new_secoundstreet->save();
+        return redirect(('secoundstreet/reserve/edit/' . $new_secoundstreet->id));
+    }
 }

@@ -624,4 +624,12 @@ class KurosawaItemController extends Controller
 
         return $jsonArray;
     }
+
+    public function clone($id)
+    {
+        $kurosawa = Kurosawa::find($id);
+        $new_kurosawa = $kurosawa->replicate();
+        $new_kurosawa->save();
+        return redirect(('kurosawa/reserve/edit/' . $new_kurosawa->id));
+    }
 }

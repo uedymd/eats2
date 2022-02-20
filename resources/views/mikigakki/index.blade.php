@@ -89,6 +89,7 @@
                                 <td class="border px-4 py-2 text-right">{{$mikigakki->checked_at}}</td>
                                 <td class=" border px-4 py-2 text-center">
                                     <a href="{{ route('mikigakki.edit',['id'=>$mikigakki->id]) }}" class="block rounded bg-blue-600 p-2 text-white">編集</a>
+                                    <a href="{{ route('mikigakki.clone',['id'=>$mikigakki->id]) }}" class="block rounded bg-gray-500 p-2 mt-2 text-white">複製</a>
                                     <a href="{{ route('mikigakki.delete',['id'=>$mikigakki->id]) }}" class="block rounded bg-red-600 p-2 mt-2 text-white">削除</a>
                                 </td>
                             </tr>

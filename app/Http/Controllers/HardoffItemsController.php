@@ -633,4 +633,12 @@ class HardoffItemsController extends Controller
 
         return $jsonArray;
     }
+
+    public function clone($id)
+    {
+        $hardoff = Hardoff::find($id);
+        $new_hardoff = $hardoff->replicate();
+        $new_hardoff->save();
+        return redirect(('hardoff/reserve/edit/' . $new_hardoff->id));
+    }
 }

@@ -627,4 +627,12 @@ class MikigakkiItemController extends Controller
 
         return $jsonArray;
     }
+
+    public function clone($id)
+    {
+        $mikigakki = Mikigakki::find($id);
+        $new_mikigakki = $mikigakki->replicate();
+        $new_mikigakki->save();
+        return redirect(('mikigakki/reserve/edit/' . $new_mikigakki->id));
+    }
 }

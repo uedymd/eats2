@@ -236,4 +236,18 @@ class DigimartsController extends Controller
         Digimarts::find($id)->delete();
         return redirect('digimart');
     }
+
+    /**
+     * Clone the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clone($id)
+    {
+        $digimart = Digimarts::find($id);
+        $new_digimart = $digimart->replicate();
+        $new_digimart->save();
+        return redirect(('digimart/reserve/edit/' . $new_digimart->id));
+    }
 }

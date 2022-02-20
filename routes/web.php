@@ -72,6 +72,7 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [RakutenController::class, 'update'])->name('rakuten.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [RakutenController::class, 'delete'])->name('rakuten.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [RakutenController::class, 'destroy'])->name('rakuten.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [RakutenController::class, 'clone'])->name('rakuten.clone')->where('id', '[0-9]+');
         Route::get('recheck', [RakutenItemController::class, 'recheck'])->name('rakuten.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
@@ -88,6 +89,7 @@ Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [DigimartsController::class, 'update'])->name('digimart.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [DigimartsController::class, 'delete'])->name('digimart.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [DigimartsController::class, 'destroy'])->name('digimart.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [DigimartsController::class, 'clone'])->name('digimart.clone')->where('id', '[0-9]+');
         Route::get('recheck', [DigimartItemsController::class, 'recheck'])->name('digimart.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
@@ -104,6 +106,7 @@ Route::group(['prefix' => 'hardoff', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [HardoffController::class, 'update'])->name('hardoff.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [HardoffController::class, 'delete'])->name('hardoff.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [HardoffController::class, 'destroy'])->name('hardoff.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [HardoffController::class, 'clone'])->name('hardoff.clone')->where('id', '[0-9]+');
         Route::get('recheck', [hardoffItemsController::class, 'recheck'])->name('hardoff.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
@@ -120,6 +123,7 @@ Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth']], function (
         Route::post('update/{id}', [SecoundstreetController::class, 'update'])->name('secoundstreet.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [SecoundstreetController::class, 'delete'])->name('secoundstreet.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [SecoundstreetController::class, 'destroy'])->name('secoundstreet.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [SecoundstreetController::class, 'clone'])->name('secoundstreet.clone')->where('id', '[0-9]+');
         Route::get('recheck', [SecoundstreetItemsController::class, 'recheck'])->name('secoundstreet.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
@@ -136,6 +140,7 @@ Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [KurosawaController::class, 'update'])->name('kurosawa.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [KurosawaController::class, 'delete'])->name('kurosawa.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [KurosawaController::class, 'destroy'])->name('kurosawa.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [KurosawaController::class, 'clone'])->name('kurosawa.clone')->where('id', '[0-9]+');
         Route::get('recheck', [KurosawaItemController::class, 'recheck'])->name('kurosawa.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
@@ -151,6 +156,7 @@ Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth']], function () {
         Route::post('update/{id}', [MikigakkiController::class, 'update'])->name('mikigakki.update')->where('id', '[0-9]+');
         Route::get('delete/{id}', [MikigakkiController::class, 'delete'])->name('mikigakki.delete')->where('id', '[0-9]+');
         Route::get('destroy/{id}', [MikigakkiController::class, 'destroy'])->name('mikigakki.destroy')->where('id', '[0-9]+');
+        Route::get('clone/{id}', [MikigakkiController::class, 'clone'])->name('mikigakki.clone')->where('id', '[0-9]+');
         Route::get('recheck', [MikigakkiItemController::class, 'recheck'])->name('mikigakki.recheck');
     });
     Route::group(['prefix' => 'items'], function () {
