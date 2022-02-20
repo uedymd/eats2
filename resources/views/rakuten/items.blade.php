@@ -26,33 +26,11 @@
                                     <p class="mt-5">
                                         {{$item->en_title}}
                                     </p>
-                                    <script>
-                                        $(function() {
-                                            $('.slides').slick({
-                                                slidesToShow: 1,
-                                                slidesToScroll: 1,
-                                                arrows: true,
-                                                fade: false,
-                                                adaptiveHeight: true,
-                                                asNavFor: '.thumbs'
-                                            });
-                                            $('.thumbs').slick({
-                                                slidesToShow: 3,
-                                                slidesToScroll: 1,
-                                                asNavFor: '.slides',
-                                                dots: false,
-                                                centerMode: true,
-                                                focusOnSelect: true
-                                            });
-                                        })
-                                    </script>
                                     <div class="slides mt-10">
                                         @php
                                         $images = unserialize($item->images);
                                         @endphp
-                                        @foreach((array)$images as $image)
-                                        <div><img src="{{$image}}" class="block"></div>
-                                        @endforeach
+                                        <div><a href="{{$item->url}}" target="_blank"><img src="{{$images[0]}}" class="block"></a></div>
                                     </div>
                                     <div class="thumbs mt-5">
                                         @php

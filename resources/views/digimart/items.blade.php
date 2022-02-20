@@ -22,46 +22,16 @@
                             <tr>
                                 <td class="border px-4 py-2">
                                     <p>
-                                        {{$item->jp_title}}
+                                        <small>{{$item->jp_title}}</small>
                                     </p>
                                     <p class="mt-5">
-                                        {{$item->en_title}}
+                                        <strong>{{$item->en_title}}</strong>
                                     </p>
-                                    <script>
-                                        $(function() {
-                                            $('.slides').slick({
-                                                slidesToShow: 1,
-                                                slidesToScroll: 1,
-                                                arrows: true,
-                                                fade: false,
-                                                adaptiveHeight: true,
-                                                asNavFor: '.thumbs'
-                                            });
-                                            $('.thumbs').slick({
-                                                slidesToShow: 3,
-                                                slidesToScroll: 1,
-                                                asNavFor: '.slides',
-                                                dots: false,
-                                                centerMode: true,
-                                                focusOnSelect: true
-                                            });
-                                        })
-                                    </script>
                                     <div class="slides mt-10">
                                         @php
                                         $images = unserialize($item->images);
                                         @endphp
-                                        @foreach((array)$images as $image)
-                                        <div><img src="{{$image}}" class="block"></div>
-                                        @endforeach
-                                    </div>
-                                    <div class="thumbs mt-5">
-                                        @php
-                                        $images = unserialize($item->images);
-                                        @endphp
-                                        @foreach((array)$images as $image)
-                                        <div><img src="{{$image}}" class="block"></div>
-                                        @endforeach
+                                        <div><a href="{{$item->url}}" target="_blank"><img src="{{$images[0]}}" class="block"></a></div>
                                     </div>
                                     <p class="mt-10">
                                         {!!number_format((float)$item->price)!!}円
