@@ -30,8 +30,12 @@
                                     <div class="slides mt-10">
                                         @php
                                         $images = unserialize($item->images);
+                                        if(!empty($images)):
                                         @endphp
                                         <div><a href="{{$item->url}}" target="_blank"><img src="{{$images[0]}}" class="block"></a></div>
+                                        @php
+                                        endif;
+                                        @endphp
                                     </div>
                                     <p class="mt-10">
                                         {!!number_format((float)$item->price)!!}円
