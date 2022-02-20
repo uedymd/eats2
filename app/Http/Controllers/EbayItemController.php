@@ -23,6 +23,12 @@ class EbayItemController extends Controller
     private $api_url = 'https://api.ebay.com/ws/api.dll';
     // private $url = 'https://api.sandbox.ebay.com/ws/api.dll';
 
+    private $models = [
+        'rakuten' => 'App\Models\RakutenItem',
+        'digimart' => 'App\Models\DigimartItems',
+        'hardoff' => 'App\Models\HardoffItems',
+    ];
+
 
     /**
      * Display a listing of the resource.
@@ -142,12 +148,6 @@ class EbayItemController extends Controller
         $erros = [];
         $ebay_item = EbayItem::find($request['id']);
 
-        $models = [
-            'rakuten' => 'App\Models\RakutenItem',
-            'digimart' => 'App\Models\DigimartItems',
-            'hardoff' => 'App\Models\HardoffItems',
-        ];
-
         Log::info($request['result']['status']);
 
 
@@ -159,7 +159,7 @@ class EbayItemController extends Controller
 
         if ($request['result']['check']) {
 
-            $site_item = $models[$site]::find($ebay_item->supplier_id);
+            $site_item = $this->models[$site]::find($ebay_item->supplier_id);
             $result_price = preg_replace("/[^0-9]+/", '', $request['result']['price']);
             $result_price = preg_replace('/\s/', '', $result_price);
             $result_price = trim(str_replace(['円', '¥', ',', '税込'], '', $result_price));
@@ -245,9 +245,39 @@ class EbayItemController extends Controller
      * @param  \App\Models\EbayItem  $ebayItem
      * @return \Illuminate\Http\Response
      */
-    public function show(EbayItem $ebayItem)
+    public function show(EbayItem $ebayItem, $id)
     {
-        //
+        $ebay = EbayItem::find($id);
+        $target = $this->models[$ebay->site]::find($ebay->supplier_id);
+        $suppliers = [];
+
+        switch ($ebay->site) {
+            case 'rakuten':
+                $rakuten_item = RakutenItem::find($ebay->supplier_id);
+                if ($rakuten_item) {
+                    $suppliers[$ebay->id] = $rakuten_item->url;
+                }
+                break;
+            case 'digimart':
+                $digimart_item = DigimartItems::find($ebay->supplier_id);
+                if ($digimart_item) {
+                    $suppliers[$ebay->id] = $digimart_item->url;
+                }
+                break;
+
+            case 'hardoff':
+                $hardoff_item = HardoffItems::find($ebay->supplier_id);
+                if ($hardoff_item) {
+                    $suppliers[$ebay->id] = $hardoff_item->url;
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        return view('ebay/show', compact('ebay', 'suppliers', 'target'));
     }
 
     /**
@@ -293,19 +323,13 @@ class EbayItemController extends Controller
      */
     public function destroy(EbayItem $ebayItem, $id)
     {
-        $models = [
-            'rakuten' => 'App\Models\RakutenItem',
-            'digimart' => 'App\Models\DigimartItems',
-            'hardoff' => 'App\Models\HardoffItems',
-        ];
-
         $item = $ebayItem::find($id);
         $xml = $this->make_delete_item_xml($item);
 
         $result = $this->ebay_delete_item($xml);
         if ($result['Ack'] !== 'Failure' && $result['Ack'] !== 'PartialFailure') {
             Log::info('ebayアイテム削除 ebayリターン成功');
-            $target = $models[$item->site]::find($item->supplier_id)->delete();
+            $target = $this->models[$item->site]::find($item->supplier_id)->delete();
             $stock = Stocks::where('site', $item->site)
                 ->where('item_id', $item->supplier_id)->delete();
             if ($target && $stock) {
@@ -313,7 +337,7 @@ class EbayItemController extends Controller
             }
         } elseif ($result['Errors']['ErrorCode'] == 1047) {
             Log::info('ebayアイテム削除 すでに終了済み');
-            $target = $models[$item->site]::find($item->supplier_id)->delete();
+            $target = $this->models[$item->site]::find($item->supplier_id)->delete();
             $stock = Stocks::where('site', $item->site)
                 ->where('item_id', $item->supplier_id)->delete();
             if ($target && $stock) {
@@ -340,15 +364,9 @@ class EbayItemController extends Controller
     public function add(EbayItem $ebayItem, $site, $id = null)
     {
 
-        $models = [
-            'rakuten' => 'App\Models\RakutenItem',
-            'digimart' => 'App\Models\DigimartItems',
-            'hardoff' => 'App\Models\HardoffItems',
-        ];
-
 
         if (is_null($id)) {
-            $item = $models[$site]::leftJoin('stocks', $site . '_items.id', '=', 'stocks.item_id')
+            $item = $this->models[$site]::leftJoin('stocks', $site . '_items.id', '=', 'stocks.item_id')
                 ->where('stocks.status', 1)
                 ->first();
 
@@ -358,7 +376,7 @@ class EbayItemController extends Controller
             $id = $item->item_id;
         }
 
-        $item = $models[$site]::find($id);
+        $item = $this->models[$site]::find($id);
         try {
             $xml = $this->make_add_item_xml($item, $site);
         } catch (\Exception $e) {
@@ -401,23 +419,17 @@ class EbayItemController extends Controller
     private function make_add_item_xml($item, $site)
     {
 
-        $models = [
-            'rakuten' => 'App\Models\Rakuten',
-            'digimart' => 'App\Models\Digimarts',
-            'hardoff' => 'App\Models\Hardoff',
-        ];
-
         switch ($site) {
             case 'rakuten':
-                $item_settings = $models[$site]::find($item->rakuten_id);
+                $item_settings = $this->models[$site]::find($item->rakuten_id);
                 break;
 
             case 'digimart':
-                $item_settings = $models[$site]::find($item->digimart_id);
+                $item_settings = $this->models[$site]::find($item->digimart_id);
                 break;
 
             case 'hardoff':
-                $item_settings = $models[$site]::find($item->hardoff_id);
+                $item_settings = $this->models[$site]::find($item->hardoff_id);
                 break;
 
             default:
@@ -623,22 +635,17 @@ class EbayItemController extends Controller
 
     private function make_description_html($item, $site)
     {
-        $models = [
-            'rakuten' => 'App\Models\Rakuten',
-            'digimart' => 'App\Models\Digimarts',
-            'hardoff' => 'App\Models\Hardoff',
-        ];
         switch ($site) {
             case 'rakuten':
-                $item_settings = $models[$site]::find($item->rakuten_id);
+                $item_settings = $this->models[$site]::find($item->rakuten_id);
                 break;
 
             case 'digimart':
-                $item_settings = $models[$site]::find($item->digimart_id);
+                $item_settings = $this->models[$site]::find($item->digimart_id);
                 break;
 
             case 'hardoff':
-                $item_settings = $models[$site]::find($item->hardoff_id);
+                $item_settings = $this->models[$site]::find($item->hardoff_id);
                 break;
 
             default:

@@ -163,6 +163,7 @@ Route::group(['prefix' => 'ebay', 'middleware' => ['auth']], function () {
     Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
     Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
+    Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
 });
 
 Route::group(['prefix' => 'stock', 'middleware' => ['auth']], function () {
