@@ -27,12 +27,14 @@
                         <div class="mt-4">
                             <div class="flex">
                                 <div class="flex-grow ml-5">
-                                    {{Form::label('ng_title', 'タイトル除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
-                                    {{Form::textarea('ng_title', $ng_title, ['class' => 'form-control w-10/12', 'id' => 'ng_title', 'rows' => '10'])}}
+                                    {{Form::label('ng_titles', 'タイトル除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
+                                    {{Form::text('ng_titles_word', "", ['class' => 'form-control w-10/12', 'id' => 'ng_title'])}}
+                                    {{Form::textarea('ng_titles', $ng_title, ['class' => 'form-control w-10/12 mt-5', 'id' => 'ng_title', 'rows' => '10','readonly' => true])}}
                                 </div>
                                 <div class="flex-grow ml-5">
-                                    {{Form::label('ng_content', 'コンテンツ除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
-                                    {{Form::textarea('ng_content', $ng_content, ['class' => 'form-control w-10/12', 'id' => 'ng_content', 'rows' => '10'])}}
+                                    {{Form::label('ng_contents', 'コンテンツ除外キーワード', ['class' => 'awesome red','id' => 'asd'])}}
+                                    {{Form::text('ng_contents_word', "", ['class' => 'form-control w-10/12', 'id' => 'ng_title'])}}
+                                    {{Form::textarea('ng_contentss', $ng_content, ['class' => 'form-control w-10/12 mt-5', 'id' => 'ng_content', 'rows' => '10','readonly' => true])}}
                                 </div>
                             </div>
 

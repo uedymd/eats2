@@ -71,46 +71,74 @@ class SettingController extends Controller
      */
     public function update(Request $request, Setting $setting, $site)
     {
+        $settings = $setting->where('site', $site)->first();
         $count = $setting->where('site', $site)->count();
+        $errors = [];
 
-        $titles = str_replace(array("\r\n", "\r", "\n"), "\n", $request->input('ng_title'));
-        $titles = explode("\n", $titles);
-        $titles = array_unique($titles);
-        array_multisort(array_map("mb_strlen", $titles), SORT_DESC, $titles);
-        $title = "";
-        foreach ($titles as $val) {
-            $title .= $val;
-            if ($val !== end($titles)) {
-                $title .= "\n";
+
+        if (!empty($request->input('ng_title_word'))) {
+            $titles = $settings->ng_title;
+            $titles = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_title);
+            $titles = explode("\n", $titles);
+            if (array_search($request->input('ng_title_word'), $titles)) {
+                $errors['title'] = $request->input('ng_title_word') . "は重複しています";
+            } else {
+                $titles[] = $request->input('ng_title_word');
+                $titles = array_unique($titles);
+                array_multisort(array_map("mb_strlen", $titles), SORT_DESC, $titles);
+                $title = "";
+                foreach ($titles as $val) {
+                    $title .= $val;
+                    if ($val !== end($titles)) {
+                        $title .= "\n";
+                    }
+                }
             }
-        }
-
-        $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $request->input('ng_content'));
-        $contents = explode("\n", $contents);
-        $contents = array_unique($contents);
-        array_multisort(array_map("mb_strlen", $contents), SORT_DESC, $contents);
-        $content = "";
-        foreach ($contents as $val) {
-            $content .= $val;
-            if ($val !== end($contents)) {
-                $content .= "\n";
-            }
-        }
-
-        if ($count === 0) {
-            $settings = new Setting();
-            $settings->site = $site;
-            $settings->ng_title = $title;
-            $settings->ng_content = $content;
-            $result = $settings->save();
         } else {
-            $settings = $setting->where('site', $site)->first();
-            $settings->ng_title = $title;
-            $settings->ng_content = $content;
-            $result = $settings->update();
+            $title = $settings->ng_title;
         }
-        if ($result) {
-            return redirect($site);
+
+        if (!empty($request->input('ng_contents_word'))) {
+            $contents = $settings->ng_content;
+            // $contents .= "\n" . $request->input('ng_contents_word');
+            $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $request->input('ng_content'));
+            $contents = explode("\n", $contents);
+            if (array_search($request->input('ng_contents_word'), $contents)) {
+                $errors['content'] = $request->input('ng_contents_word') . "は重複しています";
+            } else {
+                $contents[] = $request->input('ng_contents_word');
+                $contents = array_unique($contents);
+                array_multisort(array_map("mb_strlen", $contents), SORT_DESC, $contents);
+                $content = "";
+                foreach ($contents as $val) {
+                    $content .= $val;
+                    if ($val !== end($contents)) {
+                        $content .= "\n";
+                    }
+                }
+            }
+        } else {
+            $content = $settings->ng_content;
+        }
+
+        if (empty($errors)) {
+            if ($count === 0) {
+                $settings = new Setting();
+                $settings->site = $site;
+                $settings->ng_title = $title;
+                $settings->ng_content = $content;
+                $result = $settings->save();
+            } else {
+                $settings = $setting->where('site', $site)->first();
+                $settings->ng_title = $title;
+                $settings->ng_content = $content;
+                $result = $settings->update();
+            }
+            if ($result) {
+                return redirect($site);
+            }
+        } else {
+            return redirect("setting/edit/{$site}");
         }
     }
 
