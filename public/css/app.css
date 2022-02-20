@@ -1953,7 +1953,7 @@ select {
     cursor: pointer;
 }
 table tr td .slides {
-    max-width: 300px;
+    width: 200px;
 }
 table tr td .slides .slick-prev {
     left: 5px;
