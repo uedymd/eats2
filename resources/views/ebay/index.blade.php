@@ -45,8 +45,7 @@
                             @foreach($ebay_items as $ebay_item)
                             <tr>
                                 <td class="border px-4 py-2">
-                                    {{$ebay_item->id}}
-                                    <a href="{{ route('ebay.show',['id'=>$ebay_item->id]) }}" class="block rounded bg-gray-500 p-2 mt-2 text-white text-center">Detail</a>
+                                    <a href="{{ route('ebay.show',['id'=>$ebay_item->id]) }}" class="block rounded bg-gray-500 p-2 mt-2 text-white text-center">{{$ebay_item->id}}</a>
                                 </td>
                                 <td class="border px-4 py-2">
                                     @if($ebay_item->image!=='')
