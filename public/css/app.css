@@ -1165,6 +1165,9 @@ select {
 .mb-4 {
 	margin-bottom: 1rem;
 }
+.mb-10 {
+	margin-bottom: 2.5rem;
+}
 .ml-5 {
 	margin-left: 1.25rem;
 }
@@ -1173,9 +1176,6 @@ select {
 }
 .-mt-px {
 	margin-top: -1px;
-}
-.mb-10 {
-	margin-bottom: 2.5rem;
 }
 .block {
 	display: block;
@@ -1270,17 +1270,17 @@ select {
 .w-3\/12 {
 	width: 25%;
 }
-.w-9\/12 {
-	width: 75%;
-}
-.w-10\/12 {
-	width: 83.333333%;
-}
 .w-1\/12 {
 	width: 8.333333%;
 }
 .w-2\/12 {
 	width: 16.666667%;
+}
+.w-10\/12 {
+	width: 83.333333%;
+}
+.w-9\/12 {
+	width: 75%;
 }
 .w-8\/12 {
 	width: 66.666667%;
@@ -1964,7 +1964,7 @@ table tr td .slides .slick-next {
     z-index: 5;
 }
 table tr td .thumbs {
-    max-width: 300px;
+    width: 200px;
 }
 span[aria-current="page"] span {
     background: #ccc;
