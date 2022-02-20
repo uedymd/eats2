@@ -13,3 +13,7 @@ table tr td .slides .slick-next {
 table tr td .thumbs {
     max-width: 300px;
 }
+
+span[aria-current="page"] span {
+    background: #ccc;
+}
