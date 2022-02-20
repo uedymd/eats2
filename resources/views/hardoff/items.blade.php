@@ -21,24 +21,16 @@
                             <tr>
                                 <td class="border px-4 py-2">
                                     <p>
-                                        {{$item->jp_title}}
+                                        <small>{{$item->jp_title}}</small>
                                     </p>
                                     <p class="mt-5">
-                                        {{$item->en_title}}
+                                        <strong>{{$item->en_title}}</strong>
                                     </p>
                                     <div class="slides mt-10">
                                         @php
                                         $images = unserialize($item->images);
                                         @endphp
                                         <div><a href="{{$item->url}}" target="_blank"><img src="{{$images[0]}}" class="block"></a></div>
-                                    </div>
-                                    <div class="thumbs mt-5">
-                                        @php
-                                        $images = unserialize($item->images);
-                                        @endphp
-                                        @foreach((array)$images as $image)
-                                        <div><img src="{{$image}}" class="block"></div>
-                                        @endforeach
                                     </div>
                                     <p class="mt-10">
                                         {!!number_format((float)$item->price)!!}円
