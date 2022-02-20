@@ -13,38 +13,63 @@
                         <caption class="bg-gray-100">
                             <div class="border px-4 py-2">{{$secoundstreet_data->title}}</div>
                         </caption>
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border px-4 py-2">URL</th>
-                                <th class="border px-4 py-2">タイトル</th>
-                                <th class="border px-4 py-2">コンテンツ</th>
-                                <th class="border px-4 py-2">価格</th>
-                                <th class="border px-4 py-2">画像</th>
-                                <th class="border px-4 py-2">更新</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td rowspan="2" class="border px-4 py-2"><a href="{{$item->url}}" target="_blank">{{$item->url}}</a></td>
-                                <td class="border px-4 py-2">{{$item->jp_title}}</td>
-                                <td class="border px-4 py-2">{!!nl2br($item->jp_content)!!}</td>
-                                <td class="border px-4 py-2">{!!number_format((float)$item->price)!!}円</td>
-                                <td rowspan="2" class="border px-4 py-2">
-                                    @php
-                                    $images = unserialize($item->images);
-                                    @endphp
-                                    @foreach((array)$images as $image)
-                                    <img src="{{$image}}" class="block">
-                                    @endforeach
+                                <td class="border px-4 py-2">
+                                    <p>
+                                        {{$item->jp_title}}
+                                    </p>
+                                    <p class="mt-5">
+                                        {{$item->en_title}}
+                                    </p>
+                                    <script>
+                                        $(function() {
+                                            $('.slides').slick({
+                                                slidesToShow: 1,
+                                                slidesToScroll: 1,
+                                                arrows: true,
+                                                fade: false,
+                                                asNavFor: '.thumbs'
+                                            });
+                                            $('.thumbs').slick({
+                                                slidesToShow: 3,
+                                                slidesToScroll: 1,
+                                                asNavFor: '.slides',
+                                                dots: false,
+                                                centerMode: true,
+                                                focusOnSelect: true
+                                            });
+                                        })
+                                    </script>
+                                    <div class="slides mt-10">
+                                        @php
+                                        $images = unserialize($item->images);
+                                        @endphp
+                                        @foreach((array)$images as $image)
+                                        <div><img src="{{$image}}" class="block"></div>
+                                        @endforeach
+                                    </div>
+                                    <div class="thumbs mt-5">
+                                        @php
+                                        $images = unserialize($item->images);
+                                        @endphp
+                                        @foreach((array)$images as $image)
+                                        <div><img src="{{$image}}" class="block"></div>
+                                        @endforeach
+                                    </div>
+                                    <p class="mt-10">
+                                        {!!number_format((float)$item->price)!!}円
+                                    </p>
+                                    <p class="mt-5">
+                                        {!!number_format($item->doller)!!}ドル
+                                    </p>
+                                    <p class="mt-10">
+                                        {{$item->updated_at}}更新
+                                    </p>
                                 </td>
-                                {{-- <td class="border px-4 py-2 text-right">{{$item->created_at}}</td> --}}
-                                <td rowspan="2" class="border px-4 py-2 text-right">{{$item->updated_at}}</td>
-                            </tr>
-                            <tr>
-                                <td class="border px-4 py-2">{{$item->en_title}}</td>
+                                <td class="border px-4 py-2">{!!nl2br($item->jp_content)!!}</td>
                                 <td class="border px-4 py-2">{!!nl2br($item->en_content)!!}</td>
-                                <td class="border px-4 py-2">{!!number_format($item->doller)!!}ドル</td>
                             </tr>
                             @endforeach
                         </tbody>

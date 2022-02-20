@@ -20,8 +20,5 @@ module.exports = {
     plugins: [
         require("@tailwindcss/forms"),
         require("@tailwindcss/typography"),
-        require("tailwindcss-plugins/pagination")({
-            /* Customizations here... */
-        }),
     ],
 };

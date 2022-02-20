@@ -1,0 +1,15 @@
+table tr td .slides {
+    max-width: 300px;
+}
+table tr td .slides .slick-prev {
+    left: 5px;
+    z-index: 5;
+}
+table tr td .slides .slick-next {
+    right: 5px;
+    z-index: 5;
+}
+
+table tr td .thumbs {
+    max-width: 300px;
+}
