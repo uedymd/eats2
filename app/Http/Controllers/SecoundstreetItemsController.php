@@ -445,23 +445,31 @@ class SecoundstreetItemsController extends Controller
     {
 
         //HTMLタグを除去
-        $jp_content = strip_tags($text, ["br", "table", "tr", "td", "th", "p"]);
+        $jp_content = strip_tags($text, ["br", "table", "tr", "td", "th", "p", "dl", "dt", "dd"]);
         //改行コードを削除
         $jp_content = preg_replace("/\s/", "", $jp_content);
         //<tr>タグの開始タグを除去
         $jp_content = str_replace(["<tr>", "<TR>"], "", $jp_content);
+        //<dl>タグの開始タグを除去
+        $jp_content = preg_replace("/<dl.*?>/i", "", $jp_content);
         //thまたはtdに続くth ,tdタグの開始タグをスペースに
         $jp_content = preg_replace("/(<\/th>|<\/td>)+(<td.*?>|<th.*?>)/i", " ", $jp_content);
+        //dtに続くddタグの開始タグをスペースに
+        $jp_content = preg_replace("/(<\/dt>)+(<dd.*?>)/i", " ", $jp_content);
         //<td>タグの開始タグを除去
         $jp_content = preg_replace("/<td.*?>/i", "", $jp_content);
+        //<dt>タグの開始タグを除去
+        $jp_content = preg_replace("/<dt.*?>/i", "", $jp_content);
         //<th>タグの開始タグを除去
         $jp_content = preg_replace("/<th.*?>/i", "", $jp_content);
         //<th><td>タグの綴じタグを除去
         $jp_content = str_replace(["</th>", "</TH>", "</td>", "</TD>",], "", $jp_content);
+        //<dt>タグの綴じタグを除去
+        $jp_content = str_replace(["</dt>"], "", $jp_content);
         // table,pタグの開始タグを<br>に変換
         $jp_content = preg_replace("/(<table.*?>|<p.*?>)/i", "<br>", $jp_content);
         //<tr>タグの綴じタグを<br>に変換
-        $jp_content = str_replace(["</table>", "</tr>", "</p>"], "<br>", $jp_content);
+        $jp_content = str_replace(["</table>", "</tr>", "</p>", "</dd>"], "<br>", $jp_content);
         //<br>が3つ以上続くものは除去
         $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "<br>", $jp_content);
         //<br>を改行コードに変換
