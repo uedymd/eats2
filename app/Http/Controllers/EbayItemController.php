@@ -392,7 +392,6 @@ class EbayItemController extends Controller
             $stock = Stocks::where('site', $site)
                 ->where('item_id', $id)->update($update);
         }
-        dd("hoge");
         $registed_item = $this->ebay_regist_item($xml);
         if ($registed_item['Ack'] !== 'Failure') {
             $ebay_item = new EbayItem();
