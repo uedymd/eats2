@@ -28,6 +28,11 @@ class EbayItemController extends Controller
         'digimart' => 'App\Models\DigimartItems',
         'hardoff' => 'App\Models\HardoffItems',
     ];
+    private $sites = [
+        'rakuten' => 'App\Models\Rakuten',
+        'digimart' => 'App\Models\Digimarts',
+        'hardoff' => 'App\Models\Hardoff',
+    ];
 
 
     /**
@@ -387,6 +392,7 @@ class EbayItemController extends Controller
             $stock = Stocks::where('site', $site)
                 ->where('item_id', $id)->update($update);
         }
+        dd("hoge");
         $registed_item = $this->ebay_regist_item($xml);
         if ($registed_item['Ack'] !== 'Failure') {
             $ebay_item = new EbayItem();
@@ -421,15 +427,15 @@ class EbayItemController extends Controller
 
         switch ($site) {
             case 'rakuten':
-                $item_settings = $this->models[$site]::find($item->rakuten_id);
+                $item_settings = $this->sites[$site]::find($item->rakuten_id);
                 break;
 
             case 'digimart':
-                $item_settings = $this->models[$site]::find($item->digimart_id);
+                $item_settings = $this->sites[$site]::find($item->digimart_id);
                 break;
 
             case 'hardoff':
-                $item_settings = $this->models[$site]::find($item->hardoff_id);
+                $item_settings = $this->sites[$site]::find($item->hardoff_id);
                 break;
 
             default:
