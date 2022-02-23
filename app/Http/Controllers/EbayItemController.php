@@ -385,6 +385,7 @@ class EbayItemController extends Controller
         try {
             $xml = $this->make_add_item_xml($item, $site);
         } catch (\Exception $e) {
+
             $update = [
                 'error' => "XMLエラー：{$e->getMessage()}",
                 'status' => 3
@@ -642,15 +643,15 @@ class EbayItemController extends Controller
     {
         switch ($site) {
             case 'rakuten':
-                $item_settings = $this->models[$site]::find($item->rakuten_id);
+                $item_settings = $this->sites[$site]::find($item->rakuten_id);
                 break;
 
             case 'digimart':
-                $item_settings = $this->models[$site]::find($item->digimart_id);
+                $item_settings = $this->sites[$site]::find($item->digimart_id);
                 break;
 
             case 'hardoff':
-                $item_settings = $this->models[$site]::find($item->hardoff_id);
+                $item_settings = $this->sites[$site]::find($item->hardoff_id);
                 break;
 
             default:
