@@ -582,7 +582,9 @@ class DigimartItemsController extends Controller
             $content = $this->adjust_jp_content_html($origin_content, $ng_contents);
 
             $digimart_item = DigimartItems::find($item->id);
-            $digimart_item->jp_title = $title;
+            if (!empty($title)) {
+                $digimart_item->jp_title = $title;
+            }
             $digimart_item->en_title = null;
             $digimart_item->jp_content = $content;
             $digimart_item->en_content = null;
