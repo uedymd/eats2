@@ -459,6 +459,7 @@ class EbayItemController extends Controller
         $type = $item_settings->type;
         $brand = htmlspecialchars($item->en_brand);
         $sku = $item_settings->sku;
+        $doller = (int)$item->doller;
 
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
         $text .= "<AddFixedPriceItemRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">\n";
@@ -471,7 +472,7 @@ class EbayItemController extends Controller
         $description = $this->make_description_html($item, $site);
         $text .= "<Description><![CDATA[" . $description . "]]></Description>\n";
         $text .= "<PrimaryCategory><CategoryID>{$category}</CategoryID></PrimaryCategory>\n";
-        $text .= "<StartPrice>{$item->doller}</StartPrice>\n";
+        $text .= "<StartPrice>{$doller}</StartPrice>\n";
         $text .= "<AutoPay>0</AutoPay>\n";
         $text .= "<CategoryMappingAllowed>true</CategoryMappingAllowed>\n";
         $text .= "<ConditionID>{$condtionID}</ConditionID>\n";
