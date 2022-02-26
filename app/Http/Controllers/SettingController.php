@@ -136,7 +136,7 @@ class SettingController extends Controller
                 $result = $settings->update();
             }
             if ($result) {
-                return redirect($site);
+                return back();
             }
         } else {
             $error = "";
