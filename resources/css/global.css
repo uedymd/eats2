@@ -17,3 +17,8 @@ table tr td .thumbs {
 span[aria-current="page"] span {
     background: #ccc;
 }
+
+#globalnavi {
+    position: sticky;
+    top: 0;
+}

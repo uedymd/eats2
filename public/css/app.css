@@ -1498,6 +1498,10 @@ select {
 	--tw-border-opacity: 1;
 	border-color: rgba(243, 244, 246, var(--tw-border-opacity));
 }
+.border-red-400 {
+	--tw-border-opacity: 1;
+	border-color: rgba(248, 113, 113, var(--tw-border-opacity));
+}
 .border-gray-400 {
 	--tw-border-opacity: 1;
 	border-color: rgba(156, 163, 175, var(--tw-border-opacity));
@@ -1739,6 +1743,9 @@ select {
 .font-semibold {
 	font-weight: 600;
 }
+.font-bold {
+	font-weight: 700;
+}
 .uppercase {
 	text-transform: uppercase;
 }
@@ -1968,6 +1975,11 @@ table tr td .thumbs {
 }
 span[aria-current="page"] span {
     background: #ccc;
+}
+#globalnavi {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
 }
 .hover\:border-gray-300:hover {
 	--tw-border-opacity: 1;
@@ -2206,6 +2218,10 @@ span[aria-current="page"] span {
 
 	.sm\:block {
 		display: block;
+	}
+
+	.sm\:inline {
+		display: inline;
 	}
 
 	.sm\:flex {
