@@ -582,13 +582,13 @@ class DigimartItemsController extends Controller
             $content = $this->adjust_jp_content_html($origin_content, $ng_contents);
 
             $digimart_item = DigimartItems::find($item->id);
-            if (!empty($title)) {
+            if ($digimart_item) {
                 $digimart_item->jp_title = $title;
+                $digimart_item->en_title = null;
+                $digimart_item->jp_content = $content;
+                $digimart_item->en_content = null;
+                $digimart_item->update();
             }
-            $digimart_item->en_title = null;
-            $digimart_item->jp_content = $content;
-            $digimart_item->en_content = null;
-            $digimart_item->update();
             Log::info('リチェック ID = ' . $item->id);
         }
         return redirect('digimart');
