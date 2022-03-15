@@ -351,6 +351,8 @@ class EbayItemController extends Controller
         } else {
             $item->status_code = 999;
             $item->error = serialize([0 => '出品取消を失敗しました。']);
+            $check_time = Carbon::now();
+            $item->tracking_at = $check_time->format('Y-m-d H:i:s');
             Log::info($result);
             Log::info('ebayアイテム削除 ebayリターン失敗');
             $item->save();
