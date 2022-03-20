@@ -74,52 +74,54 @@ class SettingController extends Controller
         $settings = $setting->where('site', $site)->first();
         $count = $setting->where('site', $site)->count();
         $errors = [];
+        $title = "";
+        $content = "";
 
+        if (!is_null($settings)) {
 
-        if (!empty($request->input('ng_titles_word'))) {
+            if (!empty($request->input('ng_titles_word'))) {
 
-            $titles = $settings->ng_title;
-            $titles = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_title);
-            $titles = explode("\n", $titles);
-            if (array_search($request->input('ng_titles_word'), $titles)) {
-                $errors['title'] = "「タイトル：" . $request->input('ng_titles_word') . "」";
-            } else {
-                $titles[] = $request->input('ng_titles_word');
-                $titles = array_unique($titles);
-                array_multisort(array_map("mb_strlen", $titles), SORT_DESC, $titles);
-                $title = "";
-                foreach ($titles as $val) {
-                    $title .= $val;
-                    if ($val !== end($titles)) {
-                        $title .= "\n";
+                $titles = $settings->ng_title;
+                $titles = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_title);
+                $titles = explode("\n", $titles);
+                if (array_search($request->input('ng_titles_word'), $titles)) {
+                    $errors['title'] = "「タイトル：" . $request->input('ng_titles_word') . "」";
+                } else {
+                    $titles[] = $request->input('ng_titles_word');
+                    $titles = array_unique($titles);
+                    array_multisort(array_map("mb_strlen", $titles), SORT_DESC, $titles);
+                    foreach ($titles as $val) {
+                        $title .= $val;
+                        if ($val !== end($titles)) {
+                            $title .= "\n";
+                        }
                     }
                 }
-            }
-        } else {
-            $title = $settings->ng_title;
-        }
-
-        if (!empty($request->input('ng_contents_word'))) {
-            $contents = $settings->ng_content;
-            // $contents .= "\n" . $request->input('ng_contents_word');
-            $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_content);
-            $contents = explode("\n", $contents);
-            if (array_search($request->input('ng_contents_word'), $contents)) {
-                $errors['content'] = "「コンテンツ：" . $request->input('ng_contents_word') . "」";
             } else {
-                $contents[] = $request->input('ng_contents_word');
-                $contents = array_unique($contents);
-                array_multisort(array_map("mb_strlen", $contents), SORT_DESC, $contents);
-                $content = "";
-                foreach ($contents as $val) {
-                    $content .= $val;
-                    if ($val !== end($contents)) {
-                        $content .= "\n";
+                $title = $settings->ng_title;
+            }
+
+            if (!empty($request->input('ng_contents_word'))) {
+                $contents = $settings->ng_content;
+                // $contents .= "\n" . $request->input('ng_contents_word');
+                $contents = str_replace(array("\r\n", "\r", "\n"), "\n", $settings->ng_content);
+                $contents = explode("\n", $contents);
+                if (array_search($request->input('ng_contents_word'), $contents)) {
+                    $errors['content'] = "「コンテンツ：" . $request->input('ng_contents_word') . "」";
+                } else {
+                    $contents[] = $request->input('ng_contents_word');
+                    $contents = array_unique($contents);
+                    array_multisort(array_map("mb_strlen", $contents), SORT_DESC, $contents);
+                    foreach ($contents as $val) {
+                        $content .= $val;
+                        if ($val !== end($contents)) {
+                            $content .= "\n";
+                        }
                     }
                 }
+            } else {
+                $content = $settings->ng_content;
             }
-        } else {
-            $content = $settings->ng_content;
         }
 
         if (empty($errors)) {
