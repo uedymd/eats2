@@ -374,6 +374,7 @@ class EbayItemController extends Controller
 
         if (is_null($id)) {
             $item = $this->models[$site]::leftJoin('stocks', $site . '_items.id', '=', 'stocks.item_id')
+                ->where('stocks.site', $site)
                 ->where('stocks.status', 1)
                 ->first();
 
@@ -384,6 +385,7 @@ class EbayItemController extends Controller
         }
 
         $item = $this->models[$site]::find($id);
+
         try {
             $xml = $this->make_add_item_xml($item, $site);
         } catch (\Exception $e) {
