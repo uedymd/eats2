@@ -27,14 +27,14 @@ class StocksController extends Controller
             ->where('en_brand', '!=', '')
             ->leftJoin("{$site}s", "{$site}s.id", '=', "{$site}_items.{$site}_id")
             ->select("{$site}_items.id", "{$site}_items.en_title", "{$site}_items.en_content")
-            ->limit(100)
             ->where("{$site}s.status", '=', 3)
+            ->orderBy('id', 'desc')
+            ->limit(10)
             ->get();
 
         $result = '';
 
-        for ($i = 0; $i < count($items); $i++) {
-            $item = $items[$i];
+        foreach ($items as $item) {
             $stock_count = Stocks::where('item_id', '=', $item->id)
                 ->where('site', $site)->count();
             if ($stock_count == 0) {
