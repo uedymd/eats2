@@ -29,13 +29,13 @@ class EbayItemController extends Controller
         'rakuten' => 'App\Models\RakutenItem',
         'digimart' => 'App\Models\DigimartItems',
         'hardoff' => 'App\Models\HardoffItems',
-        'secoundstreet' => 'App\Models\SecoundstreetItems',
+        'secoundstreet' => 'App\Models\secoundstreetItems',
     ];
     private $sites = [
         'rakuten' => 'App\Models\Rakuten',
         'digimart' => 'App\Models\Digimarts',
         'hardoff' => 'App\Models\Hardoff',
-        'secoundstreet' => 'App\Models\Secoundstreet',
+        'secoundstreet' => 'App\Models\secoundstreet',
     ];
 
 
