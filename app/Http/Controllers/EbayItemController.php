@@ -35,7 +35,7 @@ class EbayItemController extends Controller
         'rakuten' => 'App\Models\Rakuten',
         'digimart' => 'App\Models\Digimarts',
         'hardoff' => 'App\Models\Hardoff',
-        'secoundstreet' => 'App\Models\secoundstreetItems',
+        'secoundstreet' => 'App\Models\SecoundstreetItems',
     ];
 
 
