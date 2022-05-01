@@ -35,7 +35,7 @@ class EbayItemController extends Controller
         'rakuten' => 'App\Models\Rakuten',
         'digimart' => 'App\Models\Digimarts',
         'hardoff' => 'App\Models\Hardoff',
-        'secoundstreet' => 'App\Models\SecoundstreetItems',
+        'secoundstreet' => 'App\Models\Secoundstreet',
     ];
 
 
@@ -464,7 +464,6 @@ class EbayItemController extends Controller
 
     private function make_add_item_xml($item, $site)
     {
-
         switch ($site) {
             case 'rakuten':
                 $item_settings = $this->sites[$site]::find($item->rakuten_id);
@@ -486,6 +485,8 @@ class EbayItemController extends Controller
                 # code...
                 break;
         }
+
+
 
         if ($item_settings->condition == 2) {
             $condtionID = 3000;
