@@ -20,7 +20,7 @@ class StocksController extends Controller
             'rakuten' => 'App\Models\RakutenItem',
             'digimart' => 'App\Models\DigimartItems',
             'hardoff' => 'App\Models\HardoffItems',
-            'secoundstreet' => 'App\Models\secoundstreetItems',
+            'secoundstreet' => 'App\Models\SecoundstreetItems',
         ];
 
         $items = $models[$site]::where('en_title', '!=', '')
