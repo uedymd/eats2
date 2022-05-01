@@ -10,6 +10,8 @@ use App\Models\Digimarts;
 use App\Models\DigimartItems;
 use App\Models\Hardoff;
 use App\Models\HardoffItems;
+use App\Models\SecoundstreetItems;
+use App\Models\Secoundstreets;
 use App\Models\templates;
 use App\Models\Stocks;
 use Carbon\Carbon;
@@ -27,11 +29,13 @@ class EbayItemController extends Controller
         'rakuten' => 'App\Models\RakutenItem',
         'digimart' => 'App\Models\DigimartItems',
         'hardoff' => 'App\Models\HardoffItems',
+        'secoundstreet' => 'App\Models\secoundstreetItems',
     ];
     private $sites = [
         'rakuten' => 'App\Models\Rakuten',
         'digimart' => 'App\Models\Digimarts',
         'hardoff' => 'App\Models\Hardoff',
+        'secoundstreet' => 'App\Models\secoundstreetItems',
     ];
 
 
@@ -65,6 +69,13 @@ class EbayItemController extends Controller
                     $hardoff_item = HardoffItems::find($ebay_item->supplier_id);
                     if ($hardoff_item) {
                         $suppliers[$ebay_item->id] = $hardoff_item->url;
+                    }
+                    break;
+
+                case 'secoundstreet':
+                    $secoundstreet_item = SecoundstreetItems::find($ebay_item->supplier_id);
+                    if ($secoundstreet_item) {
+                        $suppliers[$ebay_item->id] = $secoundstreet_item->url;
                     }
                     break;
 
@@ -109,6 +120,13 @@ class EbayItemController extends Controller
                     $hardoff_item = HardoffItems::find($ebay_item->supplier_id);
                     if ($hardoff_item) {
                         $suppliers[$ebay_item->id] = $hardoff_item->url;
+                    }
+                    break;
+
+                case 'secoundstreet':
+                    $secoundstreet_item = SecoundstreetItems::find($ebay_item->supplier_id);
+                    if ($secoundstreet_item) {
+                        $suppliers[$ebay_item->id] = $secoundstreet_item->url;
                     }
                     break;
 
@@ -200,6 +218,16 @@ class EbayItemController extends Controller
                         Log::info('Hardoff価格保存 ID = ' . $ebay_item->id);
                         break;
 
+                    case 'secoundstreet':
+                        $secoundstreet_items = SecoundstreetItems::find($ebay_item->supplier_id);
+                        if (!empty($secoundstreet_items->price) && $secoundstreet_items->price > 0) {
+                            $secoundstreet_items->price = $result_price;
+                            $secoundstreet_items->save();
+                        }
+                        $returns[] = "SecoundStreet価格保存";
+                        Log::info('SecoundStreet価格保存 ID = ' . $ebay_item->id);
+                        break;
+
                     default:
                         # code...
                         break;
@@ -274,6 +302,13 @@ class EbayItemController extends Controller
                 $hardoff_item = HardoffItems::find($ebay->supplier_id);
                 if ($hardoff_item) {
                     $suppliers[$ebay->id] = $hardoff_item->url;
+                }
+                break;
+
+            case 'secoundstreet':
+                $secoundstreet_item = SecoundstreetItems::find($ebay->supplier_id);
+                if ($secoundstreet_item) {
+                    $suppliers[$ebay->id] = $secoundstreet_item->url;
                 }
                 break;
 
@@ -384,6 +419,7 @@ class EbayItemController extends Controller
             $id = $item->item_id;
         }
 
+
         $item = $this->models[$site]::find($id);
 
         try {
@@ -440,6 +476,10 @@ class EbayItemController extends Controller
 
             case 'hardoff':
                 $item_settings = $this->sites[$site]::find($item->hardoff_id);
+                break;
+
+            case 'secoundstreet':
+                $item_settings = $this->sites[$site]::find($item->secoundstreet_id);
                 break;
 
             default:
@@ -657,6 +697,10 @@ class EbayItemController extends Controller
 
             case 'hardoff':
                 $item_settings = $this->sites[$site]::find($item->hardoff_id);
+                break;
+
+            case 'secoundstreet':
+                $item_settings = $this->sites[$site]::find($item->secoundstreet_id);
                 break;
 
             default:
