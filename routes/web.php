@@ -32,9 +32,9 @@ use App\Http\Controllers\MikigakkiItemController;
 */
 
 Route::redirect('/', '/login');
-Route::redirect('/dashboard', '/ebay/trading')->middleware(['auth'])->name('dashboard');
+Route::redirect('/dashboard', '/ebay/trading')->middleware(['auth', 'can:admin-higher'])->name('dashboard');
 
-Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'setting', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('edit/{site}', [SettingController::class, 'edit'])->name('setting.edit');
     Route::post('update/{site}', [SettingController::class, 'update'])->name('setting.update');
     Route::group(['prefix' => 'brandset'], function () {
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'rakuten', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [RakutenController::class, 'index'])->name('rakuten.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [RakutenController::class, 'create'])->name('rakuten.create');
@@ -80,7 +80,7 @@ Route::group(['prefix' => 'rakuten', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'digimart', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [DigimartsController::class, 'index'])->name('digimart.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [DigimartsController::class, 'create'])->name('digimart.create');
@@ -97,7 +97,7 @@ Route::group(['prefix' => 'digimart', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'hardoff', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'hardoff', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [HardoffController::class, 'index'])->name('hardoff.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [HardoffController::class, 'create'])->name('hardoff.create');
@@ -114,7 +114,7 @@ Route::group(['prefix' => 'hardoff', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [SecoundstreetController::class, 'index'])->name('secoundstreet.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [SecoundstreetController::class, 'create'])->name('secoundstreet.create');
@@ -131,7 +131,7 @@ Route::group(['prefix' => 'secoundstreet', 'middleware' => ['auth']], function (
     });
 });
 
-Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [KurosawaController::class, 'index'])->name('kurosawa.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [KurosawaController::class, 'create'])->name('kurosawa.create');
@@ -147,7 +147,7 @@ Route::group(['prefix' => 'kurosawa', 'middleware' => ['auth']], function () {
         Route::get('/{id}', [KurosawaItemController::class, 'items'])->name('kurosawa.items')->where('id', '[0-9]+');
     });
 });
-Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/', [MikigakkiController::class, 'index'])->name('mikigakki.index');
     Route::group(['prefix' => 'reserve'], function () {
         Route::get('create', [MikigakkiController::class, 'create'])->name('mikigakki.create');
@@ -164,7 +164,7 @@ Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['prefix' => 'ebay', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'ebay', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
     Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
@@ -172,7 +172,7 @@ Route::group(['prefix' => 'ebay', 'middleware' => ['auth']], function () {
     Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
 });
 
-Route::group(['prefix' => 'stock', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'stock', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');
 });
 
