@@ -25,7 +25,7 @@ class EbayItemController extends Controller
     private $api_url = 'https://api.ebay.com/ws/api.dll';
     // private $url = 'https://api.sandbox.ebay.com/ws/api.dll';
 
-    private $models = [
+    public $models = [
         'rakuten' => 'App\Models\RakutenItem',
         'digimart' => 'App\Models\DigimartItems',
         'hardoff' => 'App\Models\HardoffItems',

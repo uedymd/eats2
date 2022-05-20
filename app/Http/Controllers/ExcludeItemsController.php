@@ -116,7 +116,7 @@ class ExcludeItemsController extends Controller
             $result = $ebayCtl->ebay_delete_item($xml);
             if ($result['Ack'] !== 'Failure' && $result['Ack'] !== 'PartialFailure') {
                 Log::info('ebayアイテム削除 ebayリターン成功');
-                $target = $this->models[$item->site]::find($item->supplier_id)->delete();
+                $target = $ebayCtl->models[$item->site]::find($item->supplier_id)->delete();
                 $stock = Stocks::where('site', $item->site)
                     ->where('item_id', $item->supplier_id)->delete();
                 if ($target && $stock) {
@@ -124,7 +124,7 @@ class ExcludeItemsController extends Controller
                 }
             } elseif ($result['Errors']['ErrorCode'] == 1047) {
                 Log::info('ebayアイテム削除 すでに終了済み');
-                $target = $this->models[$item->site]::find($item->supplier_id)->delete();
+                $target = $ebayCtl->models[$item->site]::find($item->supplier_id)->delete();
                 $stock = Stocks::where('site', $item->site)
                     ->where('item_id', $item->supplier_id)->delete();
                 if ($target && $stock) {
