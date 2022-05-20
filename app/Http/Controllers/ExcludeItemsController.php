@@ -122,7 +122,7 @@ class ExcludeItemsController extends Controller
                 if ($target && $stock) {
                     $item->delete();
                 }
-            } elseif ($result['Errors']['ErrorCode'] == 1047) {
+            } elseif ($result['Errors']['ErrorCode'] == 1047 || $result['Errors']['ErrorCode'] == 17) {
                 Log::info('ebayアイテム削除 すでに終了済み');
                 $target = $ebayCtl->models[$item->site]::find($item->supplier_id)->delete();
                 $stock = Stocks::where('site', $item->site)
