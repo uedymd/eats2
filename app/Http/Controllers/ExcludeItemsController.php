@@ -110,7 +110,7 @@ class ExcludeItemsController extends Controller
     {
         $excludes = ExcludeItems::find(1);
         $keywords = str_replace(array("\r\n", "\r"), "\n", $excludes->keywords);
-        $keywords_array = explode("\n", $keywords);
+        $keywords_array = array_filter(explode("\n", $keywords));
         $items = EbayItem::where('title', 'like', "%{$keywords_array[0]}%");
         for ($i = 1; $i < count($keywords_array); $i++) {
             $items->orWhere('title', 'like', "%" . $keywords_array[$i] . "%");
