@@ -136,6 +136,8 @@ class ExcludeItemsController extends Controller
                 $check_time = Carbon::now();
                 $item->tracking_at = $check_time->format('Y-m-d H:i:s');
                 Log::info($result);
+                Log::info($item->id);
+                Log::info($item->ebay_id);
                 Log::info('ebayアイテム削除 ebayリターン失敗');
                 $item->save();
             }
