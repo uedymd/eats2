@@ -6,6 +6,7 @@ use App\Http\Controllers\Rakuten\RakutenItemController;
 use App\Http\Controllers\EbayItemController;
 use App\Http\Controllers\StocksController;
 use App\Http\Controllers\DigimartItemsController;
+use App\Http\Controllers\ExcludeItemsController;
 use App\Http\Controllers\HardoffItemsController;
 use App\Http\Controllers\SecoundstreetItemsController;
 use App\Http\Controllers\KurosawaItemController;
@@ -147,4 +148,8 @@ Route::group(['prefix' => 'ebay'], function () {
 
 Route::group(['prefix' => 'stock'], function () {
     Route::get('/search/{site}', [StocksController::class, 'search']);
+});
+
+Route::group(['prefix' => 'exclude_items'], function () {
+    Route::get('/exclude', [ExcludeItemsController::class, 'exclude']);
 });

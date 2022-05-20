@@ -6,6 +6,10 @@ use App\Http\Requests\StoreExcludeItemsRequest;
 use App\Http\Requests\UpdateExcludeItemsRequest;
 use Illuminate\Http\Request;
 use App\Models\ExcludeItems;
+use App\Models\EbayItem;
+use App\Models\Stocks;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ExcludeItemsController extends Controller
 {
@@ -90,5 +94,50 @@ class ExcludeItemsController extends Controller
     public function destroy(ExcludeItems $excludeItems)
     {
         //
+    }
+
+
+    public function exclude(ExcludeItems $excludeItems)
+    {
+        $excludes = ExcludeItems::find(1);
+        $keywords = str_replace(array("\r\n", "\r"), "\n", $excludes->keywords);
+        $keywords_array = explode("\n", $keywords);
+        $items = EbayItem::where('title', 'like', "%{$keywords_array[0]}%");
+        for ($i = 1; $i < count($keywords_array); $i++) {
+            $items->orWhere('title', 'like', "%" . $keywords_array[$i] . "%");
+        }
+        $target = $items->get();
+        $ebayCtl = app()->make('App\Http\Controllers\EbayItemController');
+
+
+        foreach ($target as $item) {
+            $xml = $ebayCtl->make_delete_item_xml($item);
+            $result = $ebayCtl->ebay_delete_item($xml);
+            if ($result['Ack'] !== 'Failure' && $result['Ack'] !== 'PartialFailure') {
+                Log::info('ebayアイテム削除 ebayリターン成功');
+                $target = $this->models[$item->site]::find($item->supplier_id)->delete();
+                $stock = Stocks::where('site', $item->site)
+                    ->where('item_id', $item->supplier_id)->delete();
+                if ($target && $stock) {
+                    $item->delete();
+                }
+            } elseif ($result['Errors']['ErrorCode'] == 1047) {
+                Log::info('ebayアイテム削除 すでに終了済み');
+                $target = $this->models[$item->site]::find($item->supplier_id)->delete();
+                $stock = Stocks::where('site', $item->site)
+                    ->where('item_id', $item->supplier_id)->delete();
+                if ($target && $stock) {
+                    $item->delete();
+                }
+            } else {
+                $item->status_code = 999;
+                $item->error = serialize([0 => '出品取消を失敗しました。']);
+                $check_time = Carbon::now();
+                $item->tracking_at = $check_time->format('Y-m-d H:i:s');
+                Log::info($result);
+                Log::info('ebayアイテム削除 ebayリターン失敗');
+                $item->save();
+            }
+        }
     }
 }

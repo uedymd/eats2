@@ -4,12 +4,6 @@
             削除対象キーワード設定
         </h2>
     </x-slot>
-    <!-- フラッシュメッセージ -->
-    @if (session('flash_message'))
-    <div class="flash_message">
-        {{ session('flash_message') }}
-    </div>
-    @endif
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -24,7 +18,7 @@
                             <div>
                                 <x-label for="keywords" :value="__('削除対象キーワード')" />
 
-                                {{Form::textarea('keywords', "$items->keywords", ['class' => 'form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', 'id' => 'set', 'placeholder' => '削除対象キーワード   を一行づつ入力してください。', 'rows' => '3'])}}
+                                {{Form::textarea('keywords', "$items->keywords", ['class' => 'form-control mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50', 'id' => 'set', 'placeholder' => '削除対象キーワード   を一行づつ入力してください。', 'rows' => '15'])}}
                             </div>
                         </div>
 

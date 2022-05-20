@@ -668,7 +668,7 @@ class EbayItemController extends Controller
         $xml = new \SimpleXMLElement($text);
         return $xml;
     }
-    private function make_delete_item_xml($item)
+    public function make_delete_item_xml($item)
     {
 
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
@@ -749,7 +749,7 @@ class EbayItemController extends Controller
         $result = json_decode($result, true);
         return $result;
     }
-    private function ebay_delete_item($xml_data)
+    public function ebay_delete_item($xml_data)
     {
         $http_headers = array(
             "Content-Type: text/xml",
