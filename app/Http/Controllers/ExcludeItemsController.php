@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExcludeItemsRequest;
 use App\Http\Requests\UpdateExcludeItemsRequest;
+use Illuminate\Http\Request;
 use App\Models\ExcludeItems;
 
 class ExcludeItemsController extends Controller
@@ -25,7 +26,7 @@ class ExcludeItemsController extends Controller
      */
     public function create()
     {
-        //
+        // 
     }
 
     /**
@@ -58,7 +59,8 @@ class ExcludeItemsController extends Controller
      */
     public function edit(ExcludeItems $excludeItems)
     {
-        //
+        $items = ExcludeItems::find(1);
+        return view('exclude_items/edit', compact('items'));
     }
 
     /**
@@ -68,9 +70,15 @@ class ExcludeItemsController extends Controller
      * @param  \App\Models\ExcludeItems  $excludeItems
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateExcludeItemsRequest $request, ExcludeItems $excludeItems)
+    public function update(Request $request)
     {
-        //
+        $excludes = ExcludeItems::find(1);
+        if (is_null($excludes)) {
+            $excludes = new ExcludeItems();
+        }
+        $excludes->keywords = $request->input('keywords');
+        $excludes->save();
+        return redirect('setting/exclude_items/edit')->with('success', '保存完了');
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Http\Controllers\Rakuten\RakutenController;
 use App\Http\Controllers\Rakuten\RakutenItemController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EbayItemController;
+use App\Http\Controllers\ExcludeItemsController;
 use App\Http\Controllers\BrandSetController;
 use App\Http\Controllers\RateSetController;
 use App\Http\Controllers\TemplatesController;
@@ -60,6 +61,11 @@ Route::group(['prefix' => 'setting', 'middleware' => ['auth', 'can:admin-higher'
         Route::get('/edit/{id}', [TemplatesController::class, 'edit'])->name('setting.template.edit')->where('id', '[0-9]+');
         Route::post('/update/{id}', [TemplatesController::class, 'update'])->name('setting.template.update')->where('id', '[0-9]+');
         Route::get('/destroy/{id}', [TemplatesController::class, 'destroy'])->name('setting.template.destroy')->where('id', '[0-9]+');
+    });
+    Route::group(['prefix' => 'exclude_items'], function () {
+        Route::get('/', [ExcludeItemsController::class, 'index'])->name('setting.excludeitems.index');
+        Route::get('/edit', [ExcludeItemsController::class, 'edit'])->name('setting.excludeitems.edit');
+        Route::post('/update', [ExcludeItemsController::class, 'update'])->name('setting.excludeitems.update');
     });
 });
 
