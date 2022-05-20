@@ -64,6 +64,7 @@ class ExcludeItemsController extends Controller
     public function edit(ExcludeItems $excludeItems)
     {
         $items = ExcludeItems::find(1);
+        $items = optional($items);
         return view('exclude_items/edit', compact('items'));
     }
 
