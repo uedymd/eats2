@@ -10,6 +10,14 @@ use App\Models\EbayItem;
 use App\Models\Stocks;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Models\Rakuten;
+use App\Models\RakutenItem;
+use App\Models\Digimarts;
+use App\Models\DigimartItems;
+use App\Models\Hardoff;
+use App\Models\HardoffItems;
+use App\Models\SecoundstreetItems;
+use App\Models\Secoundstreets;
 
 class ExcludeItemsController extends Controller
 {
