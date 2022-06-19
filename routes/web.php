@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
 
 // 管理者以上
 Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
-    Route::redirect('/dashboard', '/ebay/trading')->name('dashboard');
+    // Route::redirect('/dashboard', '/ebay/trading')->name('dashboard');
     Route::group(['prefix' => 'setting'], function () {
         Route::get('edit/{site}', [SettingController::class, 'edit'])->name('setting.edit');
         Route::post('update/{site}', [SettingController::class, 'update'])->name('setting.update');
@@ -187,13 +187,13 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
 
 
 
-    Route::group(['prefix' => 'ebay'], function () {
-        Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
-        Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
-        Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
-        Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
-        Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
-    });
+    // Route::group(['prefix' => 'ebay'], function () {
+    //     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
+    //     Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
+    //     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
+    //     Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
+    //     Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
+    // });
 
     Route::group(['prefix' => 'stock'], function () {
         Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');
