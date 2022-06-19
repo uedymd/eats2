@@ -34,6 +34,7 @@ use App\Http\Controllers\MikigakkiItemController;
 
 Route::redirect('/', '/login');
 Route::redirect('/dashboard', '/ebay/trading')->middleware(['auth', 'can:user-higher'])->name('dashboard');
+Route::redirect('/dashboard', '/ebay/trading')->middleware(['auth', 'can:admin-higher'])->name('dashboard');
 
 Route::group(['prefix' => 'setting', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('edit/{site}', [SettingController::class, 'edit'])->name('setting.edit');
@@ -171,6 +172,14 @@ Route::group(['prefix' => 'mikigakki', 'middleware' => ['auth', 'can:admin-highe
 });
 
 Route::group(['prefix' => 'ebay', 'middleware' => ['auth', 'can:user-higher']], function () {
+    Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
+    Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
+    Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
+    Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
+    Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
+});
+
+Route::group(['prefix' => 'ebay', 'middleware' => ['auth', 'can:admin-higher']], function () {
     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
     Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
