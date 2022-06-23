@@ -81,6 +81,11 @@
                         除外設定
                     </x-jet-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-jet-nav-link href="{{ route('register') }}" :active="request()->routeIs('setting.excludeitems.edit')">
+                        ゲスト設定
+                    </x-jet-nav-link>
+                </div>
                 @endcan
             </div>
 
