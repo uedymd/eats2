@@ -89,6 +89,8 @@ services:
         MYSQL_USERNAME: '${DB_USERNAME}'
         MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
         PMA_HOST: mysql
+        MEMORY_LIMIT: 1280M
+        UPLOAD_LIMIT: 1280M
       networks:
         - sail
 networks:
