@@ -20,6 +20,7 @@ use App\Http\Controllers\KurosawaController;
 use App\Http\Controllers\KurosawaItemController;
 use App\Http\Controllers\MikigakkiController;
 use App\Http\Controllers\MikigakkiItemController;
+use App\Http\Controllers\RateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,10 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
             Route::get('/edit/{id}', [RateSetController::class, 'edit'])->name('setting.rateset.edit')->where('id', '[0-9]+');
             Route::post('/update/{id}', [RateSetController::class, 'update'])->name('setting.rateset.update')->where('id', '[0-9]+');
             Route::get('/destroy/{id}', [RateSetController::class, 'destroy'])->name('setting.rateset.destroy')->where('id', '[0-9]+');
+        });
+        Route::group(['prefix' => 'rate'], function () {
+            Route::get('/', [RateController::class, 'index'])->name('setting.rate.edit');
+            Route::post('/update', [RateController::class, 'update'])->name('setting.rate.update');
         });
         Route::group(['prefix' => 'template'], function () {
             Route::get('/', [TemplatesController::class, 'index'])->name('setting.template.index');
