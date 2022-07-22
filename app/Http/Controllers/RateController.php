@@ -18,7 +18,7 @@ class RateController extends Controller
         $rate = Rate::find(1);
         $amount = '';
         if (!is_null($rate)) {
-            $amaount = $rate->amount;
+            $amount = $rate->amount;
         }
 
         return view('rate/edit', compact('amount'));
