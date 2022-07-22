@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Digimarts;
 use App\Models\DigimartItems;
 use App\Models\Setting;
+use App\Models\Rate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,8 @@ class DigimartItemsController extends Controller
         if (is_null($id)) {
             $digimarts = Digimarts::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
-                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
+                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -47,7 +49,8 @@ class DigimartItemsController extends Controller
             $digimarts = Digimarts::whereIn('status', [1, 3])
                 ->where('digimarts.id', $id)
                 ->leftJoin('brand_sets', 'digimarts.brand_set_id', '=', 'brand_sets.id')
-                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'digimarts.rate_set_id', '=', 'rate_sets.id')
+                ->select('digimarts.id as digimart_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -70,8 +73,9 @@ class DigimartItemsController extends Controller
                 $request = "query={$digimart}";
 
 
-                $respons = [];
                 $url = $this->digimartSearchApi . "?" . $request;
+
+                $doller_rate = Rate::find(1);
 
 
                 try {
@@ -81,6 +85,7 @@ class DigimartItemsController extends Controller
                 }
 
                 if (!empty($respons)) {
+
 
                     foreach ((array)$respons as $item) {
                         $digimart_item_count = DigimartItems::where('url', $item['href'])
@@ -114,6 +119,11 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
+
+                                if (!is_null($doller_rate)) {
+                                    $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $digimarts->rateset);
+                                    $digimart_item->doller = $doller;
+                                }
                                 $digimart_item->save();
                             }
                         }
@@ -125,6 +135,39 @@ class DigimartItemsController extends Controller
             }
         }
         return redirect('digimart');
+    }
+
+    private function exchange_yen_doller($price, $doller_rate, $rateset)
+    {
+        $rates = unserialize($rateset);
+        $return_price = 0;
+
+        foreach ($rates as $rate) {
+            switch ($price) {
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$price && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                default:
+                    break;
+            }
+            if ($return_price > 0) {
+                break;
+            }
+        }
+
+        $return_price = floor($return_price / $doller_rate);
+
+        return (int)$return_price;
     }
 
     private function update_chekced_at($id)
@@ -443,6 +486,7 @@ class DigimartItemsController extends Controller
         $jp_content = preg_replace("/(<\/th>|<\/td>)+(<td.*?>|<th.*?>)/i", " ", $jp_content);
         //<td>タグの開始タグを除去
         $jp_content = preg_replace("/<td.*?>/i", "", $jp_content);
+        //
         //<th>タグの開始タグを除去
         $jp_content = preg_replace("/<th.*?>/i", "", $jp_content);
         //<th><td>タグの綴じタグを除去
@@ -452,7 +496,7 @@ class DigimartItemsController extends Controller
         //<tr>タグの綴じタグを<br>に変換
         $jp_content = str_replace(["</table>", "</tr>", "</p>"], "<br>", $jp_content);
         //<br>が3つ以上続くものは除去
-        $jp_content = preg_replace("/(<br>|<br \/>){3,}/", "<br>", $jp_content);
+        $jp_content = preg_replace("/(<br>|<br \ />){3,}/", "<br>", $jp_content);
         //<br>を改行コードに変換
         $jp_content = str_replace(["<br>", "<br />", "<BR>", "<BR />"], "\n", $jp_content);
 
@@ -600,13 +644,13 @@ class DigimartItemsController extends Controller
     {
         $option = [
             CURLOPT_RETURNTRANSFER => true, //文字列として返す
-            CURLOPT_TIMEOUT        => 3000, // タイムアウト時間
+            CURLOPT_TIMEOUT => 3000, // タイムアウト時間
         ];
 
         $ch = curl_init($url);
         curl_setopt_array($ch, $option);
-        $json    = curl_exec($ch);
-        $info    = curl_getinfo($ch);
+        $json = curl_exec($ch);
+        $info = curl_getinfo($ch);
         $errorNo = curl_errno($ch);
 
         // OK以外はエラーなので空白配列を返す

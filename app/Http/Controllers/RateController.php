@@ -77,6 +77,7 @@ class RateController extends Controller
         }
         $rate->amount = $request->input('yen');
         $rate->save();
+        \Session::flash('status', '登録が完了しました');
         return redirect('setting/rate');
     }
 
