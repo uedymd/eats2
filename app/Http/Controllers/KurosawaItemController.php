@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Kurosawa;
 use App\Models\KurosawaItem;
 use App\Models\Setting;
+use App\Models\Rate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,8 @@ class KurosawaItemController extends Controller
         if (is_null($id)) {
             $kurosawas = Kurosawa::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'kurosawas.brand_set_id', '=', 'brand_sets.id')
-                ->select('kurosawas.id as kurosawa_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'kurosawas.rate_set_id', '=', 'rate_sets.id')
+                ->select('kurosawas.id as kurosawa_id', 'url', 'ng_keyword', 'rate_sets.set as rateset', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -47,7 +49,8 @@ class KurosawaItemController extends Controller
             $kurosawas = Kurosawa::whereIn('status', [1, 3])
                 ->where('kurosawas.id', $id)
                 ->leftJoin('brand_sets', 'kurosawas.brand_set_id', '=', 'brand_sets.id')
-                ->select('kurosawas.id as kurosawa_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'kurosawas.rate_set_id', '=', 'rate_sets.id')
+                ->select('kurosawas.id as kurosawa_id', 'url', 'ng_keyword', 'rate_sets.set as rateset', 'ng_url', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -73,6 +76,7 @@ class KurosawaItemController extends Controller
                 $respons = [];
                 $url = $this->kurosawaSearchApi . "?" . $request;
 
+                $doller_rate = Rate::find(1);
 
                 try {
                     $respons = $this->getApiDataCurl($url);
@@ -113,6 +117,11 @@ class KurosawaItemController extends Controller
 
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
+                                if (!is_null($doller_rate->amount)) {
+                                    $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $kurosawas->rateset);
+                                    $kurosawa_item->doller = $doller;
+                                }
+
                                 $kurosawa_item->price = $price;
                                 $kurosawa_item->save();
                             }
@@ -125,6 +134,39 @@ class KurosawaItemController extends Controller
             }
         }
         return redirect('kurosawa');
+    }
+
+    private function exchange_yen_doller($price, $doller_rate, $rateset)
+    {
+        $rates = unserialize($rateset);
+        $return_price = 0;
+
+        foreach ($rates as $rate) {
+            switch ($price) {
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$price && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                default:
+                    break;
+            }
+            if ($return_price > 0) {
+                break;
+            }
+        }
+
+        $return_price = floor($return_price / $doller_rate);
+
+        return (int)$return_price;
     }
 
     private function update_chekced_at($id)
