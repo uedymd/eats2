@@ -16,7 +16,12 @@ class RateController extends Controller
     public function index()
     {
         $rate = Rate::find(1);
-        return view('rate/edit', compact('rate'));
+        $amount = '';
+        if (!is_null($rate)) {
+            $amaount = $rate->amount;
+        }
+
+        return view('rate/edit', compact('amaount'));
     }
 
     /**
