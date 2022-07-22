@@ -77,7 +77,6 @@ class DigimartItemsController extends Controller
 
                 $doller_rate = Rate::find(1);
 
-
                 try {
                     $respons = $this->getApiDataCurl($url);
                 } catch (\InvalidArgumentException $e) {
@@ -119,10 +118,11 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
-                                if (!is_null($doller_rate)) {
+                                if (!is_null($doller_rate->amount)) {
                                     $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $digimarts->rateset);
                                     $digimart_item->doller = $doller;
                                 }
+                                Log::info('digimart検索 = ' . $price);
                                 $digimart_item->save();
                             }
                         }
