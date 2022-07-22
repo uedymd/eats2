@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Secoundstreets;
 use App\Models\SecoundstreetItems;
 use App\Models\Setting;
+use App\Models\Rate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,8 @@ class SecoundstreetItemsController extends Controller
         if (is_null($id)) {
             $secoundstreets = Secoundstreets::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'secoundstreets.brand_set_id', '=', 'brand_sets.id')
-                ->select('secoundstreets.id as secoundstreet_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'secoundstreets.rate_set_id', '=', 'rate_sets.id')
+                ->select('secoundstreets.id as secoundstreet_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -47,7 +49,8 @@ class SecoundstreetItemsController extends Controller
             $secoundstreets = Secoundstreets::whereIn('status', [1, 3])
                 ->where('secoundstreets.id', $id)
                 ->leftJoin('brand_sets', 'secoundstreets.brand_set_id', '=', 'brand_sets.id')
-                ->select('secoundstreets.id as secoundstreet_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'secoundstreets.rate_set_id', '=', 'rate_sets.id')
+                ->select('secoundstreets.id as secoundstreet_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -72,6 +75,8 @@ class SecoundstreetItemsController extends Controller
 
                 $respons = [];
                 $url = $this->secoundstreetSearchApi . "?" . $request;
+
+                $doller_rate = Rate::find(1);
 
 
                 try {
@@ -113,6 +118,12 @@ class SecoundstreetItemsController extends Controller
                                 $price = preg_replace('/\s/', '', $item['price']);
                                 $price = trim(str_replace(['円', '¥', ',', '税込'], '', $price));
 
+                                if (!is_null($doller_rate->amount)) {
+                                    $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $secoundstreets->rateset);
+                                    $secoundstreet_item->doller = $doller;
+                                }
+
+
                                 $secoundstreet_item->price = $price;
 
                                 $secoundstreet_item->save();
@@ -126,6 +137,39 @@ class SecoundstreetItemsController extends Controller
             }
         }
         return redirect('secoundstreet');
+    }
+
+    private function exchange_yen_doller($price, $doller_rate, $rateset)
+    {
+        $rates = unserialize($rateset);
+        $return_price = 0;
+
+        foreach ($rates as $rate) {
+            switch ($price) {
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$price && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                default:
+                    break;
+            }
+            if ($return_price > 0) {
+                break;
+            }
+        }
+
+        $return_price = floor($return_price / $doller_rate);
+
+        return (int)$return_price;
     }
 
     private function update_chekced_at($id)
