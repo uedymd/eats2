@@ -119,7 +119,6 @@ class DigimartItemsController extends Controller
                                 $price = trim(str_replace(['¥', ',', '税込'], '', $item['price']));
 
                                 $digimart_item->price = $price;
-
                                 if (!is_null($doller_rate)) {
                                     $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $digimarts->rateset);
                                     $digimart_item->doller = $doller;
