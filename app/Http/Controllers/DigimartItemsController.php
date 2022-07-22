@@ -122,7 +122,6 @@ class DigimartItemsController extends Controller
                                     $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $digimarts->rateset);
                                     $digimart_item->doller = $doller;
                                 }
-                                Log::info('digimart検索 = ' . $price);
                                 $digimart_item->save();
                             }
                         }

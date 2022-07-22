@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Hardoff;
 use App\Models\HardoffItems;
 use App\Models\Setting;
+use App\Models\Rate;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -39,7 +40,8 @@ class HardoffItemsController extends Controller
         if (is_null($id)) {
             $hardoffs = Hardoff::whereIn('status', [1, 3])
                 ->leftJoin('brand_sets', 'hardoffs.brand_set_id', '=', 'brand_sets.id')
-                ->select('hardoffs.id as hardoff_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'hardoffs.rate_set_id', '=', 'rate_sets.id')
+                ->select('hardoffs.id as hardoff_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -47,7 +49,8 @@ class HardoffItemsController extends Controller
             $hardoffs = Hardoff::whereIn('status', [1, 3])
                 ->where('hardoffs.id', $id)
                 ->leftJoin('brand_sets', 'hardoffs.brand_set_id', '=', 'brand_sets.id')
-                ->select('hardoffs.id as hardoff_id', 'url', 'ng_keyword', 'ng_url', 'brand_sets.set as brand_setting',)
+                ->leftJoin('rate_sets', 'hardoffs.rate_set_id', '=', 'rate_sets.id')
+                ->select('hardoffs.id as hardoff_id', 'url', 'ng_keyword', 'ng_url', 'rate_sets.set as rateset', 'brand_sets.set as brand_setting',)
                 ->orderBy('checked_at', 'asc')
                 ->orderBy('priority')
                 ->first();
@@ -72,6 +75,7 @@ class HardoffItemsController extends Controller
 
                 $respons = [];
                 $url = $this->hardoffSearchApi . "?" . $request;
+                $doller_rate = Rate::find(1);
 
                 try {
                     $respons = $this->getApiDataCurl($url);
@@ -112,6 +116,11 @@ class HardoffItemsController extends Controller
                                 $price = preg_replace('/\s/', '', $item['price']);
                                 $price = trim(str_replace(['円', '¥', ',', '税込'], '', $price));
 
+                                if (!is_null($doller_rate->amount)) {
+                                    $doller = $this->exchange_yen_doller($price, $doller_rate->amount, $hardoffs->rateset);
+                                    $hardoff_item->doller = $doller;
+                                }
+
                                 $hardoff_item->price = $price;
 
                                 $hardoff_item->save();
@@ -125,6 +134,39 @@ class HardoffItemsController extends Controller
             }
         }
         return redirect('hardoff');
+    }
+
+    private function exchange_yen_doller($price, $doller_rate, $rateset)
+    {
+        $rates = unserialize($rateset);
+        $return_price = 0;
+
+        foreach ($rates as $rate) {
+            switch ($price) {
+                case empty($rate['min']) && !empty($rate['max']) && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+
+                case !empty($rate['min']) && !empty($rate['max']) && $rate['min'] <= (float)$price && $rate['max'] > (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                case !empty($rate['min']) && empty($rate['max']) && $rate['min'] <= (float)$price:
+                    $return_price = (float)$price + (float)$rate['rate'];
+                    break;
+
+                default:
+                    break;
+            }
+            if ($return_price > 0) {
+                break;
+            }
+        }
+
+        $return_price = floor($return_price / $doller_rate);
+
+        return (int)$return_price;
     }
 
     private function update_chekced_at($id)
