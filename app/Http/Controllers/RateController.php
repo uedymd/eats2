@@ -21,7 +21,7 @@ class RateController extends Controller
             $amaount = $rate->amount;
         }
 
-        return view('rate/edit', compact('amaount'));
+        return view('rate/edit', compact('amount'));
     }
 
     /**
