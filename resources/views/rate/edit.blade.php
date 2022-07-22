@@ -14,9 +14,14 @@
                     <form method="POST" action="{{ route('setting.rate.update') }}">
                         @csrf
 
+                        @isset($amount)
+                        現在の設定値：{{ $amount }}円/ドル
+                        @else
+                        現在の設定値：自動設定
+                        @endisset
                         <div class="mt-4 flex">
                             <div class="w-3/12">
-                                {{Form::number('yen', $amount, ['step'=>0.001,'class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline require'])}}
+                                {{Form::number('yen', null, ['step'=>0.001,'class'=>'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline require'])}}
                                 @if (session('status'))
                                 <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
                                     <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
