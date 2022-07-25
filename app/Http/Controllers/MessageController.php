@@ -379,7 +379,6 @@ class MessageController extends Controller
         $images = $request->images;
         if(!empty($comment)){
             $result = $this->sent_message($comment, $itemID, $parent, $sender,$images);
-            dd($result);
             if ($result['Ack'] == 'Success') {
                 $flush = 'メッセージを送信しました。';
 
