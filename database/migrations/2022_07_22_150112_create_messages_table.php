@@ -26,6 +26,7 @@ class CreateMessagesTable extends Migration
             $table->dateTimeTz('ExpirationDate', $precision = 0);
             $table->float('ItemID', 16, 0)->nullable();
             $table->longText('Text')->nullable();
+            $table->boolean('Replied')->nullable();
             $table->text('ResponseDetails')->nullable();
             $table->text('MessageType')->nullable();
             $table->dateTimeTz('ItemEndTime', $precision = 0)->nullable();

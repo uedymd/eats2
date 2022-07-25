@@ -23,13 +23,21 @@
                         </thead>
                         <tbody>
                             @foreach($messages as $message)
-                            <tr>
+                            @php
+                            $class = "";
+                            $replied = "";
+                            if($message->Replied){
+                            $class = "bg-gray-300";
+                            $replied = "[replied] ";
+                            }
+                            @endphp
+                            <tr class="{{$class}}">
                                 <td class="border px-4 py-2">
                                     {{$message->Sender}}
                                 </td>
                                 <td class="border px-4 py-2">
                                     <p class="text-blue-600">
-                                        <a href="{{ route('message.show',['id'=>$message->id]) }}">{{$message->Subject}}</a>
+                                        <a href="{{ route('message.show',['id'=>$message->id]) }}">{{$replied}}{{$message->Subject}}</a>
                                     </p>
                                 </td>
                                 <td class=" border px-4 py-2 text-sm">

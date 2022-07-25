@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\EbayItem;
 use KubAT\PhpSimple\HtmlDomParser;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class MessageController extends Controller
 {
@@ -128,6 +129,14 @@ class MessageController extends Controller
                 }
                 if (isset($message['ItemID'])) {
                     $record->ItemID = $message['ItemID'];
+                }
+                if (isset($message['Replied']) && !is_null($message['Replied'])) {
+                    if ($message['Replied'] == "true") {
+                        $replied = 1;
+                    } else {
+                        $replied = 0;
+                    }
+                    $record->Replied = $replied;
                 }
                 if (isset($message['ResponseDetails'])) {
                     $record->ResponseDetails = serialize($message['ResponseDetails']);
@@ -304,6 +313,7 @@ class MessageController extends Controller
             $flush = 'メッセージの送信に失敗しました。';
         }
         $request->session()->flash('status', $flush);
+        $this->set_text();
         return redirect("message/show/{$current}");
     }
 
