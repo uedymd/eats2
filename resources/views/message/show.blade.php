@@ -31,9 +31,11 @@
                                     <div class="flex flex-row-reverse">
                                         <div class="w-8/12 mt-5 max-w-screen-md text-gray-500 md:text-lg mb-5 px-2 py-2 bg-blue-100">
                                             @foreach($replies[$record->id] as $reply)
-                                            <p class="text-indigo-500 font-semibold text-sm">Sent : {{$reply->created_at}}</p>
-                                            <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$users[$reply->member_id]}}</p></p>
-                                                {{ $reply->text }}
+                                            <div class="mb-3">
+                                                <p class="text-indigo-500 font-semibold text-sm">Sent : {{$reply->created_at}}</p>
+                                                <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$users[$reply->member_id]}}</p></p>
+                                                    {!! nl2br($reply->text) !!}
+                                            </div>
                                             @endforeach
                                         </div>
                                     </div>
