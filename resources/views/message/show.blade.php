@@ -41,7 +41,7 @@
                                                         @endphp
                                                         <div class="flex">
                                                             @foreach($images as $image)
-                                                            <div class="w-2/12"><img src="{{$image}}" alt="" rel="lightbox[]"></div>
+                                                            <div class="w-2/12"><a href="{{$image}}" rel="lightbox[]"><img src="{{$image}}" alt=""></a></div>
                                                             @endforeach
                                                         </div>
                                                     @endif
