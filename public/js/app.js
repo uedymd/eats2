@@ -5305,7 +5305,7 @@ $(function () {
 
       if (ret["Ack"] !== "Failure") {
         image = ret["SiteHostedPictureDetails"]["FullURL"];
-        html = "<input type=\"hidden\" value=\"@{image}\" >";
+        html = "<input type=\"hidden\" value=\"".concat(image, "\" >");
         $('.imageUploads').append(html);
       } else {
         alert("不明なエラーが発生しました。");
