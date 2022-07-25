@@ -17,8 +17,7 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2 w-1/12">From</th>
                                 <th class="border px-4 py-2 w-6/12">Subject</th>
-                                <th class="border px-4 py-2 w-1/12">Item Ends</th>
-                                <th class="border px-4 py-2 w-1/12">Received</th>
+                                <th class="border px-4 py-2 w-1/12">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,7 +27,7 @@
                             $replied = "";
                             if($message->Replied){
                             $class = "bg-gray-300";
-                            $replied = "[replied] ";
+                            $replied = "【返信済】 ";
                             }
                             @endphp
                             <tr class="{{$class}}">
@@ -40,11 +39,10 @@
                                         <a href="{{ route('message.show',['id'=>$message->id]) }}">{{$replied}}{{$message->Subject}}</a>
                                     </p>
                                 </td>
-                                <td class=" border px-4 py-2 text-sm">
-                                    {{$message->ItemEndTime}}
-                                </td>
-                                <td class="border px-4 py-2 text-sm">
-                                    {{$message->ReceiveDate}}
+                                <td class=" border px-4 py-2 text-sm text-center">
+                                    @if(!is_null($message->status))
+                                    {{$status[$message->status]}}
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

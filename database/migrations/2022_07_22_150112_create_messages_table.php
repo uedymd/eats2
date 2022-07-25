@@ -21,7 +21,7 @@ class CreateMessagesTable extends Migration
             $table->text('SendToName')->nullable();
             $table->text('Subject');
             $table->float('MessageID', 16, 0)->unique();
-            $table->float('ExternalMessageID', 16, 0)->unique()->nullable();
+            $table->float('ExternalMessageID', 16, 0)->nullable();
             $table->dateTimeTz('ReceiveDate', $precision = 0);
             $table->dateTimeTz('ExpirationDate', $precision = 0);
             $table->float('ItemID', 16, 0)->nullable();
@@ -32,6 +32,7 @@ class CreateMessagesTable extends Migration
             $table->text('MessageType')->nullable();
             $table->dateTimeTz('ItemEndTime', $precision = 0)->nullable();
             $table->text('ItemTitle')->nullable();
+            $table->text('status')->nullable();
             $table->timestamps();
         });
     }

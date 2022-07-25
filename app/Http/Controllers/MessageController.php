@@ -15,6 +15,8 @@ class MessageController extends Controller
 
     private $api_url = 'https://api.ebay.com/ws/api.dll';
 
+    private $status_array = [''=>'ステータスを選択','1'=>'販売元問合せ中', '2'=>'確認中', '3'=>'返信済'];
+
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +24,9 @@ class MessageController extends Controller
      */
     public function index()
     {
+        $status = $this->status_array;
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        return view('message/index', compact('messages'));
+        return view('message/index', compact('messages','status'));
     }
 
     public function get_messages()
@@ -256,11 +259,12 @@ class MessageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Message $message, $id)
-    {
+    {   
+        $status = $this->status_array;
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderByDesc('ReceiveDate')->get();
         $item = EbayItem::select('id', 'image')->where('ebay_id', (int)$current->ItemID)->first();
-        return view('message/show', compact('current', 'records', 'item'));
+        return view('message/show', compact('current', 'records','item','status'));
     }
 
     /**
@@ -295,14 +299,26 @@ class MessageController extends Controller
         $itemID = $request->itemID;
         $sender = $request->sender;
         $parent = $request->parent;
-        $result = $this->sent_message($comment, $itemID, $parent, $sender);
-        if ($result['Ack'] == 'Success') {
-            $flush = 'メッセージを送信しました。';
-        } else {
-            $flush = 'メッセージの送信に失敗しました。';
+        $status = $request->status;
+        if(!empty($comment)){
+            $result = $this->sent_message($comment, $itemID, $parent, $sender);
+            if ($result['Ack'] == 'Success') {
+                $flush = 'メッセージを送信しました。';
+                $this->set_text();
+            } else {
+                $flush = 'メッセージの送信に失敗しました。';
+            }
+            $request->session()->flash('messageResult', $flush);
         }
-        $request->session()->flash('status', $flush);
-        $this->set_text();
+
+        if(!empty($status)){
+            $record = Message::find($current);
+            $record->status = $status;
+            $record->save();
+            $flush = 'ステータスを変更しました。';
+            $request->session()->flash('mesasgeStatus', $flush);
+        }
+
         return redirect("message/show/{$current}");
     }
 
