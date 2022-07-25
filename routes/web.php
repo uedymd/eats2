@@ -193,6 +193,8 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
 
     Route::group(['prefix' => 'message'], function () {
         Route::get('/', [MessageController::class, 'index'])->name('message.index');
+        Route::get('show/{id}', [MessageController::class, 'show'])->name('message.show')->where('id', '[0-9]+');
+        Route::post('send', [MessageController::class, 'send'])->name('message.send');
     });
 
 

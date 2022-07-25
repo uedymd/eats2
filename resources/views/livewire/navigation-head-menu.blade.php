@@ -11,12 +11,12 @@
                 </div>
                 @can('admin-higher')
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('ebay.index') }}" :active="request()->routeIs('ebay.index')">
                         ebay管理
                     </x-jet-nav-link>
@@ -61,7 +61,7 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('setting.brandset.index') }}" :active="request()->routeIs('setting.brandset.index')">
                         ブランド設定
                     </x-jet-nav-link>
@@ -93,19 +93,24 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('setting.template.index') }}" :active="request()->routeIs('setting.template.index')">
                         テンプレート設定
                     </x-jet-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('setting.excludeitems.edit') }}" :active="request()->routeIs('setting.excludeitems.edit')">
                         除外設定
                     </x-jet-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')">
                         ゲスト設定
+                    </x-jet-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
+                    <x-jet-nav-link href="{{ route('message.index') }}" :active="request()->routeIs('message.index')">
+                        メッセージツール
                     </x-jet-nav-link>
                 </div>
                 @endcan
