@@ -285,7 +285,7 @@ class MessageController extends Controller
         $replies = [];
         $users = [];
         foreach($records as $record){
-            $reply = MessageReply::where('message_id',$record->id);
+            $reply = MessageReply::where('message_id',$record->id)->orderByDesc('created_at');
             if($reply->count() > 0){
                 $replies[$record->id] = $reply->get();
                 foreach($replies[$record->id] as $reply){
