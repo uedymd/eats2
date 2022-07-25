@@ -21,6 +21,7 @@ use App\Http\Controllers\KurosawaItemController;
 use App\Http\Controllers\MikigakkiController;
 use App\Http\Controllers\MikigakkiItemController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -188,6 +189,10 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
         Route::group(['prefix' => 'items'], function () {
             Route::get('/{id}', [MikigakkiItemController::class, 'items'])->name('mikigakki.items')->where('id', '[0-9]+');
         });
+    });
+
+    Route::group(['prefix' => 'message'], function () {
+        Route::get('/', [MessageController::class, 'index'])->name('message.index');
     });
 
 
