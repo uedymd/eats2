@@ -33,6 +33,24 @@
                                 <div class="mt-5 max-w-screen-md text-gray-500 md:text-lg mb-5 px-2 py-2 {{$class}}">
                                     <p class="text-indigo-500 lg:text-lg font-semibold mb-1 md:mb-1">Sent : {{$record->ReceiveDate}}</p>
                                     {!! $record->Text !!}
+                                    @php
+                                    $imageArray = [];
+                                    if(!is_null($record->MessageMedia)){
+                                        $images = unserialize($record->MessageMedia);
+                                        if(isset($images["MediaURL"])){
+                                            $imageArray[] = $images["MediaURL"];
+                                        }else{
+                                            foreach($images as $image){
+                                                $imageArray[] = $image["MediaURL"];
+                                            }
+                                        }
+                                        echo "<div class=\"flex mt-3\">";
+                                            foreach ($imageArray as $value) {
+                                                echo "<div class=\"w-2/12 mr-2\"><a href=\"{$value}\" rel=\"lightbox[]\"><img src=\"{$value}\"></a></div>";
+                                            }
+                                        echo "</div>";
+                                    }
+                                    @endphp
                                 </div>
                                 @endforeach
                             </div>

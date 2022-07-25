@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" type="text/css" href="/js/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="/js/slick/slick-theme.css" />
+    <link rel="stylesheet" type="text/css" href="/js/lightbox/css/lightbox.css" />
 
 
     @livewireStyles
@@ -24,6 +25,8 @@
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript" src="/js/lightbox/js/lightbox.js"></script>
+
 
 </head>
 

@@ -65,22 +65,7 @@ class MessageController extends Controller
         $dom = HtmlDomParser::str_get_html($html);
         $returnHtml = '';
         $plainText = $dom->getElementById("UserInputtedText");
-        $images = [];
-        for ($i = 0; $i < 10; $i++) {
-            $_image = $dom->find("#previewimage{$i}");
-            if (!is_null($_image) && isset($_image[0])) {
-                $images[] = $_image[0]->getAttribute('src');
-            }
-        }
         $returnHtml .= $plainText->text();
-
-        if (!empty($images)) {
-            $returnHtml .= "<div class=\"flex\">";
-            foreach ($images as $image) {
-                $returnHtml .= "<div><img src=\"{$image}\"></div>";
-            }
-            $returnHtml .= "</div>";
-        }
         return $returnHtml;
     }
 
@@ -150,6 +135,10 @@ class MessageController extends Controller
                 }
                 if (isset($message['ItemTitle'])) {
                     $record->ItemTitle = $message['ItemTitle'];
+                }
+
+                if (isset($message["MessageMedia"])) {
+                    $record->MessageMedia = serialize($message['MessageMedia']);
                 }
             }
 
