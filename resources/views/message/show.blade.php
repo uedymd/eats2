@@ -89,6 +89,9 @@
                                 </div>
                                 <form method="POST" action="{{ route('message.send'); }}">
                                     <div>
+                                        <div class="flex imageUploads">
+                                            
+                                        </div>
                                         <div>
                                             @csrf
                                             {{Form::textarea('return', '', ['class' => 'form-control block w-full', 'id' => 'return', 'rows' => '10'])}}
