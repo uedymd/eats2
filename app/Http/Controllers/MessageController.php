@@ -425,7 +425,7 @@ class MessageController extends Controller
             if(!empty($images)){
                 foreach((array)$images as $image){
                     $text .= "<MessageMedia>\n
-                    <MediaName></MediaName>\n
+                    <MediaName>image</MediaName>\n
                     <MediaURL>{$image}</MediaURL>\n
                     </MessageMedia>\n";
                 }
