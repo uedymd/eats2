@@ -5304,7 +5304,9 @@ $(function () {
       console.log(ret);
 
       if (ret["Ack"] !== "Failure") {
-        $image = ret["SiteHostedPictureDetails"]["FullURL"];
+        image = ret["SiteHostedPictureDetails"]["FullURL"];
+        html = "<input type=\"hidden\" value=\"@{image}\" >";
+        $('.imageUploads').append(html);
       } else {
         alert("不明なエラーが発生しました。");
       }
