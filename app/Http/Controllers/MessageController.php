@@ -376,8 +376,9 @@ class MessageController extends Controller
         $sender = $request->sender;
         $parent = $request->parent;
         $status = $request->status;
+        $images = $request->images;
         if(!empty($comment)){
-            $result = $this->sent_message($comment, $itemID, $parent, $sender);
+            $result = $this->sent_message($comment, $itemID, $parent, $sender,$images);
             if ($result['Ack'] == 'Success') {
                 $flush = 'メッセージを送信しました。';
 
@@ -405,7 +406,7 @@ class MessageController extends Controller
     }
 
 
-    private function sent_message($comment, $itemID, $parent, $sender)
+    private function sent_message($comment, $itemID, $parent, $sender,$images)
     {
         $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n
         <AddMemberMessageRTQRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">\n
@@ -418,8 +419,18 @@ class MessageController extends Controller
               {$comment}
             </Body>\n
             <DisplayToPublic>false</DisplayToPublic>\n
-            <EmailCopyToSender>true</EmailCopyToSender>\n
-            <!-- This is the  unique identifier of the buyer's question. Message ID values can be retrieved with a GetMyMessages call -->\n
+            <EmailCopyToSender>true</EmailCopyToSender>\n";
+        
+            if(!empty($images)){
+                foreach((array)$images as $image){
+                    $text .= "<MessageMedia>\n
+                    <MediaName></MediaName>\n
+                    <MediaURL>{$image}</MediaURL>\n
+                    </MessageMedia>\n";
+                }
+            }
+
+        $text .="<!-- This is the  unique identifier of the buyer's question. Message ID values can be retrieved with a GetMyMessages call -->\n
             <ParentMessageID>{$parent}</ParentMessageID>\n
             <!-- This is the user ID of the prospective buyer/bidder that asked the question -->\n
             <RecipientID>{$sender}</RecipientID>\n
