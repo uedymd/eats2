@@ -15,6 +15,8 @@ class MessageController extends Controller
 
     private $api_url = 'https://api.ebay.com/ws/api.dll';
 
+    private $status_array = [''=>'ステータスを選択','1'=>'販売元問合せ中', '2'=>'確認中', '3'=>'返信済'];
+
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +24,9 @@ class MessageController extends Controller
      */
     public function index()
     {
+        $status = $this->status_array;
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        return view('message/index', compact('messages'));
+        return view('message/index', compact('messages','status'));
     }
 
     public function get_messages()
@@ -65,22 +68,7 @@ class MessageController extends Controller
         $dom = HtmlDomParser::str_get_html($html);
         $returnHtml = '';
         $plainText = $dom->getElementById("UserInputtedText");
-        $images = [];
-        for ($i = 0; $i < 10; $i++) {
-            $_image = $dom->find("#previewimage{$i}");
-            if (!is_null($_image) && isset($_image[0])) {
-                $images[] = $_image[0]->getAttribute('src');
-            }
-        }
         $returnHtml .= $plainText->text();
-
-        if (!empty($images)) {
-            $returnHtml .= "<div class=\"flex\">";
-            foreach ($images as $image) {
-                $returnHtml .= "<div><img src=\"{$image}\"></div>";
-            }
-            $returnHtml .= "</div>";
-        }
         return $returnHtml;
     }
 
@@ -150,6 +138,10 @@ class MessageController extends Controller
                 }
                 if (isset($message['ItemTitle'])) {
                     $record->ItemTitle = $message['ItemTitle'];
+                }
+
+                if (isset($message["MessageMedia"])) {
+                    $record->MessageMedia = serialize($message['MessageMedia']);
                 }
             }
 
@@ -267,11 +259,12 @@ class MessageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Message $message, $id)
-    {
+    {   
+        $status = $this->status_array;
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderByDesc('ReceiveDate')->get();
         $item = EbayItem::select('id', 'image')->where('ebay_id', (int)$current->ItemID)->first();
-        return view('message/show', compact('current', 'records', 'item'));
+        return view('message/show', compact('current', 'records','item','status'));
     }
 
     /**
@@ -306,14 +299,26 @@ class MessageController extends Controller
         $itemID = $request->itemID;
         $sender = $request->sender;
         $parent = $request->parent;
-        $result = $this->sent_message($comment, $itemID, $parent, $sender);
-        if ($result['Ack'] == 'Success') {
-            $flush = 'メッセージを送信しました。';
-        } else {
-            $flush = 'メッセージの送信に失敗しました。';
+        $status = $request->status;
+        if(!empty($comment)){
+            $result = $this->sent_message($comment, $itemID, $parent, $sender);
+            if ($result['Ack'] == 'Success') {
+                $flush = 'メッセージを送信しました。';
+                $this->set_text();
+            } else {
+                $flush = 'メッセージの送信に失敗しました。';
+            }
+            $request->session()->flash('messageResult', $flush);
         }
-        $request->session()->flash('status', $flush);
-        $this->set_text();
+
+        if(!empty($status)){
+            $record = Message::find($current);
+            $record->status = $status;
+            $record->save();
+            $flush = 'ステータスを変更しました。';
+            $request->session()->flash('mesasgeStatus', $flush);
+        }
+
         return redirect("message/show/{$current}");
     }
 
