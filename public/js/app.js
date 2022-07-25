@@ -5303,10 +5303,8 @@ $(function () {
       ret = JSON.parse(result);
       console.log(ret);
 
-      if (ret["Ack"] == "Success") {
-        alert("ok");
-      } else if (ret["Ack"] == "Failure") {
-        alert("エラーが発生しました。");
+      if (ret["Ack"] !== "Failure") {
+        $image = ret["SiteHostedPictureDetails"]["FullURL"];
       } else {
         alert("不明なエラーが発生しました。");
       }
