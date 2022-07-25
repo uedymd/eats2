@@ -18,7 +18,7 @@ class CreateMessageRepliesTable extends Migration
             $table->integer('message_id');
             $table->integer('member_id');
             $table->text('text');
-
+            $table->longText('images')->nullable();
             $table->timestamps();
         });
     }

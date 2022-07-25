@@ -17,10 +17,7 @@
                             <tr class="bg-gray-100">
                                 <th class="border px-4 py-2 w-1/12">From</th>
                                 <th class="border px-4 py-2 w-6/12">Subject</th>
-<<<<<<< HEAD
-=======
                                 <th class="border px-4 py-2 w-1/12">Status</th>
->>>>>>> main
                             </tr>
                         </thead>
                         <tbody>

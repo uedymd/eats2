@@ -6,9 +6,17 @@ use App\Http\Requests\StoreMessageRequest;
 use App\Http\Requests\UpdateMessageRequest;
 use App\Models\Message;
 use App\Models\EbayItem;
+use App\Models\MessageReply;
+use App\Models\User;
+use App\Models\RakutenItem;
+use App\Models\DigimartItems;
+use App\Models\HardoffItems;
+use App\Models\SecoundstreetItems;
+use App\Http\Controllers\EbayItemController;
 use KubAT\PhpSimple\HtmlDomParser;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -263,8 +271,65 @@ class MessageController extends Controller
         $status = $this->status_array;
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderByDesc('ReceiveDate')->get();
+        $replies = [];
+        $users = [];
+        foreach($records as $record){
+            $reply = MessageReply::where('message_id',$record->id);
+            if($reply->count() > 0){
+                $replies[$record->id] = $reply->get();
+                foreach($replies[$record->id] as $reply){
+                    $user = User::find($reply->member_id)->first();
+                    $users[$user->id] = $user->name;
+                }
+            }
+        }
+        
         $item = EbayItem::select('id', 'image')->where('ebay_id', (int)$current->ItemID)->first();
-        return view('message/show', compact('current', 'records','item','status'));
+        $ebay = EbayItem::where('ebay_id',(int)$current->ItemID)->first();
+        $suppliers = [];
+        $target = '';
+        if(!is_null($ebay)){
+
+            $ebayItem = new EbayItemController;
+            $target = $ebayItem->models[$ebay->site]::find($ebay->supplier_id);
+            $suppliers = [];
+    
+            switch ($ebay->site) {
+                case 'rakuten':
+                    $rakuten_item = RakutenItem::find($ebay->supplier_id);
+                    if ($rakuten_item) {
+                        $suppliers[$ebay->id] = $rakuten_item->url;
+                    }
+                    break;
+                case 'digimart':
+                    $digimart_item = DigimartItems::find($ebay->supplier_id);
+                    if ($digimart_item) {
+                        $suppliers[$ebay->id] = $digimart_item->url;
+                    }
+                    break;
+    
+                case 'hardoff':
+                    $hardoff_item = HardoffItems::find($ebay->supplier_id);
+                    if ($hardoff_item) {
+                        $suppliers[$ebay->id] = $hardoff_item->url;
+                    }
+                    break;
+    
+                case 'secoundstreet':
+                    $secoundstreet_item = SecoundstreetItems::find($ebay->supplier_id);
+                    if ($secoundstreet_item) {
+                        $suppliers[$ebay->id] = $secoundstreet_item->url;
+                    }
+                    break;
+    
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+
+        return view('message/show', compact('current', 'records','item','status','replies','users','ebay', 'suppliers', 'target'));
     }
 
     /**
@@ -304,6 +369,12 @@ class MessageController extends Controller
             $result = $this->sent_message($comment, $itemID, $parent, $sender);
             if ($result['Ack'] == 'Success') {
                 $flush = 'メッセージを送信しました。';
+
+                $reply = new MessageReply;
+                $reply->message_id = $current;
+                $reply->member_id = Auth::id();
+                $reply->text = $comment;
+                $reply->save();
                 $this->set_text();
             } else {
                 $flush = 'メッセージの送信に失敗しました。';
