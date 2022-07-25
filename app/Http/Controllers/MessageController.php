@@ -21,9 +21,13 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $this->set_text();
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         return view('message/index', compact('messages'));
+    }
+
+    public function get_messages()
+    {
+        $this->set_text();
     }
 
     public function set_text()

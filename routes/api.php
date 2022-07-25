@@ -11,6 +11,7 @@ use App\Http\Controllers\HardoffItemsController;
 use App\Http\Controllers\SecoundstreetItemsController;
 use App\Http\Controllers\KurosawaItemController;
 use App\Http\Controllers\MikigakkiItemController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,4 +153,8 @@ Route::group(['prefix' => 'stock'], function () {
 
 Route::group(['prefix' => 'exclude_items'], function () {
     Route::get('/exclude', [ExcludeItemsController::class, 'exclude']);
+});
+
+Route::group(['prefix' => 'message'], function () {
+    Route::get('/', [MessageController::class, 'get_messages']);
 });
