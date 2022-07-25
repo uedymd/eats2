@@ -18,8 +18,8 @@ $(function () {
         })
             .done(function (result) {
                 ret = JSON.parse(result);
-                console.log(ret["Ack"]);
-                if (ret["Ack"] == "success") {
+                console.log(ret);
+                if (ret["Ack"] == "Success") {
                     alert("ok");
                 } else if (ret["Ack"] == "Failure") {
                     alert("エラーが発生しました。");
