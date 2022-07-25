@@ -35,12 +35,12 @@
                                                 <p class="text-indigo-500 font-semibold text-sm">Sent : {{$reply->created_at}}</p>
                                                 <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$users[$reply->member_id]}}</p></p>
                                                     {!! nl2br($reply->text) !!}
-                                                    @if(!is_null($reply->iamges))
+                                                    @if(!is_null($reply->images))
                                                         @php 
-                                                        $images = unserialize($reply->iamges);
+                                                        $images = unserialize($reply->images);
                                                         @endphp
                                                         <div class="flex">
-                                                            @foreach($iamges as $image)
+                                                            @foreach($images as $image)
                                                             <div><img src="{{$image}}" alt=""></div>
                                                             @endforeach
                                                         </div>
