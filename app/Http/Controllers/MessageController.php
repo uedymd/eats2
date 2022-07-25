@@ -34,7 +34,18 @@ class MessageController extends Controller
     {
         $status = $this->status_array;
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        return view('message/index', compact('messages','status'));
+        $_users = User::all();
+        $users = [];
+        $replies = [];
+        foreach($messages as $message){
+            $reply = MessageReply::where('message_replies.message_id',$message->id)
+            ->leftJoin("users",'users.id','=','message_replies.member_id')
+            ->orderByDesc("message_replies.created_at");
+            if($reply->count()>0){
+                $users[$message->id] = $reply->first()->name;
+            }
+        }
+        return view('message/index', compact('messages','status','users'));
     }
 
     public function get_messages()
@@ -438,6 +449,51 @@ class MessageController extends Controller
         $result = json_decode($result, true);
         return $result;
     }
+
+    public function upload(Request $request)
+    {
+        $img = $request->file('image')->store('images','public');
+        $imageURL = "http://{$_SERVER['HTTP_HOST']}/storage/{$img}";
+        $result = $this->image_upload($imageURL);
+        return $result;
+    }
+
+    private function image_upload($image)
+    {
+        $text = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+        <UploadSiteHostedPicturesRequest xmlns=\"urn:ebay:apis:eBLBaseComponents\">
+          <RequesterCredentials>
+          <eBayAuthToken>" . config('app.ebay_token') . "</eBayAuthToken>\n
+          </RequesterCredentials>
+          <WarningLevel>High</WarningLevel>
+          <ExternalPictureURL>{$image}</ExternalPictureURL>
+          <PictureName></PictureName>
+        </UploadSiteHostedPicturesRequest>";
+        $http_headers = array(
+            "Content-Type: text/xml",
+            "X-EBAY-API-COMPATIBILITY-LEVEL: 967",
+            "X-EBAY-API-CALL-NAME: UploadSiteHostedPictures",
+            "X-EBAY-API-SITEID: 0",
+            "X-EBAY-API-DEV-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-APP-NAME: " . config('app.ebay_client_id'),
+            "X-EBAY-API-CERT-NAME: " . config('app.ebay_client_id')
+        );
+
+        $xml = $text;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->api_url);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+
+        $_result = curl_exec($ch);
+        $result = simplexml_load_string($_result);
+        $result = json_encode($result);
+        $result = json_decode($result, true);
+        return $result;
+    }
+
 
     /**
      * Remove the specified resource from storage.

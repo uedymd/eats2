@@ -5215,6 +5215,8 @@ __webpack_require__(/*! ./common */ "./resources/js/common.js");
 
 __webpack_require__(/*! ./template */ "./resources/js/template.js");
 
+__webpack_require__(/*! ./message */ "./resources/js/message.js");
+
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
@@ -5271,6 +5273,46 @@ $(function () {
 
       setTimeout(nextPage, 10000);
     }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/message.js":
+/*!*********************************!*\
+  !*** ./resources/js/message.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+$(function () {
+  $("input[name=uploader]").on("change", function () {
+    var fd = new FormData();
+    fd.append("image", $(this).prop("files")[0]);
+    $.ajax({
+      headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+      },
+      url: "/message/upload",
+      type: "POST",
+      data: fd,
+      processData: false,
+      contentType: false,
+      dataType: "text"
+    }).done(function (result) {
+      ret = JSON.parse(result);
+      console.log(ret["Ack"]);
+
+      if (ret["Ack"] == "success") {
+        alert("ok");
+      } else if (ret["Ack"] == "Failure") {
+        alert("エラーが発生しました。");
+      } else {
+        alert("不明なエラーが発生しました。");
+      }
+    }).fail(function (data) {
+      alert("アップロードに失敗しました");
+    });
   });
 });
 

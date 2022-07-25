@@ -195,6 +195,8 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
         Route::get('/', [MessageController::class, 'index'])->name('message.index');
         Route::get('show/{id}', [MessageController::class, 'show'])->name('message.show')->where('id', '[0-9]+');
         Route::post('send', [MessageController::class, 'send'])->name('message.send');
+        Route::post('upload', [MessageController::class, 'upload'])->name('message.upload');
+        Route::get('upload', [MessageController::class, 'upload'])->name('message.upload');
     });
 
 

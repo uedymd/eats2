@@ -82,6 +82,11 @@
                                     <p>{{ session('mesasgeStatus') }}</p>
                                 </div>
                                 @endif
+                                <div class="flex">
+                                    <div class="imageUpload mb-3">
+                                        <input type="file" name="uploader">
+                                    </div>
+                                </div>
                                 <form method="POST" action="{{ route('message.send'); }}">
                                     <div>
                                         <div>
