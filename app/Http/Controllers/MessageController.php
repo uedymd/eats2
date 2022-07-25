@@ -386,6 +386,9 @@ class MessageController extends Controller
                 $reply->message_id = $current;
                 $reply->member_id = Auth::id();
                 $reply->text = $comment;
+                if(!empty($images)){
+                    $reply->images = serialize($images);
+                }
                 $reply->save();
                 $this->set_text();
             } else {
