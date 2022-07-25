@@ -21,7 +21,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        // $this->set_text();
+        $this->set_text();
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         return view('message/index', compact('messages'));
     }
@@ -29,9 +29,9 @@ class MessageController extends Controller
     public function set_text()
     {
         $this->set_headers();
-        $messages = Message::where('Text', null)->select('MessageID')->orderBy('ReceiveDate')->limit(10)->get();
-        if ($messages) {
-            $texts = $this->get_message_text($messages);
+        $messages = Message::where('Text', null)->select('MessageID')->orderBy('ReceiveDate')->limit(10);
+        while ($messages->count() > 0) {
+            $texts = $this->get_message_text($messages->get());
             if ($texts['Ack'] == 'Success') {
                 if (isset($texts['Messages']['Message']["MessageID"])) {
                     $record = Message::where('MessageID', $texts['Messages']['Message']["MessageID"])->first();
@@ -51,14 +51,32 @@ class MessageController extends Controller
                     }
                 }
             }
+            $messages = Message::where('Text', null)->select('MessageID')->orderBy('ReceiveDate')->limit(10);
         }
     }
 
     private function parse_html($html)
     {
         $dom = HtmlDomParser::str_get_html($html);
+        $returnHtml = '';
         $plainText = $dom->getElementById("UserInputtedText");
-        return $plainText->text();
+        $images = [];
+        for ($i = 0; $i < 10; $i++) {
+            $_image = $dom->find("#previewimage{$i}");
+            if (!is_null($_image) && isset($_image[0])) {
+                $images[] = $_image[0]->getAttribute('src');
+            }
+        }
+        $returnHtml .= $plainText->text();
+
+        if (!empty($images)) {
+            $returnHtml .= "<div class=\"flex\">";
+            foreach ($images as $image) {
+                $returnHtml .= "<div><img src=\"{$image}\"></div>";
+            }
+            $returnHtml .= "</div>";
+        }
+        return $returnHtml;
     }
 
 

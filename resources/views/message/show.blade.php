@@ -31,8 +31,8 @@
                                 }
                                 @endphp
                                 <div class="mt-5 max-w-screen-md text-gray-500 md:text-lg mb-5 px-2 py-2 {{$class}}">
-                                    <p class="text-indigo-500 lg:text-lg font-semibold mb-1 md:mb-1">Sent : {{$record->ReceiveDate}}
-                                        {!! $record->Text !!}
+                                    <p class="text-indigo-500 lg:text-lg font-semibold mb-1 md:mb-1">Sent : {{$record->ReceiveDate}}</p>
+                                    {!! $record->Text !!}
                                 </div>
                                 @endforeach
                             </div>
