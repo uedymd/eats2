@@ -28,7 +28,9 @@
                                     {{$message->Sender}}
                                 </td>
                                 <td class="border px-4 py-2">
-                                    <a href="{{ route('message.show',['id'=>$message->id]) }}" class="text-sky-500">{{$message->Subject}}</a>
+                                    <p class="text-blue-600">
+                                        <a href="{{ route('message.show',['id'=>$message->id]) }}">{{$message->Subject}}</a>
+                                    </p>
                                 </td>
                                 <td class=" border px-4 py-2 text-sm">
                                     {{$message->ItemEndTime}}
