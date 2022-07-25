@@ -35,6 +35,13 @@
                                                 <p class="text-indigo-500 font-semibold text-sm">Sent : {{$reply->created_at}}</p>
                                                 <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$users[$reply->member_id]}}</p></p>
                                                     {!! nl2br($reply->text) !!}
+                                                    @if(!is_null($reply->iamges))
+                                                        <div class="flex">
+                                                            @foreach($reply->iamges as $image)
+                                                            <div><img src="{{$image}}" alt=""></div>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
                                             </div>
                                             @endforeach
                                         </div>
