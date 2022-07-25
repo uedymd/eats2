@@ -90,7 +90,7 @@
                                 <form method="POST" action="{{ route('message.send'); }}">
                                     <div>
                                         <div class="flex imageUploads">
-                                            
+
                                         </div>
                                         <div>
                                             @csrf
@@ -262,5 +262,7 @@
         </div>
     </div>
     @endif
+
+    <div id="loader" style="position:fixed;background:rgba(0,0,0,0.8);left:0;top:0;width:100%;height:100%;display:none;"></div>
 
 </x-app-layout>

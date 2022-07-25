@@ -5287,6 +5287,7 @@ $(function () {
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 $(function () {
   $("input[name=uploader]").on("change", function () {
+    $("#loader").show();
     var fd = new FormData();
     fd.append("image", $(this).prop("files")[0]);
     $.ajax({
@@ -5300,6 +5301,7 @@ $(function () {
       contentType: false,
       dataType: "text"
     }).done(function (result) {
+      $("#loader").hide();
       ret = JSON.parse(result);
       console.log(ret);
 
@@ -5314,6 +5316,7 @@ $(function () {
       }
     }).fail(function (data) {
       alert("アップロードに失敗しました");
+      $("#loader").hide();
     });
   });
 });
