@@ -41,7 +41,10 @@
                                 </td>
                                 <td class=" border px-4 py-2 text-sm text-center">
                                     @if(!is_null($message->status))
-                                    {{$status[$message->status]}}<br>【{{$users[$message->id]}}】
+                                    <span class="block">{{$status[$message->status]}}</span>
+                                    @endif
+                                    @if(isset($users[$message->id]))
+                                   <span class="block">【{{$users[$message->id]}}】</span>
                                     @endif
                                 </td>
                             </tr>
