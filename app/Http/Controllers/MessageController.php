@@ -424,7 +424,7 @@ class MessageController extends Controller
               {$comment}
             </Body>\n
             <DisplayToPublic>false</DisplayToPublic>\n
-            <EmailCopyToSender>true</EmailCopyToSender>\n";
+            <EmailCopyToSender>false</EmailCopyToSender>\n";
         
             if(!empty($images)){
                 foreach((array)$images as $image){
