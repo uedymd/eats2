@@ -108,6 +108,11 @@
                         ゲスト設定
                     </x-jet-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
+                    <x-jet-nav-link href="{{ route('message.index') }}" :active="request()->routeIs('message.index')">
+                        メッセージツール
+                    </x-jet-nav-link>
+                </div>
                 @endcan
                 @can('messenger-higher')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
