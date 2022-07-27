@@ -316,7 +316,6 @@ class MessageController extends Controller
             }
         }
         
-        $item = EbayItem::select('id', 'image')->where('ebay_id', (int)$current->ItemID)->first();
         $ebay = EbayItem::where('ebay_id',(int)$current->ItemID)->first();
         $suppliers = [];
         $target = '';
@@ -361,7 +360,7 @@ class MessageController extends Controller
         }
 
 
-        return view('message/show', compact('current', 'records','item','items','status','replies','users','ebay', 'suppliers', 'target','messages'));
+        return view('message/show', compact('current', 'records','items','status','replies','users','ebay', 'suppliers', 'target','messages'));
     }
 
     /**
