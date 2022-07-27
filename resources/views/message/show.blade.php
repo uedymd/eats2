@@ -25,14 +25,14 @@
                                     @php
                                         $class = "bg-gray-100";
                                         $status_message = "";
-                                        if($message->Replied){
+                                        if($message->Replied||$message->status == 3){
                                             $class = " bg-gray-400";
                                         }
                                         if($message->status == 1){
-                                            $class .= " bg-red-100";
+                                            $class .= " bg-green-100";
                                         }
                                         if($message->status == 2){
-                                            $class .= " bg-green-100";
+                                            $class .= " bg-red-100";
                                         }
                                         if($message->id == $current->id){
                                             $class .= " border-2 border-indigo-600";
