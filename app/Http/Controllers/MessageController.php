@@ -390,7 +390,7 @@ class MessageController extends Controller
                     $reply->images = serialize($images);
                 }
                 $reply->save();
-                $this->set_text();
+                $this->set_headers();
             } else {
                 $flush = 'メッセージの送信に失敗しました。';
             }
