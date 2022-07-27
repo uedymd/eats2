@@ -29,6 +29,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('admin-higher', function ($user) {
             return ($user->role >= 1 && $user->role <= 10);
         });
+        // メッセージ権限
+        Gate::define('messenger-higher', function ($user) {
+            return ($user->role >= 80 && $user->role < 100);
+        });
         // 一般ユーザー以上に許可
         Gate::define('user-higher', function ($user) {
             return ($user->role <= 100);

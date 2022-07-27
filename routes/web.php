@@ -49,6 +49,17 @@ Route::group(['middleware' => ['auth', 'can:user-higher']], function () {
     });
 });
 
+// メッセンジャー
+Route::group(['middleware' => ['auth', 'can:messenger-higher']], function () {
+    Route::group(['prefix' => 'message'], function () {
+        Route::get('/', [MessageController::class, 'index'])->name('message.index');
+        Route::get('show/{id}', [MessageController::class, 'show'])->name('message.show')->where('id', '[0-9]+');
+        Route::post('send', [MessageController::class, 'send'])->name('message.send');
+        Route::post('upload', [MessageController::class, 'upload'])->name('message.upload');
+        Route::get('upload', [MessageController::class, 'upload'])->name('message.upload');
+    });
+});
+
 // 管理者以上
 Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
     // Route::redirect('/dashboard', '/ebay/trading')->name('dashboard');
@@ -190,24 +201,6 @@ Route::group(['middleware' => ['auth', 'can:admin-higher']], function () {
             Route::get('/{id}', [MikigakkiItemController::class, 'items'])->name('mikigakki.items')->where('id', '[0-9]+');
         });
     });
-
-    Route::group(['prefix' => 'message'], function () {
-        Route::get('/', [MessageController::class, 'index'])->name('message.index');
-        Route::get('show/{id}', [MessageController::class, 'show'])->name('message.show')->where('id', '[0-9]+');
-        Route::post('send', [MessageController::class, 'send'])->name('message.send');
-        Route::post('upload', [MessageController::class, 'upload'])->name('message.upload');
-        Route::get('upload', [MessageController::class, 'upload'])->name('message.upload');
-    });
-
-
-
-    // Route::group(['prefix' => 'ebay'], function () {
-    //     Route::get('/trading', [EbayItemController::class, 'index'])->name('ebay.index');
-    //     Route::post('/trading/search/', [EbayItemController::class, 'search'])->name('ebay.search');
-    //     Route::get('/trading/delete/{id}', [EbayItemController::class, 'delete'])->name('ebay.delete');
-    //     Route::get('/trading/destroy/{id}', [EbayItemController::class, 'destroy'])->name('ebay.destroy');
-    //     Route::get('/trading/show/{id}', [EbayItemController::class, 'show'])->name('ebay.show');
-    // });
 
     Route::group(['prefix' => 'stock'], function () {
         Route::get('/search', [StocksController::class, 'search'])->name('stock.seach');

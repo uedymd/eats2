@@ -9,7 +9,6 @@
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
-                @can('admin-higher')
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
@@ -21,6 +20,7 @@
                         ebay管理
                     </x-jet-nav-link>
                 </div>
+                @can('admin-higher')
                 <!-- Settings Dropdown -->
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="right" width="48">
@@ -108,6 +108,8 @@
                         ゲスト設定
                     </x-jet-nav-link>
                 </div>
+                @endcan
+                @can('messenger-higher')
                 <div class="hidden space-x-8 sm:-my-px sm:ml-4 sm:flex">
                     <x-jet-nav-link href="{{ route('message.index') }}" :active="request()->routeIs('message.index')">
                         メッセージツール
