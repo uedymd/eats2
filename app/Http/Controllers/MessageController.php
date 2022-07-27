@@ -17,6 +17,7 @@ use KubAT\PhpSimple\HtmlDomParser;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Boolean;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
@@ -529,6 +530,25 @@ class MessageController extends Controller
         $result = json_encode($result);
         $result = json_decode($result, true);
         return $result;
+    }
+
+    public function totalling(Request $request){
+
+        if(!isset($request->year)||!isset($request->month)){
+            $startDate = Carbon::createFromFormat('Y-m-d', date('Y-m-01'))->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', date('Y-m-t'))->endOfDay();
+        }else{
+            $startDate = Carbon::createFromFormat('Y-m-d', date("{$request->year}-{$request->month}-1"))->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', date("{$request->year}-{$request->month}-t"))->endOfDay();
+        }
+
+        $replies = MessageReply::select('users.name')
+        ->selectRaw('COUNT(users.id) as count_userId')
+        ->join('users','users.id','=','message_replies.member_id')
+        ->whereBetween('message_replies.created_at', [$startDate, $endDate])
+        ->groupBy("users.id")
+        ->get();
+        return view('message/totalling', compact('replies','startDate','endDate'));
     }
 
 
