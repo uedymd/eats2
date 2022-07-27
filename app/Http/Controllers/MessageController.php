@@ -162,9 +162,9 @@ class MessageController extends Controller
                 if (isset($message["MessageMedia"])) {
                     $record->MessageMedia = serialize($message['MessageMedia']);
                 }
+                $record->save();
             }
 
-            $record->save();
         }
     }
 
@@ -279,6 +279,8 @@ class MessageController extends Controller
      */
     public function show(Message $message, $id)
     {   
+        // dd(parse_url(url()->previous()));
+
         $status = $this->status_array;
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderByDesc('ReceiveDate')->get();
