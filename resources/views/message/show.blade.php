@@ -184,18 +184,18 @@
                                             @if($ebay->ebay_id>0)
                                             <br>【{{$ebay->ebay_id}}】
                                             @endif
+                                            @if(isset($suppliers[$ebay->id]))
+                                            <div class="w-8/12">
+                                                <a href="{{$suppliers[$ebay->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-5">{{$ebay->site}}</a>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="flex mt-5">
-                                        <div class="w-3/12 shurink-0 mr-5 text-center">
-                                            @if(isset($suppliers[$ebay->id]))
-                                            <a href="{{$suppliers[$ebay->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center">{{$ebay->site}}</a>
-                                            @endif
-                                        </div>
-                                        <div class="w-6/12 mr-5 mt-2">
+                                        <div class="w-8/12 mr-5 mt-2">
                                             {{$ebay->tracking_at}}
                                         </div>
-                                        <div class="w-3/12 text-center">
+                                        <div class="w-4/12 text-center">
                                             <a href="{{ route('ebay.delete',['id'=>$ebay->id]) }}" class="block rounded bg-red-600 p-2 text-white text-center">出品取消</a>
                                         </div>
                                     </div>
