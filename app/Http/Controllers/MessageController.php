@@ -315,8 +315,9 @@ class MessageController extends Controller
                 $items[$message->id] = $ebay->first();
             }
         }
-        
-        $ebay = $items[$current->id];
+        if($ebay->count()>0){
+            $ebay = $items[$current->id];
+        }
         $suppliers = [];
         $target = '';
         if(!is_null($ebay)){
