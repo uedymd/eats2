@@ -12,45 +12,42 @@
                     <div class="mt-10">
                         {{ $messages->links() }}
                     </div>
-                    <table class="table-auto w-full mt-5">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border px-4 py-2 w-1/12">From</th>
-                                <th class="border px-4 py-2 w-6/12">Subject</th>
-                                <th class="border px-4 py-2 w-1/12">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($messages as $message)
-                            @php
-                            $class = "";
-                            $replied = "";
+
+                    <div class="w-1/4 mt-5" >
+                    @foreach($messages as $message)
+                        @php
+                            $class = "bg-gray-100";
+                            $status_message = "";
                             if($message->Replied){
-                            $class = "bg-gray-300";
-                            $replied = "【返信済】 ";
+                                $class = "bg-gray-400";
                             }
-                            @endphp
-                            <tr class="{{$class}}">
-                                <td class="border px-4 py-2">
-                                    {{$message->Sender}}
-                                </td>
-                                <td class="border px-4 py-2">
-                                    <p class="text-blue-600">
-                                        <a href="{{ route('message.show',['id'=>$message->id]) }}">{{$replied}}{{$message->Subject}}</a>
-                                    </p>
-                                </td>
-                                <td class=" border px-4 py-2 text-sm text-center">
-                                    @if(!is_null($message->status))
-                                    <span class="block">{{$status[$message->status]}}</span>
+                            if(!is_null($message->status)){
+                                $status_message = $status[$message->status];
+                            }
+                        @endphp
+                        <div class="block__mail py-5 px-5 {{$class}} mb-1">
+                            <a href="{{ route('message.show',['id'=>$message->id]) }}" class="block">
+                                <div class="flex justify-between">
+                                    @if(!empty($items[$message->id]) && !is_null(!empty($items[$message->id]->image)))
+                                    <div class="w-3/12 shrink-0 mr-5">
+                                        <img src="{{$items[$message->id]->image}}" alt="">
+                                    </div>
                                     @endif
-                                    @if(isset($users[$message->id]))
-                                   <span class="block">【{{$users[$message->id]}}】</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    <div class="w-9/12">
+                                        <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
+                                        @if(!empty($status_message))
+                                        <div class="block__status text-sm">【{{$status_message}}】</div>
+                                        @endif
+                                        @if(!empty($items[$message->id]))
+                                            {{$items[$message->id]->title;}}
+                                        @endif
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                    </div>
+
                     <div class="mt-10">
                         {{ $messages->links() }}
                     </div>

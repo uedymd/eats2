@@ -37,6 +37,7 @@ class MessageController extends Controller
         $_users = User::all();
         $users = [];
         $replies = [];
+        $items = [];
         foreach($messages as $message){
             $reply = MessageReply::where('message_replies.message_id',$message->id)
             ->leftJoin("users",'users.id','=','message_replies.member_id')
@@ -44,8 +45,12 @@ class MessageController extends Controller
             if($reply->count()>0){
                 $users[$message->id] = $reply->first()->name;
             }
+            $ebay = EbayItem::where('ebay_id',$message->ItemID);
+            if($ebay->count()>0){
+                $items[$message->id] = $ebay->first();
+            }
         }
-        return view('message/index', compact('messages','status','users'));
+        return view('message/index', compact('messages','status','users','items'));
     }
 
     public function get_messages()
@@ -283,17 +288,31 @@ class MessageController extends Controller
 
         $status = $this->status_array;
         $current = Message::find($id);
-        $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderByDesc('ReceiveDate')->get();
+        $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderBy('ReceiveDate')->get();
         $replies = [];
         $users = [];
+        $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         foreach($records as $record){
-            $reply = MessageReply::where('message_id',$record->id)->orderByDesc('created_at');
+            $reply = MessageReply::where('message_id',$record->id)->orderBy('created_at');
             if($reply->count() > 0){
                 $replies[$record->id] = $reply->get();
                 foreach($replies[$record->id] as $reply){
                     $user = User::find($reply->member_id)->first();
                     $users[$user->id] = $user->name;
                 }
+            }
+        }
+        $items = [];
+        foreach($messages as $message){
+            $reply = MessageReply::where('message_replies.message_id',$message->id)
+            ->leftJoin("users",'users.id','=','message_replies.member_id')
+            ->orderByDesc("message_replies.created_at");
+            if($reply->count()>0){
+                $users[$message->id] = $reply->first()->name;
+            }
+            $ebay = EbayItem::where('ebay_id',$message->ItemID);
+            if($ebay->count()>0){
+                $items[$message->id] = $ebay->first();
             }
         }
         
@@ -342,7 +361,7 @@ class MessageController extends Controller
         }
 
 
-        return view('message/show', compact('current', 'records','item','status','replies','users','ebay', 'suppliers', 'target'));
+        return view('message/show', compact('current', 'records','item','items','status','replies','users','ebay', 'suppliers', 'target','messages'));
     }
 
     /**
