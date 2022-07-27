@@ -316,7 +316,7 @@ class MessageController extends Controller
             }
         }
         
-        $ebay = EbayItem::where('ebay_id',(int)$current->ItemID)->first();
+        $ebay = $items[$current->id];
         $suppliers = [];
         $target = '';
         if(!is_null($ebay)){
