@@ -315,12 +315,14 @@ class MessageController extends Controller
                 $items[$message->id] = $ebay->first();
             }
         }
-        if($ebay->count()>0){
+        if(isset($items[$current->id])){
             $ebay = $items[$current->id];
+        }else{
+            $ebay = "";
         }
         $suppliers = [];
         $target = '';
-        if(!is_null($ebay)){
+        if(!empty($ebay)){
 
             $ebayItem = new EbayItemController;
             $target = $ebayItem->models[$ebay->site]::find($ebay->supplier_id);

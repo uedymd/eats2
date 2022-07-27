@@ -167,7 +167,7 @@
                                 </div>
                             </div>
                             <div class="w-1/4 ml-5 h-screen overflow-scroll">
-                                @if(!is_null($ebay))
+                                @if(!empty($ebay))
                                     <div class="flex">
                                         <div class="w-3/12 shurink-0 mr-5">
                                             @if($ebay->image!=='')
