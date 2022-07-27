@@ -14,12 +14,18 @@
                     </div>
 
                     <div class="w-1/4 mt-5" >
-                    @foreach($messages as $message)
+                        @foreach($messages as $message)
                         @php
                             $class = "bg-gray-100";
                             $status_message = "";
-                            if($message->Replied){
-                                $class = "bg-gray-400";
+                            if($message->Replied||$message->status == 3){
+                                $class = " bg-gray-400";
+                            }
+                            if($message->status == 1){
+                                $class .= " bg-green-100";
+                            }
+                            if($message->status == 2){
+                                $class .= " bg-red-100";
                             }
                             if(!is_null($message->status)){
                                 $status_message = $status[$message->status];
@@ -34,13 +40,13 @@
                                     </div>
                                     @endif
                                     <div class="w-9/12">
-                                        <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
-                                        @if(!empty($status_message))
-                                        <div class="block__status text-sm">【{{$status_message}}】</div>
-                                        @endif
-                                        @if(!empty($items[$message->id]))
-                                            {{$items[$message->id]->title;}}
-                                        @endif
+                                            <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
+                                            @if(!empty($status_message))
+                                            <div class="block__status text-sm">【{{$status_message}}】</div>
+                                            @endif
+                                            @if(!empty($items[$message->id]))
+                                                {{$items[$message->id]->title;}}
+                                            @endif
                                     </div>
                                 </div>
                             </a>
