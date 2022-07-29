@@ -39,16 +39,24 @@ class MessageController extends Controller
         $users = [];
         $replies = [];
         $items = [];
-        foreach($messages as $message){
-            $reply = MessageReply::where('message_replies.message_id',$message->id)
-            ->leftJoin("users",'users.id','=','message_replies.member_id')
+
+        $reply = MessageReply::
+            join("users",'users.id','=','message_replies.member_id')
             ->orderByDesc("message_replies.created_at");
-            if($reply->count()>0){
-                $users[$message->id] = $reply->first()->name;
+
+        if($reply->count()>0){
+            $records = $reply->get();
+            foreach($records as $record){
+                $users[$record->member_id] = $record->name;
             }
-            $ebay = EbayItem::where('ebay_id',$message->ItemID);
-            if($ebay->count()>0){
-                $items[$message->id] = $ebay->first();
+        }
+
+        $ebay = EbayItem::join('messages','ebay_items.ebay_id','=','messages.ItemID');
+
+        if($ebay->count()>0){
+            $records = $ebay->get();
+            foreach($records as $record){
+                $items[$record->id] = $record;
             }
         }
         return view('message/index', compact('messages','status','users','items'));
