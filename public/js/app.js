@@ -5282,9 +5282,19 @@ $(function () {
 /*!*********************************!*\
   !*** ./resources/js/message.js ***!
   \*********************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 $(function () {
   $("input[name=uploader]").on("change", function () {
     $("#loader").show();
@@ -5319,6 +5329,93 @@ $(function () {
       $("#loader").hide();
     });
   });
+});
+$(function () {
+  var list = $('.block__mail');
+
+  var get_item_data = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
+      var url, response, data;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              url = "/api/message/side_items/".concat(id);
+              _context.next = 3;
+              return fetch(url);
+
+            case 3:
+              response = _context.sent;
+
+              if (!response.ok) {
+                _context.next = 9;
+                break;
+              }
+
+              data = response.json();
+              return _context.abrupt("return", data);
+
+            case 9:
+              return _context.abrupt("return");
+
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function get_item_data(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var insert_image = function insert_image(data, target) {
+    if (data.image !== '') {
+      var _html = "\n            <div class=\"w-3/12 shrink-0 mr-5\">\n                <img src=\"".concat(data.image, "\" alt=\"\">\n            </div>\n            ");
+
+      target.find('.flex').prepend(_html);
+    }
+  };
+
+  var insert_title = function insert_title(data, target) {
+    console.log(data.title);
+
+    if (data.title !== '') {
+      var _html2 = "\n            <div class=\"block__title\">\n                ".concat(data.title, "\n            </div>\n            ");
+
+      target.find('.block__data').append(_html2);
+    }
+  };
+
+  if (list.length > 0) {
+    list.each( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var _this = this;
+
+      var itemID;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              itemID = $(this).find('a').data('item');
+
+              if (itemID !== void 0) {
+                get_item_data(itemID).then(function (data) {
+                  insert_image(data, $(_this));
+                  insert_title(data, $(_this));
+                })["catch"](function (error) {// console.log(error);
+                });
+              }
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    })));
+  }
 });
 
 /***/ }),

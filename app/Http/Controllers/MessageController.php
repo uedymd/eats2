@@ -35,14 +35,8 @@ class MessageController extends Controller
     {
         $status = $this->status_array;
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        $_users = User::all();
-        $users = [];
-        $replies = [];
-        $items = [];
-        // $users = $this->get_relation_member();
-        $items = $this->get_relation_items();
 
-        return view('message/index', compact('messages','status','users','items'));
+        return view('message/index', compact('messages','status'));
     }
 
     private function get_relation_member(){
@@ -309,9 +303,8 @@ class MessageController extends Controller
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderBy('ReceiveDate')->get();
         $replies = [];
-        $users = [];
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        $items = $this->get_relation_items();
+        // $items = $this->get_relation_items();
         if(isset($items[$current->id])){
             $ebay = $items[$current->id];
         }else{
@@ -360,7 +353,7 @@ class MessageController extends Controller
         }
 
 
-        return view('message/show', compact('current', 'records','items','status','replies','users','ebay', 'suppliers', 'target','messages'));
+        return view('message/show', compact('current', 'records','status','replies','ebay', 'suppliers', 'target','messages'));
     }
 
     /**
@@ -545,6 +538,15 @@ class MessageController extends Controller
         ->groupBy("users.id")
         ->get();
         return view('message/totalling', compact('replies','startDate','endDate'));
+    }
+
+    public function get_side_items(Request $request){
+        $message = Message::where('messages.id',$request->id)
+        ->join('ebay_items','ebay_items.ebay_id','=','messages.ItemID')
+        ->first();
+        if(!is_null($message)){
+            return json_encode($message);
+        }
     }
 
 

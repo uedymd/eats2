@@ -157,4 +157,5 @@ Route::group(['prefix' => 'exclude_items'], function () {
 
 Route::group(['prefix' => 'message'], function () {
     Route::get('/', [MessageController::class, 'get_messages']);
+    Route::get('/side_items/{id?}', [MessageController::class, 'get_side_items'])->where('id', '[0-9]+');
 });
