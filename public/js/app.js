@@ -5392,6 +5392,18 @@ $(function () {
     });
   };
 
+  var scroll_current = function scroll_current() {
+    var sidebar = $('.side__mails');
+    var current = $('.side__mails .current__item');
+
+    if (sidebar.length > 0) {
+      var currentPos = current.position().top;
+      sidebar.animate({
+        scrollTop: currentPos
+      }, 'slow');
+    }
+  };
+
   if (list.length > 0) {
     var ids = [];
     list.each( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -5416,6 +5428,7 @@ $(function () {
     get_item_data().then(function (data) {
       insert_image(data);
       insert_title(data);
+      scroll_current();
     })["catch"](function (error) {// console.log(error);
     });
   }

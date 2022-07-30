@@ -15,12 +15,12 @@
                         </div>
 
                         <div class="flex">
-                            <div class="w-1/4 shrink-0 h-screen overflow-scroll">
+                            <div class="w-1/4 shrink-0">
                                 <div class="mt-10">
                                     {{ $messages->links('vendor.pagination.tailwind2') }}
                                 </div>
             
-                                <div class="mt-5" >
+                                <div class="mt-5 overflow-scroll h-screen side__mails relative" >
                                     @foreach($messages as $message)
                                         @php
                                             $class = "bg-gray-100";
@@ -35,7 +35,7 @@
                                                 $class .= " bg-red-100";
                                             }
                                             if($message->id == $current->id){
-                                                $class .= " border-2 border-indigo-600";
+                                                $class .= " border-2 border-indigo-600 current__item";
                                             }
                                             if(!is_null($message->status)){
                                                 $status_message = $status[$message->status];

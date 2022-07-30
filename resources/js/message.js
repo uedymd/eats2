@@ -76,6 +76,15 @@ $(function(){
             target.find('.block__data').append(html);
         })
     }
+
+    const scroll_current = () => {
+        const sidebar = $('.side__mails');
+        const current = $('.side__mails .current__item');
+        if(sidebar.length > 0){
+            let currentPos = current.position().top;
+            sidebar.animate({scrollTop:currentPos},'slow');
+        }
+    }
     
     if(list.length>0){
         let ids = [];
@@ -89,6 +98,7 @@ $(function(){
             .then(data => {
                 insert_image(data);
                 insert_title(data);
+                scroll_current();
             })
             .catch(error=>{
                 // console.log(error);
