@@ -5334,44 +5334,34 @@ $(function () {
 
   var get_item_data = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(ids) {
-      var url, method, headers, body, response, data;
+      var url, response, data;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               url = "/api/message/side_items/";
-              method = 'post';
-              headers = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              };
-              body = JSON.stringify(ids);
-              _context.next = 6;
-              return fetch(url, {
-                method: method,
-                headers: headers,
-                body: body
-              });
+              _context.next = 3;
+              return fetch(url);
 
-            case 6:
+            case 3:
               response = _context.sent;
 
               if (!response.ok) {
-                _context.next = 14;
+                _context.next = 11;
                 break;
               }
 
-              _context.next = 10;
+              _context.next = 7;
               return response.json();
 
-            case 10:
+            case 7:
               data = _context.sent;
               return _context.abrupt("return", data);
 
-            case 14:
+            case 11:
               return _context.abrupt("return");
 
-            case 15:
+            case 12:
             case "end":
               return _context.stop();
           }
@@ -5423,7 +5413,7 @@ $(function () {
         }
       }, _callee2, this);
     })));
-    get_item_data(JSON.stringify(ids)).then(function (data) {
+    get_item_data().then(function (data) {
       insert_image(data);
       insert_title(data);
     })["catch"](function (error) {// console.log(error);

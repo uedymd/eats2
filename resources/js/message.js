@@ -42,13 +42,7 @@ $(function(){
     
     const get_item_data = async(ids) => {
         const url = `/api/message/side_items/`;
-        const method = 'post';
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          };
-        const body = JSON.stringify(ids);
-        const response = await fetch(url,{method, headers, body});
+        const response = await fetch(url);
         if(response.ok){
             const data = await response.json();
             return data;
@@ -91,7 +85,7 @@ $(function(){
                 ids.push(itemID);
             }
         });
-        get_item_data(JSON.stringify(ids))
+        get_item_data()
             .then(data => {
                 insert_image(data);
                 insert_title(data);

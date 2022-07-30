@@ -504,10 +504,6 @@ class MessageController extends Controller
     public function get_side_items(Request $request){
         $ids = explode(',',$request[0]);
         $message = EbayItem::join('messages','ebay_items.ebay_id','=','messages.ItemID');
-        
-        foreach($ids as $id){
-            $message->orWhere('messages.id',$id);
-        }
         if($message->count() > 0){
             return json_encode($message->get());
         }
