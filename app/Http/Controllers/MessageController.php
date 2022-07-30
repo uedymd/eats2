@@ -154,6 +154,10 @@ class MessageController extends Controller
                 }
                 if (isset($message['ItemID'])) {
                     $record->ItemID = $message['ItemID'];
+                    $ebay_item = EbayItem::select('id')->where("ebay_id",$message['ItemID'])->first();
+                    if(!is_null($ebay_item)){
+                        $record->ebay_items_id = $ebay_item->id;
+                    }
                 }
                 if (isset($message['Replied']) && !is_null($message['Replied'])) {
                     if ($message['Replied'] == "true") {
@@ -502,8 +506,7 @@ class MessageController extends Controller
     }
 
     public function get_side_items(Request $request){
-        $ids = explode(',',$request[0]);
-        $message = Message::join('ebay_items','ebay_items.ebay_id','=','messages.ItemID')
+        $message = Message::join('ebay_items','ebay_items.id','=','messages.ebay_items_id')
         ->select('messages.id','ebay_items.title','ebay_items.image');
         if($message->count() > 0){
             return json_encode($message->get());
