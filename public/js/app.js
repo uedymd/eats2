@@ -5502,8 +5502,10 @@ $(function () {
     html += '</div>';
     html += '</div>';
     html += '<div class="block__translate mt-10">';
-    html += "<div class=\"border-t-2 px-4 py-4\">".concat(data.target.jp_content, "</div>");
-    html += "<div class=\"border-t-2 px-4 py-4\">".concat(data.target.en_content, "</div>");
+    var jp_content = data.target.jp_content.replace(/\n/g, '<br>');
+    var en_content = data.target.en_content.replace(/\n/g, '<br>');
+    html += "<div class=\"border-t-2 px-4 py-4\">".concat(jp_content, "</div>");
+    html += "<div class=\"border-t-2 px-4 py-4\">".concat(en_content, "</div>");
     html += '</div>';
     blockDetail.html(html);
   };
