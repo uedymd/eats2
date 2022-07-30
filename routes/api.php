@@ -157,6 +157,6 @@ Route::group(['prefix' => 'exclude_items'], function () {
 
 Route::group(['prefix' => 'message'], function () {
     Route::get('/', [MessageController::class, 'get_messages']);
-    Route::get('/side_items', [MessageController::class, 'get_side_items']);
+    Route::post('/side_items', [MessageController::class, 'get_side_items']);
     Route::get('/item_detail/{id}', [MessageController::class, 'get_item_detail'])->where('id', '[0-9]+');
 });
