@@ -97,7 +97,7 @@
                                             @foreach($replies[$record->id] as $reply)
                                             <div class="mb-3">
                                                 <p class="text-indigo-500 font-semibold text-sm">Sent : {{$reply->created_at}}</p>
-                                                <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$users[$reply->member_id]}}</p></p>
+                                                <p class="text-indigo-500 font-semibold mb-1 md:mb-1 text-sm">From : {{$reply->name}}</p></p>
                                                     {!! nl2br($reply->text) !!}
                                                     @if(!is_null($reply->images))
                                                         @php 
@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="w-1/4 ml-5 h-screen overflow-scroll">
-                                <div class="flex block__item--detail" data-current='{{$current->id}}'>
+                                <div class="block__item--detail" data-current='{{$current->id}}'>
                                     {{-- <div class="w-3/12 shurink-0 mr-5">
                                         @if($ebay->image!=='')
                                         <img src="{{$ebay->image}}" alt="" class="block" style="max-width:100%;height:auto;">

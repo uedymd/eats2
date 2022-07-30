@@ -5313,7 +5313,6 @@ $(function () {
     }).done(function (result) {
       $("#loader").hide();
       ret = JSON.parse(result);
-      console.log(ret);
 
       if (ret["Ack"] !== "Failure") {
         image = ret["SiteHostedPictureDetails"]["FullURL"];
@@ -5388,7 +5387,6 @@ $(function () {
   var insert_image = function insert_image(data) {
     if (data.length > 0) {
       data.forEach(function (data, key) {
-        console.log(data);
         var target = $(".block__mail > a[data-item=".concat(data.id, "]"));
         var html = "\n                <div class=\"w-3/12 shrink-0 mr-5\">\n                    <img src=\"".concat(data.image, "\" alt=\"\">\n                </div>\n                ");
         target.find('.flex').prepend(html);
@@ -5398,7 +5396,6 @@ $(function () {
 
   var insert_title = function insert_title(data) {
     data.forEach(function (data, key) {
-      console.log(data);
       var target = $(".block__mail > a[data-item=".concat(data.id, "]"));
       var html = "\n            <div class=\"block__title\">\n                ".concat(data.title, "\n            </div>\n            ");
       target.find('.block__data').append(html);
@@ -5430,6 +5427,102 @@ $(function () {
       insert_image(data);
       insert_title(data);
     })["catch"](function (error) {// console.log(error);
+    });
+  }
+});
+$(function () {
+  var blockDetail = $('.block__item--detail');
+  var currentID = blockDetail.data('current');
+
+  var get_item_detail = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(id) {
+      var url, response, data;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              url = "/api/message/item_detail/".concat(id);
+              _context3.next = 3;
+              return fetch(url);
+
+            case 3:
+              response = _context3.sent;
+
+              if (!response.ok) {
+                _context3.next = 11;
+                break;
+              }
+
+              _context3.next = 7;
+              return response.json();
+
+            case 7:
+              data = _context3.sent;
+              return _context3.abrupt("return", data);
+
+            case 11:
+              return _context3.abrupt("return");
+
+            case 12:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function get_item_detail(_x2) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var insert_item_detail = function insert_item_detail(data) {
+    var html = '';
+    html += '<div class="flex">';
+    html += '<div class="w-3/12 shurink-0 mr-5">';
+
+    if (data.ebay.image !== void 0) {
+      html += "<img src=\"".concat(data.ebay.image, "\" alt=\"\" class=\"block\" style=\"max-width:100%;height:auto;\">");
+    }
+
+    if (data.ebay.view_url !== void 0) {
+      html += "<a href=\"".concat(data.ebay.view_url, "\" target=\"_blank\" class=\"block rounded bg-gray-500 p-2 text-white text-center mt-2\">View</a>");
+    } else {
+      html += '<small>詳細取得中</small>';
+    }
+
+    html += '</div>';
+    html += '<div class="w-9/12">';
+    html += "".concat(data.ebay.title);
+
+    if (data.ebay.ebay_id > 0) {
+      html += "<br>\u3010".concat(data.ebay.ebay_id, "\u3011");
+    }
+
+    if (data.suppliers !== void 0) {
+      html += "\n                    <div class=\"w-8/12\">\n                        <a href=\"".concat(data.suppliers, "\" target=\"_blank\" class=\"block rounded bg-gray-500 p-2 text-white text-center mt-5\">").concat(data.ebay.site, "</a>\n                    </div>\n                    ");
+    }
+
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="flex mt-5">';
+    html += "<div class=\"w-8/12 mr-5 mt-2\">".concat(data.ebay.tracking_at, "</div>");
+    html += '<div class="w-4/12 text-center">';
+    html += "<a href=\"/ebay/trading/delete/".concat(data.ebay.id, "\" class=\"block rounded bg-red-600 p-2 text-white text-center\">\u51FA\u54C1\u53D6\u6D88</a>");
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="block__translate mt-10">';
+    html += "<div class=\"border-t-2 px-4 py-4\">".concat(data.target.jp_content, "</div>");
+    html += "<div class=\"border-t-2 px-4 py-4\">".concat(data.target.en_content, "</div>");
+    html += '</div>';
+    blockDetail.html(html);
+  };
+
+  if (currentID !== void 0) {
+    get_item_detail(currentID).then(function (data) {
+      insert_item_detail(data);
+    })["catch"](function (error) {
+      console.log(error);
     });
   }
 });

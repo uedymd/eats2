@@ -297,17 +297,22 @@ class MessageController extends Controller
      */
     public function show(Message $message, $id)
     {   
-        // dd(parse_url(url()->previous()));
-
         $status = $this->status_array;
         $current = Message::find($id);
         $records = Message::where('Sender', $current->Sender)->where('ItemID', $current->ItemID)->orderBy('ReceiveDate')->get();
         $replies = [];
+        $users = [];
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
-        // $items = $this->get_relation_items();
-        
-
-        //,'ebay', 'suppliers', 'target'
+        foreach((array)$records as $record){
+            if($record){
+                $reply = MessageReply::where('message_replies.message_id',$record[0]->id)
+                ->join('users','users.id','=','message_replies.member_id')
+                ->orderBy('message_replies.created_at');
+                if($reply->count() > 0){
+                    $replies[$record->id] = $reply->get();
+                }
+            }
+        }
         return view('message/show', compact('current', 'records','status','replies','messages'));
     }
 
@@ -508,8 +513,55 @@ class MessageController extends Controller
 
     public function get_item_detail(Request $request)
     {
-        
+        $ebay = EbayItem::join('messages','ebay_items.ebay_id','=','messages.ItemID')
+        ->where('messages.id',$request->id)->first();
+        if($ebay){
+            $ebayItem = new EbayItemController;
+            $target = $ebayItem->models[$ebay->site]::find($ebay->supplier_id);
+            $suppliers = '';
+    
+            switch ($ebay->site) {
+                case 'rakuten':
+                    $rakuten_item = RakutenItem::find($ebay->supplier_id);
+                    if ($rakuten_item) {
+                        $suppliers = $rakuten_item->url;
+                    }
+                    break;
+                case 'digimart':
+                    $digimart_item = DigimartItems::find($ebay->supplier_id);
+                    if ($digimart_item) {
+                        $suppliers = $digimart_item->url;
+                    }
+                    break;
+    
+                case 'hardoff':
+                    $hardoff_item = HardoffItems::find($ebay->supplier_id);
+                    if ($hardoff_item) {
+                        $suppliers = $hardoff_item->url;
+                    }
+                    break;
+    
+                case 'secoundstreet':
+                    $secoundstreet_item = SecoundstreetItems::find($ebay->supplier_id);
+                    if ($secoundstreet_item) {
+                        $suppliers = $secoundstreet_item->url;
+                    }
+                    break;
+    
+                default:
+                    # code...
+                    break;
+            }
+            $data = [
+                'ebay'  => $ebay,
+                'target'  => $target,
+                'suppliers'  => $suppliers
+            ];
+            return json_encode($data);
+        }
     }
+
+    
 
 
     /**
