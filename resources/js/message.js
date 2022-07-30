@@ -145,8 +145,10 @@ $(function(){
             html += '</div>';
         html += '</div>';
         html += '<div class="block__translate mt-10">';
-            html += `<div class="border-t-2 px-4 py-4">${data.target.jp_content}</div>`;
-            html += `<div class="border-t-2 px-4 py-4">${data.target.en_content}</div>`;
+            let jp_content = data.target.jp_content.replace(/\n/g, '<br>');
+            let en_content = data.target.en_content.replace(/\n/g, '<br>');
+            html += `<div class="border-t-2 px-4 py-4">${jp_content}</div>`;
+            html += `<div class="border-t-2 px-4 py-4">${en_content}</div>`;
         html += '</div>';
         blockDetail.html(html);
     }
