@@ -16,35 +16,35 @@
 
                         <div class="w-1/4 mt-5" >
                             @foreach($messages as $message)
-                            @php
-                                $class = "bg-gray-100";
-                                $status_message = "";
-                                if($message->Replied||$message->status == 3){
-                                    $class = " bg-gray-400";
-                                }
-                                if($message->status == 1){
-                                    $class .= " bg-green-100";
-                                }
-                                if($message->status == 2){
-                                    $class .= " bg-red-100";
-                                }
-                                if(!is_null($message->status)){
-                                    $status_message = $status[$message->status];
-                                }
-                            @endphp
-                            <div class="block__mail {{$class}} mb-1">
-                                <a href="{{ route('message.show',['id'=>$message->id]) }}" data-item="{{$message->id}}" class="block py-5 px-5">
-                                    <div class="flex justify-between">
-                                        <div class="w-9/12 block__data">
-                                                <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
-                                                @if(!empty($status_message))
-                                                <div class="block__status text-sm">【{{$status_message}}】</div>
-                                                @endif
+                                @php
+                                    $class = "bg-gray-100";
+                                    $status_message = "";
+                                    if($message->Replied||$message->status == 3){
+                                        $class = " bg-gray-400";
+                                    }
+                                    if($message->status == 1){
+                                        $class .= " bg-green-100";
+                                    }
+                                    if($message->status == 2){
+                                        $class .= " bg-red-100";
+                                    }
+                                    if(!is_null($message->status)){
+                                        $status_message = $status[$message->status];
+                                    }
+                                @endphp
+                                <div class="block__mail {{$class}} mb-1">
+                                    <a href="{{ route('message.show',['id'=>$message->id]) }}" data-item="{{$message->id}}" class="block py-5 px-5">
+                                        <div class="flex justify-between">
+                                            <div class="w-9/12 block__data">
+                                                    <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
+                                                    @if(!empty($status_message))
+                                                    <div class="block__status text-sm">【{{$status_message}}】</div>
+                                                    @endif
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="mt-10">
