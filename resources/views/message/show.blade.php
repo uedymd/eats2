@@ -20,7 +20,7 @@
                                     {{ $messages->links('vendor.pagination.tailwind2') }}
                                 </div>
             
-                                <div class="w-1/4 mt-5" >
+                                <div class="mt-5" >
                                     @foreach($messages as $message)
                                         @php
                                             $class = "bg-gray-100";
@@ -34,18 +34,21 @@
                                             if($message->status == 2){
                                                 $class .= " bg-red-100";
                                             }
+                                            if($message->id == $current->id){
+                                                $class .= " border-2 border-indigo-600";
+                                            }
                                             if(!is_null($message->status)){
                                                 $status_message = $status[$message->status];
                                             }
                                         @endphp
                                         <div class="block__mail {{$class}} mb-1">
-                                            <a href="{{ route('message.show',['id'=>$message->id]) }}" data-item="{{$message->id}}" class="block py-5 px-5">
+                                            <a href="{{ route('message.show',['id'=>$message->id]) }}" class="block py-5 px-5">
                                                 <div class="flex justify-between">
-                                                    <div class="w-9/12 block__data">
-                                                            <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
-                                                            @if(!empty($status_message))
-                                                            <div class="block__status text-sm">【{{$status_message}}】</div>
-                                                            @endif
+                                                    <div class="w-9/12">
+                                                        <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
+                                                        @if(!empty($status_message))
+                                                        <div class="block__status text-sm">【{{$status_message}}】</div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </a>
