@@ -304,12 +304,12 @@ class MessageController extends Controller
         $users = [];
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         foreach((array)$records as $record){
-            if($record && isset($record->id)){
+            if($record && isset($record[0]->id)){
                 $reply = MessageReply::where('message_replies.message_id',$record[0]->id)
                 ->join('users','users.id','=','message_replies.member_id')
                 ->orderBy('message_replies.created_at');
                 if($reply->count() > 0){
-                    $replies[$record->id] = $reply->get();
+                    $replies[$record[0]->id] = $reply->get();
                 }
             }
         }
