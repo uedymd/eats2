@@ -304,7 +304,7 @@ class MessageController extends Controller
         $users = [];
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         foreach((array)$records as $record){
-            if($record){
+            if(!is_null($record)){
                 $reply = MessageReply::where('message_replies.message_id',$record[0]->id)
                 ->join('users','users.id','=','message_replies.member_id')
                 ->orderBy('message_replies.created_at');
