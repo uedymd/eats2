@@ -503,7 +503,8 @@ class MessageController extends Controller
 
     public function get_side_items(Request $request){
         $ids = explode(',',$request[0]);
-        $message = EbayItem::leftJoin('messages','ebay_items.ebay_id','=','messages.ItemID');
+        $message = Message::join('ebay_items','ebay_items.ebay_id','=','messages.ItemID')
+        ->select('messages.id','ebay_items.title','ebay_items.image');
         if($message->count() > 0){
             return json_encode($message->get());
         }
