@@ -34,6 +34,9 @@
                                             if($message->status == 2){
                                                 $class .= " bg-red-100";
                                             }
+                                            if($message->id == $current->id){
+                                                $class .= " border-2 border-indigo-600";
+                                            }
                                             if(!is_null($message->status)){
                                                 $status_message = $status[$message->status];
                                             }
