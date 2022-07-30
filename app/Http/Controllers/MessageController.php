@@ -305,55 +305,10 @@ class MessageController extends Controller
         $replies = [];
         $messages = Message::orderByDesc('ReceiveDate')->paginate(150);
         // $items = $this->get_relation_items();
-        if(isset($items[$current->id])){
-            $ebay = $items[$current->id];
-        }else{
-            $ebay = "";
-        }
-        $suppliers = [];
-        $target = '';
-        if(!empty($ebay)){
+        
 
-            $ebayItem = new EbayItemController;
-            $target = $ebayItem->models[$ebay->site]::find($ebay->supplier_id);
-            $suppliers = [];
-    
-            switch ($ebay->site) {
-                case 'rakuten':
-                    $rakuten_item = RakutenItem::find($ebay->supplier_id);
-                    if ($rakuten_item) {
-                        $suppliers[$ebay->id] = $rakuten_item->url;
-                    }
-                    break;
-                case 'digimart':
-                    $digimart_item = DigimartItems::find($ebay->supplier_id);
-                    if ($digimart_item) {
-                        $suppliers[$ebay->id] = $digimart_item->url;
-                    }
-                    break;
-    
-                case 'hardoff':
-                    $hardoff_item = HardoffItems::find($ebay->supplier_id);
-                    if ($hardoff_item) {
-                        $suppliers[$ebay->id] = $hardoff_item->url;
-                    }
-                    break;
-    
-                case 'secoundstreet':
-                    $secoundstreet_item = SecoundstreetItems::find($ebay->supplier_id);
-                    if ($secoundstreet_item) {
-                        $suppliers[$ebay->id] = $secoundstreet_item->url;
-                    }
-                    break;
-    
-                default:
-                    # code...
-                    break;
-            }
-        }
-
-
-        return view('message/show', compact('current', 'records','status','replies','ebay', 'suppliers', 'target','messages'));
+        //,'ebay', 'suppliers', 'target'
+        return view('message/show', compact('current', 'records','status','replies','messages'));
     }
 
     /**
@@ -420,7 +375,6 @@ class MessageController extends Controller
 
         return redirect("message/show/{$current}");
     }
-
 
     private function sent_message($comment, $itemID, $parent, $sender,$images)
     {
@@ -541,12 +495,20 @@ class MessageController extends Controller
     }
 
     public function get_side_items(Request $request){
-        $message = Message::where('messages.id',$request->id)
-        ->join('ebay_items','ebay_items.ebay_id','=','messages.ItemID')
-        ->first();
-        if(!is_null($message)){
-            return json_encode($message);
+        $ids = explode(',',$request[0]);
+        $message = EbayItem::join('messages','ebay_items.ebay_id','=','messages.ItemID');
+        
+        foreach($ids as $id){
+            $message->orWhere('messages.id',$id);
         }
+        if($message->count() > 0){
+            return json_encode($message->get());
+        }
+    }
+
+    public function get_item_detail(Request $request)
+    {
+        
     }
 
 

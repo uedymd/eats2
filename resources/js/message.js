@@ -41,53 +41,67 @@ $(function () {
 $(function(){
     const list = $('.block__mail');
     
-    const get_item_data = async(id) => {
-        const url = `/api/message/side_items/${id}`;
-        const response = await fetch(url);
+    const get_item_data = async(ids) => {
+        const url = `/api/message/side_items/`;
+        const method = 'post';
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          };
+        const body = JSON.stringify(ids);
+        const response = await fetch(url,{method, headers, body});
         if(response.ok){
-            const data = response.json();
+            const data = await response.json();
             return data;
         }else{
             return;
         }
     }
 
-    const insert_image = (data,target) => {
-        if(data.image !== ''){
-            let html = `
-            <div class="w-3/12 shrink-0 mr-5">
-                <img src="${data.image}" alt="">
-            </div>
-            `;
-            target.find('.flex').prepend(html);
+    const insert_image = (data) => {
+        
+        if(data.length > 0){
+            data.forEach((data,key)=>{
+                console.log(data);
+                const target = $(`.block__mail > a[data-item=${data.id}]`);
+                let html = `
+                <div class="w-3/12 shrink-0 mr-5">
+                    <img src="${data.image}" alt="">
+                </div>
+                `;
+                target.find('.flex').prepend(html);
+            })
         }
     }
-    const insert_title = (data,target) => {
-        console.log(data.title);
-        if(data.title !== ''){
+    const insert_title = (data) => {
+        data.forEach((data,key)=>{
+            console.log(data);
+            const target = $(`.block__mail > a[data-item=${data.id}]`);
             let html = `
             <div class="block__title">
                 ${data.title}
             </div>
             `;
             target.find('.block__data').append(html);
-        }
+        })
     }
     
     if(list.length>0){
+        let ids = [];
         list.each(async function(){
             let itemID = $(this).find('a').data('item');
             if(itemID !== void 0){
-                get_item_data(itemID)
-                    .then(data => {
-                        insert_image(data,$(this));
-                        insert_title(data,$(this));
-                    })
-                    .catch(error=>{
-                        // console.log(error);
-                    })
+                ids.push(itemID);
             }
         });
+        get_item_data(JSON.stringify(ids))
+            .then(data => {
+                insert_image(data);
+                insert_title(data);
+            })
+            .catch(error=>{
+                // console.log(error);
+            })
     }
 
 

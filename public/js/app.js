@@ -5334,31 +5334,45 @@ $(function () {
   var list = $('.block__mail');
 
   var get_item_data = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(id) {
-      var url, response, data;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(ids) {
+      var url, method, headers, body, response, data;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              url = "/api/message/side_items/".concat(id);
-              _context.next = 3;
-              return fetch(url);
+              url = "/api/message/side_items/";
+              method = 'post';
+              headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              };
+              body = JSON.stringify(ids);
+              _context.next = 6;
+              return fetch(url, {
+                method: method,
+                headers: headers,
+                body: body
+              });
 
-            case 3:
+            case 6:
               response = _context.sent;
 
               if (!response.ok) {
-                _context.next = 9;
+                _context.next = 14;
                 break;
               }
 
-              data = response.json();
-              return _context.abrupt("return", data);
-
-            case 9:
-              return _context.abrupt("return");
+              _context.next = 10;
+              return response.json();
 
             case 10:
+              data = _context.sent;
+              return _context.abrupt("return", data);
+
+            case 14:
+              return _context.abrupt("return");
+
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -5371,28 +5385,29 @@ $(function () {
     };
   }();
 
-  var insert_image = function insert_image(data, target) {
-    if (data.image !== '') {
-      var _html = "\n            <div class=\"w-3/12 shrink-0 mr-5\">\n                <img src=\"".concat(data.image, "\" alt=\"\">\n            </div>\n            ");
-
-      target.find('.flex').prepend(_html);
+  var insert_image = function insert_image(data) {
+    if (data.length > 0) {
+      data.forEach(function (data, key) {
+        console.log(data);
+        var target = $(".block__mail > a[data-item=".concat(data.id, "]"));
+        var html = "\n                <div class=\"w-3/12 shrink-0 mr-5\">\n                    <img src=\"".concat(data.image, "\" alt=\"\">\n                </div>\n                ");
+        target.find('.flex').prepend(html);
+      });
     }
   };
 
-  var insert_title = function insert_title(data, target) {
-    console.log(data.title);
-
-    if (data.title !== '') {
-      var _html2 = "\n            <div class=\"block__title\">\n                ".concat(data.title, "\n            </div>\n            ");
-
-      target.find('.block__data').append(_html2);
-    }
+  var insert_title = function insert_title(data) {
+    data.forEach(function (data, key) {
+      console.log(data);
+      var target = $(".block__mail > a[data-item=".concat(data.id, "]"));
+      var html = "\n            <div class=\"block__title\">\n                ".concat(data.title, "\n            </div>\n            ");
+      target.find('.block__data').append(html);
+    });
   };
 
   if (list.length > 0) {
+    var ids = [];
     list.each( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-      var _this = this;
-
       var itemID;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
@@ -5401,11 +5416,7 @@ $(function () {
               itemID = $(this).find('a').data('item');
 
               if (itemID !== void 0) {
-                get_item_data(itemID).then(function (data) {
-                  insert_image(data, $(_this));
-                  insert_title(data, $(_this));
-                })["catch"](function (error) {// console.log(error);
-                });
+                ids.push(itemID);
               }
 
             case 2:
@@ -5415,6 +5426,11 @@ $(function () {
         }
       }, _callee2, this);
     })));
+    get_item_data(JSON.stringify(ids)).then(function (data) {
+      insert_image(data);
+      insert_title(data);
+    })["catch"](function (error) {// console.log(error);
+    });
   }
 });
 
