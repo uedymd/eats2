@@ -34,9 +34,6 @@
                                             if($message->status == 2){
                                                 $class .= " bg-red-100";
                                             }
-                                            if($message->id == $current->id){
-                                                $class .= " border-2 border-indigo-600";
-                                            }
                                             if(!is_null($message->status)){
                                                 $status_message = $status[$message->status];
                                             }
@@ -44,11 +41,11 @@
                                         <div class="block__mail {{$class}} mb-1">
                                             <a href="{{ route('message.show',['id'=>$message->id]) }}" data-item="{{$message->id}}" class="block py-5 px-5">
                                                 <div class="flex justify-between">
-                                                    <div class="w-9/12">
-                                                        <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
-                                                        @if(!empty($status_message))
-                                                        <div class="block__status text-sm">【{{$status_message}}】</div>
-                                                        @endif
+                                                    <div class="w-9/12 block__data">
+                                                            <div class="block__sender text-sm text-blue-500">{{$message->Sender}}</div>
+                                                            @if(!empty($status_message))
+                                                            <div class="block__status text-sm">【{{$status_message}}】</div>
+                                                            @endif
                                                     </div>
                                                 </div>
                                             </a>
@@ -160,27 +157,6 @@
                             </div>
                             <div class="w-1/4 ml-5 h-screen overflow-scroll">
                                 <div class="block__item--detail" data-current='{{$current->id}}'>
-                                    {{-- <div class="w-3/12 shurink-0 mr-5">
-                                        @if($ebay->image!=='')
-                                        <img src="{{$ebay->image}}" alt="" class="block" style="max-width:100%;height:auto;">
-                                        @endif
-                                        @if(!is_null($ebay->view_url))
-                                        <a href="{{$ebay->view_url}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-2">View</a>
-                                        @else
-                                        <small>詳細取得中</small>
-                                        @endif
-                                    </div>
-                                    <div class="w-9/12">
-                                        {{$ebay->title}}
-                                        @if($ebay->ebay_id>0)
-                                        <br>【{{$ebay->ebay_id}}】
-                                        @endif
-                                        @if(isset($suppliers[$ebay->id]))
-                                        <div class="w-8/12">
-                                            <a href="{{$suppliers[$ebay->id]}}" target="_blank" class="block rounded bg-gray-500 p-2 text-white text-center mt-5">{{$ebay->site}}</a>
-                                        </div>
-                                        @endif
-                                    </div> --}}
                                 </div>
                                 @if(!empty($ebay))
                                     <div class="flex mt-5">
