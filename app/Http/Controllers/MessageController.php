@@ -113,7 +113,6 @@ class MessageController extends Controller
     public function set_headers()
     {
         $result = $this->get_message_headers();
-
         $messages = $result['Messages']['Message'];
 
         foreach ($messages as $message) {
@@ -310,7 +309,7 @@ class MessageController extends Controller
         foreach((array)$records as $record){
             if($record){
                 foreach($records as $value){
-                    $reply = MessageReply::select('message_replies.id','message_replies.text','message_replies.images','message_replies.created_at')
+                    $reply = MessageReply::select('message_replies.id','users.name','message_replies.text','message_replies.images','message_replies.created_at')
                     ->where('message_replies.message_id',$value->id)
                     ->join('users','users.id','=','message_replies.member_id')
                     ->orderBy('message_replies.created_at');
