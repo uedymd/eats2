@@ -61,6 +61,7 @@
                                 </div>
                             </div>
                             <div class="w-2/4 ml-5 shrinki-0 h-screen overflow-scroll">
+                                <div class="mb-5 pb-3 border-b-2"><h3>{{$current->Subject}}</h3></div>
                                 @foreach ($records as $record)
                                 @php
                                 $class = "";
