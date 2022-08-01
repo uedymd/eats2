@@ -5312,6 +5312,7 @@ $(function () {
       dataType: "text"
     }).done(function (result) {
       $("#loader").hide();
+      console.log(result);
       ret = JSON.parse(result);
 
       if (ret["Ack"] !== "Failure") {
