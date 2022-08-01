@@ -21,8 +21,8 @@ $(function () {
                 console.log(result);
                 let ret = JSON.parse(result);
                 if (ret["Ack"] !== "Failure") {
-                    image = ret["SiteHostedPictureDetails"]["FullURL"];
-                    html = "";
+                    let image = ret["SiteHostedPictureDetails"]["FullURL"];
+                    let html = "";
                     html += `<input type="hidden" name="images[]" value="${image}" >`;
                     html += `<div class="w-2/12 mr-2 mb-3"><img src="${image}"></div>`;
                     $('.imageUploads').append(html);

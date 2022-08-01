@@ -5316,8 +5316,8 @@ $(function () {
       var ret = JSON.parse(result);
 
       if (ret["Ack"] !== "Failure") {
-        image = ret["SiteHostedPictureDetails"]["FullURL"];
-        html = "";
+        var image = ret["SiteHostedPictureDetails"]["FullURL"];
+        var html = "";
         html += "<input type=\"hidden\" name=\"images[]\" value=\"".concat(image, "\" >");
         html += "<div class=\"w-2/12 mr-2 mb-3\"><img src=\"".concat(image, "\"></div>");
         $('.imageUploads').append(html);
