@@ -457,9 +457,9 @@ class MessageController extends Controller
           <RequesterCredentials>
           <eBayAuthToken>" . config('app.ebay_token') . "</eBayAuthToken>\n
           </RequesterCredentials>
-          <WarningLevel>High</WarningLevel>
+          <WarningLevel>Low</WarningLevel>
           <ExternalPictureURL>{$image}</ExternalPictureURL>
-          <PictureName></PictureName>
+          <PictureName>image</PictureName>
         </UploadSiteHostedPicturesRequest>";
         $http_headers = array(
             "Content-Type: text/xml",
