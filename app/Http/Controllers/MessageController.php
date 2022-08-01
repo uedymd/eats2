@@ -447,7 +447,7 @@ class MessageController extends Controller
         $img = $request->file('image')->store('images','public');
         $imageURL = "http://{$_SERVER['HTTP_HOST']}/storage/{$img}";
         $result = $this->image_upload($imageURL);
-        return $imageURL;
+        return $result;
     }
 
     private function image_upload($image)
