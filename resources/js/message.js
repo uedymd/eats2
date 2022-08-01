@@ -19,7 +19,7 @@ $(function () {
             .done(function (result) {
                 $("#loader").hide();
                 console.log(result);
-                ret = JSON.parse(result);
+                let ret = JSON.parse(result);
                 if (ret["Ack"] !== "Failure") {
                     image = ret["SiteHostedPictureDetails"]["FullURL"];
                     html = "";
